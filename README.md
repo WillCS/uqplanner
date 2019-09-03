@@ -3,5 +3,5 @@ Timetable Optimiser Cloud Application
 
 ## Components
 * Front-end `/webapp/`
-* Web server `/server/
+* Web server `/server/`
 * Spark Processing `/optimiser/`
