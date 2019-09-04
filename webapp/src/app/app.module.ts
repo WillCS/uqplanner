@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { ContainerComponent } from './components/container/container.component';
 import { PlanningComponent } from './components/planner/planning/planning.component';
 import { OptimisingComponent } from './components/optimiser/optimising/optimising.component';
+import { CalendarComponent } from './calendar/calendar/calendar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ContainerComponent,
     PlanningComponent,
-    OptimisingComponent
+    OptimisingComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,

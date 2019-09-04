@@ -1,7 +1,9 @@
 <div>
-    <nav>
-        <a routerLink='/plan'>Plan</a>
-        <a routerLink='/optimise'>Optimise</a>
+    <nav class='navbar'>
+        <a routerLink='/plan' routerLinkActive='active'>Plan</a>
+        <a routerLink='/optimise' routerLinkActive='active'>Optimise</a>
     </nav>
-    <router-outlet></router-outlet>
+    <div class='contentContainer'>
+        <router-outlet></router-outlet>
+    </div>
 </div>
