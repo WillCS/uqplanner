@@ -1,0 +1,17 @@
+div.calendarColumnContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    width: 100%;
+    height: 600px;
+}
+
+div.calendarColumn {
+    display: inline-block;
+    width: 150px;
+}
+
+div.calendarColumn > p {
+    text-align: center;
+}
