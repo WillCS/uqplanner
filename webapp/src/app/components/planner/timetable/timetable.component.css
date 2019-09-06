@@ -10,6 +10,7 @@ div.calendarColumnContainer {
 div.calendarColumn {
     display: inline-block;
     width: 150px;
+    height: 100%;
 }
 
 div.calendarColumn > p {

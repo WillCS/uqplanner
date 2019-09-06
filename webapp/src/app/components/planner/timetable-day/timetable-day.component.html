@@ -1,5 +1,14 @@
 <div class='dayColumn'>
-    <div>
-        <app-scheduled-class *ngFor='let session of this.getClasses()' [session]='session'></app-scheduled-class>
+    <div 
+        class='scheduledClass'
+        *ngFor='let session of this.getClasses()' 
+        [style.top.%]='this.getSessionTopPercentage(session.classSession)'
+        [style.height.%]='this.getSessionHeightPercentage(session.classSession)'
+    >
+        <p>
+            {{session.className}}
+            <br />
+            {{session.classType}}0{{session.classStream + 1}}
+        </p>
     </div>
 </div>

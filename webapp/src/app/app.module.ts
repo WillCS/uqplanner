@@ -8,7 +8,6 @@ import { PlanningComponent } from './components/planner/planning/planning.compon
 import { OptimisingComponent } from './components/optimiser/optimising/optimising.component';
 import { TimetableComponent } from './components/planner/timetable/timetable.component';
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
-import { ScheduledClassComponent } from './components/planner/scheduled-class/scheduled-class.component';
 
 @NgModule({
   declarations: [
@@ -17,8 +16,7 @@ import { ScheduledClassComponent } from './components/planner/scheduled-class/sc
     PlanningComponent,
     OptimisingComponent,
     TimetableComponent,
-    TimetableDayComponent,
-    ScheduledClassComponent
+    TimetableDayComponent
   ],
   imports: [
     BrowserModule,

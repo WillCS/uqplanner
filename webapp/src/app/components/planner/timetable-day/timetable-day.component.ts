@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalendarService } from 'src/app/calendar/service/calendar.service';
-import { ClassSession, ClassListing, ClassType, ClassStream, TimetableSession } from 'src/app/calendar/calendar';
+import { ClassSession, ClassListing, ClassType, ClassStream, TimetableSession, DAY_LENGTH, DAY_START_TIME, DAY_END_TIME } from 'src/app/calendar/calendar';
+import { Time } from '@angular/common';
 
 @Component({
     selector: 'app-timetable-day',
@@ -17,19 +18,24 @@ export class TimetableDayComponent implements OnInit {
     ngOnInit() {
     }
 
-    private getClasses() {
+    private getClasses(): TimetableSession[] {
         let classes: TimetableSession[] = [];
         
         this.calendarService.GetClasses().forEach((classListing: ClassListing) => {
             classListing.classes.forEach((classType: ClassType) => {
                 classType.streams.forEach((classStream: ClassStream, streamIndex: number) => {
                     classStream.classes.forEach((session: ClassSession, sessionIndex: number) => {
-                        if(session.day == this.dayIndex) {
+                        let day: number = session instanceof Date
+                                ? (session as Date).getDay()
+                                : session.day as number;
+
+                        if(day == this.dayIndex) {
                             classes.push({
                                 className: classListing.name,
                                 classType: classType.name,
                                 classStream: streamIndex,
-                                classSession: sessionIndex
+                                classSessionIndex: sessionIndex,
+                                classSession: session
                             });
                         }
                     });
@@ -40,4 +46,14 @@ export class TimetableDayComponent implements OnInit {
         return classes;
     }
 
+    private getSessionTopPercentage(session: ClassSession): number {
+        let relative_time: number = session.startTime.hours
+                - DAY_START_TIME.hours;
+        return 100 * (relative_time / DAY_LENGTH);
+    }
+
+    private getSessionHeightPercentage(session: ClassSession): number {
+        let length: number = session.endTime.hours - session.startTime.hours;
+        return 100 * (length / DAY_LENGTH);
+    }
 }
