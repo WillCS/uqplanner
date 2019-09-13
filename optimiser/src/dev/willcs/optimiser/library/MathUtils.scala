@@ -1,6 +1,6 @@
 package dev.willcs.optimiser.library
 
 object MathUtils {
-    def valueInRange(value: Double, upper: Double, lower: Double): Boolean =
-        value >= upper && value < lower
+  def valueInRange(value: Double, lower: Double, upper: Double): Boolean =
+    value >= lower && value < upper
 }
