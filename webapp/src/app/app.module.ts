@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +9,7 @@ import { PlanningComponent } from './components/planner/planning/planning.compon
 import { OptimisingComponent } from './components/optimiser/optimising/optimising.component';
 import { TimetableComponent } from './components/planner/timetable/timetable.component';
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
+import { ClassListComponent } from './components/class-list/class-list.component';
 
 @NgModule({
   declarations: [
@@ -17,13 +18,13 @@ import { TimetableDayComponent } from './components/planner/timetable-day/timeta
     PlanningComponent,
     OptimisingComponent,
     TimetableComponent,
-    TimetableDayComponent
+    TimetableDayComponent,
+    ClassListComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    HttpClientJsonpModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
