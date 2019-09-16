@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-optimising',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OptimisingComponent implements OnInit {
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
   ngOnInit() {
+    this.api.getClass('hehe');
   }
 
 }
