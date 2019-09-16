@@ -1,0 +1,106 @@
+div.classObject {
+    width: 100px;
+}
+
+div.classContainer {
+    min-height: 50px;
+    position: relative;
+}
+
+div.classList {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    min-height: 50px;
+    width: 100%;
+    margin: 0px auto;
+}
+
+input.classSearchField {
+    position: absolute;
+    height: 30px;
+    border-radius: 15px;
+    width: 0px;
+    margin: 10px;
+    padding: 0px;
+    border: 0px;
+    top: 0px;
+    right: 25px;
+    transition: width 0.1s, padding 0.1s, margin 0.1s;
+}
+
+input.classSearchField.expanded {
+    width: 100px;
+    padding: 3px;
+    padding-left: 10px;
+    margin: 7px;
+}
+
+button.classSearch,
+        button.classSearch:active,
+        button.classSearch:focus,
+        button.classSearch::-moz-focus-inner {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 20px;
+    border: 0px;
+    outline: none;
+    top: 0px;
+    right: 0px;
+    margin: 5px;
+    transition: box-shadow 0.1s;
+}
+
+button.classSearch > span {
+    background-color: #395a9c;
+    width: 6px;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 3px;
+    transition: background-color 0.1s, transform 0.1s, height 0.1s;
+}
+
+button.classSearch > span:first-child {
+    transform: translate(16.5px, 5px);
+}
+
+button.classSearch > span:nth-child(2) {
+    transform: translate(16.5px, 5px) rotate(90deg);
+}
+
+button.classSearch:hover {
+    box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.55);
+    cursor: pointer;
+}
+
+button.classSearch:hover > span:first-child,
+        button.classSearch.expanded > span:first-child,
+        button.classSearch.expanded.ready > span:first-child {
+    transform: translate(18.5px, 10px) rotate(67.5deg);
+}
+
+button.classSearch:hover > span:nth-child(2),
+        button.classSearch.expanded > span:nth-child(2),
+        button.classSearch.expanded.ready > span:nth-child(2) {
+    transform: translate(18.5px, 0px) rotate(112.5deg);
+}
+
+button.classSearch.expanded > span:first-child {
+    transform: translate(16.5px, 5px) rotate(45deg);
+}
+
+button.classSearch.expanded > span:nth-child(2) {
+    transform: translate(16.5px, 5px) rotate(135deg);
+}
+
+button.classSearch.expanded > span {
+    background-color: #9c4131;
+}
+
+button.classSearch.expanded.ready > span {
+    background-color: #5a83cd;
+}

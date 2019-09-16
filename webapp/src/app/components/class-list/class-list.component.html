@@ -1,5 +1,31 @@
-<div class='classList'>
-    <div *ngFor='let class of this.classesListed' class='classObject'>
-        {{class}}
+<div class='classContainer'>
+    <div class='classList'>
+        <div
+            class='classObject'
+            *ngFor='let class of this.classesListed' 
+        >
+            {{class}}
+        </div>
     </div>
+
+    <input #courseCode
+        class='classSearchField'
+        [class.expanded]='this.isExpanded'
+        [class.ready]='this.isReady'
+        (keyup.enter)='this.handleEnterPress(courseCode.value)'
+        (input)='this.searchText=$event.target.value'
+        (keyup)='this.handleTextChange(courseCode.value)'
+        type='text'
+        placeholder='Course Code...'
+    >
+
+    <button 
+        class='classSearch' 
+        [class.expanded]='this.isExpanded' 
+        [class.ready]='this.isReady'
+        (click)='this.handleClick()'
+    >
+        <span></span>
+        <span></span>
+    </button>
 </div>

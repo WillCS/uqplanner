@@ -6,16 +6,24 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-class-list',
   templateUrl: './class-list.component.html',
-  styleUrls: ['./class-list.component.css']
+  styleUrls: ['./class-list.component.css'],
+  providers: [
+    ApiService
+  ]
 })
 export class ClassListComponent implements OnInit {
   @Output()
   public classAdded: EventEmitter<ClassListing> = new EventEmitter<ClassListing>();
 
   @Output()
-  public classRemoved: EventEmitter<ClassListing> = new EventEmitter<ClassListing>();
+  public classRemoved: EventEmitter<string> = new EventEmitter<string>();
 
-  private classesListed: ClassListing[] = []
+  private classesListed: string[] = [];
+
+  private isExpanded: boolean = false;
+  private isReady: boolean    = false;
+
+  private searchText: string = '';
 
   constructor(private api: ApiService) {
     
@@ -23,6 +31,28 @@ export class ClassListComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  private handleClick(): void {
+    if(!this.isReady) {
+      this.isExpanded = !this.isExpanded;
+    } else {
+      this.addClass(this.searchText);
+    }
+  }
+
+  private handleEnterPress(courseCode: string): void {
+    if(this.isReady) {
+      this.addClass(courseCode)
+    }
+  }
+
+  private handleTextChange(courseCode: string): void {
+    if(!(courseCode == null || courseCode === '')) {
+      this.isReady = true;
+    } else {
+      this.isReady = false;
+    }
   }
 
   private addClass(courseCode: string): void {
@@ -33,7 +63,7 @@ export class ClassListComponent implements OnInit {
     let response: Observable<ClassListing> = this.api.getClass(courseCode);
 
     response.subscribe((newClass: ClassListing) => {
-      this.classesListed.push(newClass);
+      this.classesListed.push(newClass.name);
       this.classAdded.emit(newClass);
     });
   }
@@ -43,16 +73,15 @@ export class ClassListComponent implements OnInit {
       return;
     }
 
-    // TODO emit the event
-    this.classesListed.filter((removalCandidate: ClassListing) => {
-      return !(removalCandidate.name === courseCode);
+    this.classRemoved.emit(courseCode)
+    this.classesListed = this.classesListed.filter((removalCandidate: string) => {
+      return !(removalCandidate=== courseCode);
     })
   }
 
   private hasClass(courseCode: string): boolean {
-    return this.classesListed.some((listing: ClassListing) => {
-      return listing.name === courseCode
+    return this.classesListed.some((listing: string) => {
+      return listing === courseCode;
     });
   }
-
 }
