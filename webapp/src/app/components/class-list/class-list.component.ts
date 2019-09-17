@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { ClassListing } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
 import { Observable } from 'rxjs';
@@ -18,6 +18,9 @@ export class ClassListComponent implements OnInit {
   @Output()
   public classRemoved: EventEmitter<string> = new EventEmitter<string>();
 
+  @ViewChild('courseCode', { read: ElementRef, static: false })
+  private input: ElementRef;
+
   private classesListed: string[] = [];
 
   private isExpanded: boolean = false;
@@ -36,6 +39,12 @@ export class ClassListComponent implements OnInit {
   private handleClick(): void {
     if(!this.isReady) {
       this.isExpanded = !this.isExpanded;
+
+      if(this.isExpanded) {
+        this.input.nativeElement.focus();
+      } else {
+        this.input.nativeElement.blur();
+      }
     } else {
       this.addClass(this.searchText);
     }
@@ -60,9 +69,7 @@ export class ClassListComponent implements OnInit {
       return;
     }
 
-    let response: Observable<ClassListing> = this.api.getClass(courseCode);
-
-    response.subscribe((newClass: ClassListing) => {
+    this.api.getClass(courseCode).subscribe((newClass: ClassListing) => {
       this.classesListed.push(newClass.name);
       this.classAdded.emit(newClass);
     });
@@ -76,7 +83,7 @@ export class ClassListComponent implements OnInit {
     this.classRemoved.emit(courseCode)
     this.classesListed = this.classesListed.filter((removalCandidate: string) => {
       return !(removalCandidate=== courseCode);
-    })
+    });
   }
 
   private hasClass(courseCode: string): boolean {

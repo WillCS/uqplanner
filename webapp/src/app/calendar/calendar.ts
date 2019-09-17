@@ -18,28 +18,28 @@ export const TIMETABLE_HOURS: number[] = [
     8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 ];
 
-export declare type ClassListing = {
+export interface ClassListing {
     name: string;
     classes: ClassType[];
 }
 
-export declare type ClassType = {
+export interface ClassType {
     name: string;
     streams: ClassStream[];
 }
 
-export declare type ClassStream = {
+export interface ClassStream {
     classes: ClassSession[];
 }
 
-export declare type ClassSession = {
+export interface ClassSession {
     day: number | Date;
     startTime: Time;
     endTime: Time;
     location: string;
 }
 
-export declare type TimetableSession = {
+export interface TimetableSession {
     className: string;
     classType: string;
     classStream: number;

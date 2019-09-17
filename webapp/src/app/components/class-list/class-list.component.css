@@ -25,7 +25,7 @@ input.classSearchField {
     padding: 0px;
     border: 0px;
     top: 0px;
-    right: 25px;
+    right: 15px;
     transition: width 0.1s, padding 0.1s, margin 0.1s;
 }
 
