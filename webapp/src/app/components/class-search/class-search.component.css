@@ -1,36 +1,19 @@
-div.classObject {
-    width: 100px;
-}
-
-div.classContainer {
-    min-height: 50px;
-    position: relative;
-}
-
-div.classList {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    min-height: 50px;
-    width: 100%;
-    margin: 0px auto;
-}
-
 input.classSearchField {
     position: absolute;
     height: 30px;
-    border-radius: 15px;
+    border-radius: 20px;
     width: 0px;
     margin: 10px;
     padding: 0px;
     border: 0px;
     top: 0px;
     right: 15px;
+    background-color: #e6dede;
     transition: width 0.1s, padding 0.1s, margin 0.1s;
 }
 
 input.classSearchField.expanded {
-    width: 100px;
+    width: 150px;
     padding: 3px;
     padding-left: 10px;
     margin: 7px;
@@ -43,7 +26,7 @@ button.classSearch,
     position: absolute;
     width: 40px;
     height: 40px;
-    background-color: white;
+    background-color: #e6dede;
     border-radius: 20px;
     border: 0px;
     outline: none;
@@ -73,7 +56,6 @@ button.classSearch > span:nth-child(2) {
 }
 
 button.classSearch:hover {
-    box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.55);
     cursor: pointer;
 }
 
@@ -97,9 +79,15 @@ button.classSearch.expanded > span:nth-child(2) {
     transform: translate(16.5px, 5px) rotate(135deg);
 }
 
+
 button.classSearch.expanded > span {
+    background-color: #732918;
+}
+
+button.classSearch.expanded:hover > span {
     background-color: #9c4131;
 }
+
 
 button.classSearch.expanded.ready > span {
     background-color: #5a83cd;

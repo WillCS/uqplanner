@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ClassListing } from './calendar/calendar';
-import { HttpClient, HttpResponse } from '@angular/common/http'
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -12,7 +12,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  public getClass(courseCode: string): Observable<ClassListing> {
+  public getClass(courseCode: string, year: number, semester: number): Observable<ClassListing> {
     let endpoint: string = this.endpoint('test');
     return this.http.get<string>(endpoint).pipe(map(
         (value: string) => JSON.parse(value)));

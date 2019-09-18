@@ -1,22 +1,14 @@
-<div class='classContainer'>
-    <div class='classList'>
-        <div
-            class='classObject'
-            *ngFor='let class of this.classesListed' 
-        >
-            {{class}}
-        </div>
-    </div>
-
+<div>
     <input #courseCode
         class='classSearchField'
         [class.expanded]='this.isExpanded'
         [class.ready]='this.isReady'
         (keyup.enter)='this.handleEnterPress(courseCode.value)'
+        (keyup.escape)='this.handleEscapePress()'
         (input)='this.searchText=$event.target.value'
         (keyup)='this.handleTextChange(courseCode.value)'
         type='text'
-        placeholder='Course Code'
+        placeholder='Course Code...'
     >
 
     <button 

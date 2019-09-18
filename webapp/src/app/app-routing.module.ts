@@ -7,6 +7,7 @@ import { OptimisingComponent } from './components/optimiser/optimising/optimisin
 const routes: Routes = [
   { path: 'plan',     component: PlanningComponent },
   { path: 'optimise', component: OptimisingComponent },
+  { path: 'meet',     component: OptimisingComponent },
   { path: '', redirectTo: '/plan', pathMatch: 'full' }
 ];
 

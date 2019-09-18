@@ -1,4 +1,19 @@
 <div>
     <app-timetable></app-timetable>
-    <app-class-list></app-class-list>
+
+    <div class='classContainer'>
+        <div class='classList'>
+            <div
+                class='classObject'
+                *ngFor='let class of this.calendar.getClasses()' 
+            >
+                {{class.name}}
+            </div>
+        </div>
+
+        <app-class-search
+            (classAdded)='this.onClassAdded($event)'
+        >
+        </app-class-search>
+    </div>
 </div>

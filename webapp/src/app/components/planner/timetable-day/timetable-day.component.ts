@@ -1,27 +1,28 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CalendarService } from 'src/app/calendar/service/calendar.service';
 import { ClassSession, ClassListing, ClassType, ClassStream, TimetableSession, DAY_LENGTH, DAY_START_TIME, DAY_END_TIME } from 'src/app/calendar/calendar';
-import { Time } from '@angular/common';
 
 @Component({
     selector: 'app-timetable-day',
     templateUrl: './timetable-day.component.html',
     styleUrls: ['./timetable-day.component.css'],
-    providers: [CalendarService]
+    providers: [
+        CalendarService
+    ]
 })
 export class TimetableDayComponent implements OnInit {
     @Input()
     public dayIndex: number;
 
-    constructor(private calendarService: CalendarService) { }
+    constructor(private calendar: CalendarService) { }
 
     ngOnInit() {
     }
 
     private getClasses(): TimetableSession[] {
         let classes: TimetableSession[] = [];
-        
-        this.calendarService.GetClasses().forEach((classListing: ClassListing) => {
+
+        this.calendar.getClasses().forEach((classListing: ClassListing) => {
             classListing.classes.forEach((classType: ClassType) => {
                 classType.streams.forEach((classStream: ClassStream, streamIndex: number) => {
                     classStream.classes.forEach((session: ClassSession, sessionIndex: number) => {

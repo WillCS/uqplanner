@@ -1,14 +1,17 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ApiService } from 'src/app/api.service';
 import { ClassListing } from 'src/app/calendar/calendar';
+import { CalendarService } from 'src/app/calendar/service/calendar.service';
 
 @Component({
   selector: 'app-planning',
   templateUrl: './planning.component.html',
-  styleUrls: ['./planning.component.css']
+  styleUrls: ['./planning.component.css'],
+  providers: [
+    CalendarService
+  ]
 })
 export class PlanningComponent implements OnInit {
-  constructor() {
+  constructor(private calendar: CalendarService) {
 
   }
 
@@ -16,4 +19,7 @@ export class PlanningComponent implements OnInit {
 
   }
 
+  private onClassAdded(newClass: ClassListing): void {
+    this.calendar.addClass(newClass);
+  }
 }

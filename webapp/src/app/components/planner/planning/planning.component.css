@@ -1,0 +1,17 @@
+div.classObject {
+    width: 100px;
+}
+
+div.classContainer {
+    min-height: 50px;
+    position: relative;
+}
+
+div.classList {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    min-height: 50px;
+    width: 100%;
+    margin: 0px auto;
+}

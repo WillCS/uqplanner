@@ -10,7 +10,7 @@ import { PlanningComponent } from './components/planner/planning/planning.compon
 import { OptimisingComponent } from './components/optimiser/optimising/optimising.component';
 import { TimetableComponent } from './components/planner/timetable/timetable.component';
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
-import { ClassListComponent } from './components/class-list/class-list.component';
+import { ClassSearchComponent } from './components/class-search/class-search.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { ClassListComponent } from './components/class-list/class-list.component
     OptimisingComponent,
     TimetableComponent,
     TimetableDayComponent,
-    ClassListComponent,
+    ClassSearchComponent,
   ],
   imports: [
     BrowserModule,
