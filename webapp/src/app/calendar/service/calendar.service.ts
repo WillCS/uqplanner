@@ -36,8 +36,12 @@ export class CalendarService {
   }
 
   public addClass(newClass: ClassListing): void {
-    if (!this.classes.some((c => c.name == newClass.name))) {
+    if (!this.classes.some(c => c.name == newClass.name)) {
       this.classes.push(newClass);
     }
+  }
+
+  public removeClass(className: string): void {
+    this.classes = this.classes.filter(c => className !== c.name);
   }
 }

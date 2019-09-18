@@ -24,9 +24,8 @@ export class ClassSearchComponent implements OnInit {
 
   private searchText: string = '';
 
-  constructor(private ref: ChangeDetectorRef,
-      private api: ApiService,
-      private calendar: CalendarService) {
+  constructor(private api: ApiService, private calendar: CalendarService) {
+    
   }
 
   ngOnInit() {

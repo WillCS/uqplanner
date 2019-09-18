@@ -1,4 +1,8 @@
 <div>
+    <div class='plannerControls'>
+
+    </div>
+
     <app-timetable></app-timetable>
 
     <div class='classContainer'>
@@ -7,7 +11,10 @@
                 class='classObject'
                 *ngFor='let class of this.calendar.getClasses()' 
             >
-                {{class.name}}
+                <p>{{class.name}}</p>
+                <app-close-button
+                    class='classCloseButton'
+                    (click)='this.onClassCloseClicked(class.name)'></app-close-button>
             </div>
         </div>
 

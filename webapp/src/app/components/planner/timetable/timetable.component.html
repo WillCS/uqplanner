@@ -1,6 +1,6 @@
 <div class='calendarColumnContainer'>
     <div *ngFor='let day of this.weekdayIndices' class='calendarColumn'>
-        <p>{{this.weekdays[day]}}</p>
+        <p class='dayHeader'>{{this.weekdays[day]}}</p>
         <app-timetable-day [dayIndex]='day'></app-timetable-day>
     </div>
 </div>

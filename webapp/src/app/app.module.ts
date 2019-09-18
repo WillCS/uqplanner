@@ -11,6 +11,7 @@ import { OptimisingComponent } from './components/optimiser/optimising/optimisin
 import { TimetableComponent } from './components/planner/timetable/timetable.component';
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
 import { ClassSearchComponent } from './components/class-search/class-search.component';
+import { CloseButtonComponent } from './components/close-button/close-button.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ClassSearchComponent } from './components/class-search/class-search.com
     TimetableComponent,
     TimetableDayComponent,
     ClassSearchComponent,
+    CloseButtonComponent,
   ],
   imports: [
     BrowserModule,

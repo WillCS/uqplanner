@@ -1,13 +1,13 @@
 input.classSearchField {
     position: absolute;
-    height: 30px;
+    height: 34px;
     border-radius: 20px;
     width: 0px;
     margin: 10px;
     padding: 0px;
     border: 0px;
-    top: 0px;
-    right: 15px;
+    top: -2px;
+    right: 5px;
     background-color: #e6dede;
     transition: width 0.1s, padding 0.1s, margin 0.1s;
 }
@@ -33,7 +33,6 @@ button.classSearch,
     top: 0px;
     right: 0px;
     margin: 5px;
-    transition: box-shadow 0.1s;
 }
 
 button.classSearch > span {

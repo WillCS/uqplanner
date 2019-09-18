@@ -22,4 +22,8 @@ export class PlanningComponent implements OnInit {
   private onClassAdded(newClass: ClassListing): void {
     this.calendar.addClass(newClass);
   }
+
+  private onClassCloseClicked(className: string): void {
+    this.calendar.removeClass(className);
+  }
 }
