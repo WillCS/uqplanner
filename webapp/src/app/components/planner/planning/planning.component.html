@@ -3,23 +3,33 @@
 
     </div>
 
-    <app-timetable></app-timetable>
+    <app-timetable
+        [classList]='this.classList'
+        [editing]='this.editing'
+        [editingClassName]='this.editingClassName'
+        [editingClassType]='this.editingClassType'
+        [selections]='this.selections'
+        (sessionClick)='this.handleSessionClicked($event)'
+    >
+    </app-timetable>
 
     <div class='classContainer'>
         <div class='classList'>
             <div
                 class='classObject'
-                *ngFor='let class of this.calendar.getClasses()' 
+                *ngFor='let class of this.classList' 
             >
                 <p>{{class.name}}</p>
                 <app-close-button
                     class='classCloseButton'
-                    (click)='this.onClassCloseClicked(class.name)'></app-close-button>
+                    (click)='this.onClassCloseClicked(class.name)'
+                >
+                </app-close-button>
             </div>
         </div>
 
         <app-class-search
-            (classAdded)='this.onClassAdded($event)'
+            (search)='this.onSearched($event)'
         >
         </app-class-search>
     </div>

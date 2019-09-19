@@ -1,20 +1,18 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ClassListing } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
-import { CalendarService } from 'src/app/calendar/service/calendar.service';
 
 @Component({
   selector: 'app-class-search',
   templateUrl: './class-search.component.html',
   styleUrls: ['./class-search.component.css'],
   providers: [
-    ApiService,
-    CalendarService
+    ApiService
   ]
 })
 export class ClassSearchComponent implements OnInit {
   @Output()
-  public classAdded: EventEmitter<ClassListing> = new EventEmitter<ClassListing>();
+  public search: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('courseCode', { read: ElementRef, static: false })
   private input: ElementRef;
@@ -24,7 +22,7 @@ export class ClassSearchComponent implements OnInit {
 
   private searchText: string = '';
 
-  constructor(private api: ApiService, private calendar: CalendarService) {
+  constructor(private api: ApiService) {
     
   }
 
@@ -54,13 +52,13 @@ export class ClassSearchComponent implements OnInit {
         this.openTextInput();
       }
     } else {
-      this.addClass(this.searchText);
+      this.executeSearch(this.searchText);
     }
   }
 
   private handleEnterPress(courseCode: string): void {
     if(this.isReady) {
-      this.addClass(courseCode)
+      this.executeSearch(courseCode)
     }
   }
 
@@ -80,13 +78,7 @@ export class ClassSearchComponent implements OnInit {
     }
   }
 
-  private addClass(courseCode: string): void {
-    let year: number = this.calendar.year;
-    let semester: number = this.calendar.semester;
-
-    this.api.getClass(courseCode, year, semester).subscribe(
-      (newClass: ClassListing) => {
-        this.classAdded.emit(newClass);
-      });
+  private executeSearch(courseCode: string): void {
+    this.search.emit(courseCode);
   }
 }

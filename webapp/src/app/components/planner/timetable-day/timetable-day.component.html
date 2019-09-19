@@ -1,9 +1,11 @@
 <div class='dayColumn'>
     <div 
         class='scheduledClass'
-        *ngFor='let session of this.getClasses()' 
+        *ngFor='let session of this.sessionList'
+        [class.editing]='this.displaySessonAsEditing(session)'
         [style.top.%]='this.getSessionTopPercentage(session.classSession)'
         [style.height.%]='this.getSessionHeightPercentage(session.classSession)'
+        (click)='this.sessionClick.emit(session)'
     >
         <p>
             {{session.className}}

@@ -11,5 +11,10 @@ div.scheduledClass {
     background-color: #8b2962;
     width: 100%;
     box-sizing: border-box;
-    border-bottom: 1px solid #e6dede
+    border-bottom: 1px solid #e6dede;
+    cursor: pointer;
+}
+
+div.scheduledClass.editing {
+    background-color: purple;
 }

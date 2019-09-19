@@ -1,6 +1,14 @@
 <div class='calendarColumnContainer'>
     <div *ngFor='let day of this.weekdayIndices' class='calendarColumn'>
         <p class='dayHeader'>{{this.weekdays[day]}}</p>
-        <app-timetable-day [dayIndex]='day'></app-timetable-day>
+        <app-timetable-day
+            [sessionList]='this.getSessionsOnDay(day)'
+            [editing]='this.editing'
+            [editingClassName]='this.editingClassName'
+            [editingClassType]='this.editingClassType'
+            [selections]='this.selections'
+            (sessionClick)='this.sessionClick.emit($event)'
+        >
+        </app-timetable-day>
     </div>
 </div>
