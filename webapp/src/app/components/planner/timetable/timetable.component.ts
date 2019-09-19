@@ -42,10 +42,14 @@ export class TimetableComponent implements OnInit {
 
     this.classList.forEach((classListing: ClassListing) => {
       let selectionsForClass = this.selections.get(classListing.name);
+
       classListing.classes.forEach((classType: ClassType) => {
         let selectionForType = selectionsForClass.get(classType.name);
+
         classType.streams.forEach((classStream: ClassStream, streamIndex: number) => {
-          if(this.editing || (!this.editing && streamIndex == selectionForType)) {
+
+          if((this.editing && classType.name === this.editingClassType)
+              || streamIndex == selectionForType) {
             classStream.classes.forEach((session: ClassSession, sessionIndex: number) => {
               let day: number = session instanceof Date
                 ? (session as Date).getDay()

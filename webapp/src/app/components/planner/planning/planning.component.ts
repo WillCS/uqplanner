@@ -57,6 +57,10 @@ export class PlanningComponent implements OnInit {
 
   public removeClass(className: string): void {
     this.classList = this.classList.filter(c => className !== c.name);
+
+    if(this.selections.has(className)) {
+      this.selections.delete(className);
+    }
   }
 
   public SetSelection(className: string, classType: string, selection: number): void {
