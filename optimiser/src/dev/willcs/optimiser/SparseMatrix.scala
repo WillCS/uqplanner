@@ -5,10 +5,9 @@ import scala.Option
 import scala.collection.immutable.List
 
 import dev.willcs.optimiser.library.MathUtils
-import dev.willcs.optimiser.library.SortedArrayList
 
-/** Immutable implementation of a sparse Matrix.
-  * i.e. it's optimised for large matrices with few non-zero elements.
+/** Implementation of a sparse Matrix. i.e. it's optimised for large matrices
+  *  with few non-zero elements.
   *
   *  @author Will Stibbards
   */
@@ -20,9 +19,9 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     *  some sort of automatically sorted list, hopefully improving
     *  performance.
     */
-  private val matrixList: SortedArrayList[SparseMatrixNode] = elements match {
-    case already: SortedArrayList[SparseMatrixNode] => already
-    case otherwise: Traversable[SparseMatrixNode]   => new SortedArrayList(elements)
+  private val matrixList: List[SparseMatrixNode] = elements match {
+    case already: List[SparseMatrixNode]          => already
+    case otherwise: Traversable[SparseMatrixNode] => elements toList
   }
 
   /** The number of rows in this matrix. */
@@ -53,13 +52,20 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     *  be added.
     *  TODO: Make this do something else
     */
-  def setAll(elems: Array[SparseMatrixNode]): SparseMatrix =
+  def set(elems: Array[SparseMatrixNode]): SparseMatrix =
     (this /: elems)(
       (matrix: SparseMatrix, node: SparseMatrixNode) =>
         node match {
           case SparseMatrixNode(row, col, value) => matrix.set(row, col, value)
         }
     )
+
+  /** Return the transpose of this matrix. */
+  def transpose(): SparseMatrix =
+    new SparseMatrix(this.columns, this.rows, this.map(
+        (node: SparseMatrixNode) =>
+          new SparseMatrixNode(node.column, node.row, node.value)
+      ))
 
   /** From `Traversable`, iterate over every value-location pair in this matrix. */
   def foreach[U](f: SparseMatrixNode => U): Unit = this.matrixList.foreach(f)
@@ -71,17 +77,18 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     MathUtils.valueInRange(row, 0, this.rows) &&
       MathUtils.valueInRange(col, 0, this.columns)
 
+  /** Return whether or not this is a square matrix */
+  def isSquare(): Boolean = this.rows == this.columns
+
   /** Get the value at the given position in the matrix. This function
     *  doesn't check if the location is valid or not and is pretty much only
     *  used internally inside `apply`.
     */
-  private def get(row: Int, col: Int): Option[Double] = (
-    (foundNode: SparseMatrixNode) => 
-      if (foundNode.row == row && foundNode.column == col)
-        Some(foundNode.value)
-      else
-        None
-    )(this.matrixList.findClosest(new SparseMatrixNode(row, col, 0)))
+  private def get(row: Int, col: Int): Option[Double] =
+    (Option(0d) /: (this.map {
+      case SparseMatrixNode(r, c, value) =>
+        if (r == row && c == col) Some(value) else None
+    }))((l: Option[Double], r: Option[Double]) => if (r.isEmpty) l else r)
 
   /** Construct a matrix with a new set of values, but the same size as this one. */
   private def rebuild(elems: Traversable[SparseMatrixNode]): SparseMatrix =
@@ -89,28 +96,19 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
 
   /** Remove a value from the matrix, effectively setting that value to zero. */
   private def remove(row: Int, col: Int): SparseMatrix =
-    this.rebuild(this.matrixList.remove(new SparseMatrixNode(row, col, 0)))
+    this.rebuild(this.matrixList.filter(
+      (node: SparseMatrixNode) => node match {
+          case SparseMatrixNode(row, col, _) => false
+          case _                             => true
+      }))
 
   /** Add a value to the matrix, regardless of whether it not it already exists.
     *  This is only used internally in situations where it's ensured that no
     *  duplicate elements will result from the operation.
     */
   private def add(row: Int, col: Int, value: Double): SparseMatrix =
-    this.rebuild(this.matrixList.insert(SparseMatrixNode(row, col, value)))
+    this.rebuild(this.matrixList :+ SparseMatrixNode(row, col, value))
 }
 
 /** Case class representing a single value in a matrix and its location. */
-case class SparseMatrixNode(row: Int, column: Int, value: Double) extends Ordered[SparseMatrixNode] {
-  def compare(that: SparseMatrixNode): Int = 
-    if (this.row > that.row) 
-      1
-    else if (this.row == that.row)
-      if(this.column > that.column) 
-        1
-      else if (this.column == that.column)
-        0
-      else
-        -1
-    else
-      -1
-}
+case class SparseMatrixNode(row: Int, column: Int, value: Double)

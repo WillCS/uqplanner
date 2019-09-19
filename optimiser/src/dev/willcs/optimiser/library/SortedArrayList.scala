@@ -27,6 +27,11 @@ class SortedArrayList[A <: Ordered[A]](elems: Array[A])(implicit tag: ClassTag[A
   def insert(element: A): SortedArrayList[A] =
     if (this.length == 0)
       new SortedArrayList(this.array :+ element)
+    else if (this.length == 1) 
+      if (element.compare(this.array(0)) == 0)
+        new SortedArrayList(element +: this.array)
+      else
+        new SortedArrayList(this.array :+ element)
     else (
       (index: Int) => new SortedArrayList(
         (this.array.slice(0, index) :+ element) ++ this.array.slice(index, this.array.length)
