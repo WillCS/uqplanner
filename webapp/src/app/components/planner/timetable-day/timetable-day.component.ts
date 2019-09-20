@@ -10,7 +10,7 @@ export class TimetableDayComponent implements OnInit {
   @Input()
   public sessionList: TimetableSession[];
   @Output()
-  public sessionClick: EventEmitter<number> = new EventEmitter<number>();
+  public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
 
   @Input()
   public editing: boolean;
@@ -26,12 +26,23 @@ export class TimetableDayComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
-  public displaySessonAsEditing(session: TimetableSession): boolean {
+  public handleClicked(session: TimetableSession) {
+    if(this.displaySessionAsEditing(session) || !this.editing) {
+      this.sessionClick.emit(session);
+    }
+  }
+
+  public displaySessionAsEditing(session: TimetableSession): boolean {
     return this.editing
         && this.editingClassName === session.className
         && this.editingClassType === session.classType;
+  }
+
+  public displaySessionAsNotEditing(session: TimetableSession): boolean {
+    return this.editing && !this.displaySessionAsEditing(session);
   }
 
   public getSessionTopPercentage(session: ClassSession): number {

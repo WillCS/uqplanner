@@ -17,7 +17,7 @@ export class TimetableComponent implements OnInit {
   public weekdayIndices: number[] = WEEKDAY_INDICES;
 
   @Output()
-  public sessionClick: EventEmitter<number> = new EventEmitter<number>();
+  public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
 
   @Input()
   public editing: boolean;

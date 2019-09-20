@@ -16,6 +16,7 @@ div.classObject {
     color: #292029;
     line-height: 25px;
     transition: left 0.5s;
+    box-sizing: border-box;
 }
 
 div.classObject > p {

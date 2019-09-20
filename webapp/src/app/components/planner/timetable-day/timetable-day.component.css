@@ -13,8 +13,17 @@ div.scheduledClass {
     box-sizing: border-box;
     border-bottom: 1px solid #e6dede;
     cursor: pointer;
+    padding: 5px;
 }
 
 div.scheduledClass.editing {
-    background-color: purple;
+    background-color: #413941f0;
+}
+
+div.scheduledClass.editing:hover {
+    background-color: #5a83cd;
+}
+
+div.scheduledClass.notEditing:hover {
+    cursor: auto;
 }

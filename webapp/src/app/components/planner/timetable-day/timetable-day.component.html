@@ -2,10 +2,11 @@
     <div 
         class='scheduledClass'
         *ngFor='let session of this.sessionList'
-        [class.editing]='this.displaySessonAsEditing(session)'
+        [class.editing]='this.displaySessionAsEditing(session)'
+        [class.notEditing]='this.displaySessionAsNotEditing(session)'
         [style.top.%]='this.getSessionTopPercentage(session.classSession)'
         [style.height.%]='this.getSessionHeightPercentage(session.classSession)'
-        (click)='this.sessionClick.emit(session)'
+        (click)='this.handleClicked(session)'
     >
         <p>
             {{session.className}}
