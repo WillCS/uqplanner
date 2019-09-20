@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ClassSession, TimetableSession, DAY_LENGTH, DAY_START_TIME, ClassStream } from 'src/app/calendar/calendar';
+import { ClassSession, TimetableSession, DAY_START_TIME, ClassStream, DAY_LENGTH_MINUTES, TIMETABLE_HOURS, DAY_LENGTH_HOURS } from 'src/app/calendar/calendar';
 
 @Component({
   selector: 'app-timetable-day',
@@ -21,12 +21,19 @@ export class TimetableDayComponent implements OnInit {
   @Input()
   public selections: Map<string, Map<string, ClassStream>>;
 
+  private sessionBlockHeight = 100 * (50 / DAY_LENGTH_MINUTES);
+  private sessionStartTimes = TIMETABLE_HOURS;
+
   constructor() {
 
   }
 
   ngOnInit() {
 
+  }
+
+  public sessionBlockTopOffset(block: number): number {
+    return 100 * ((block - DAY_START_TIME.hours) / DAY_LENGTH_HOURS);
   }
 
   public handleClicked(session: TimetableSession) {
@@ -46,13 +53,14 @@ export class TimetableDayComponent implements OnInit {
   }
 
   public getSessionTopPercentage(session: ClassSession): number {
-    const relativeTime: number = session.startTime.hours
-      - DAY_START_TIME.hours;
-    return 100 * (relativeTime / DAY_LENGTH);
+    const relativeTime: number = session.startTime.hours * 60 + session.startTime.minutes
+      - (DAY_START_TIME.hours * 60 + DAY_START_TIME.minutes);
+    return 100 * (relativeTime / (DAY_LENGTH_MINUTES));
   }
 
   public getSessionHeightPercentage(session: ClassSession): number {
-    const length: number = session.endTime.hours - session.startTime.hours;
-    return 100 * (length / DAY_LENGTH);
+    const length: number = (session.endTime.hours * 60 + session.endTime.minutes)
+      - (session.startTime.hours * 60 + session.startTime.minutes);
+    return 100 * (length / DAY_LENGTH_MINUTES);
   }
 }

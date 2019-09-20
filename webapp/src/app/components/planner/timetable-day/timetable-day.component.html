@@ -1,4 +1,11 @@
 <div class='dayColumn'>
+    <div
+        class='sessionBlock'
+        *ngFor='let block of this.sessionStartTimes'
+        [style.height.%]='this.sessionBlockHeight'
+        [style.top.%]='this.sessionBlockTopOffset(block)'
+    >
+    </div>
     <div 
         class='scheduledClass'
         *ngFor='let session of this.sessionList'
@@ -9,9 +16,9 @@
         (click)='this.handleClicked(session)'
     >
         <p>
-            {{session.className}}
+            <b>{{session.className}}</b> {{session.classType}}0{{session.classStream + 1}}
             <br />
-            {{session.classType}}0{{session.classStream + 1}}
+            {{session.classSession.location}}
         </p>
     </div>
 </div>

@@ -5,36 +5,43 @@ CLASS_TYPES = [
     [
         {
             'name': 'L',
-            'streams': 1,
-            'hours': { 'min': 1, 'max': 3 }
+            'streams': { 'min': 1, 'max': 3 },
+            'length': { 'hours': 0, 'minutes': 50 },
+            'sessions': 3
         }, {
             'name':  'T',
             'streams': { 'min': 4, 'max': 8 },
-            'length': 1
+            'length': { 'hours': 0, 'minutes': 50 },
+            'sessions': 1
         }, {
             'name': 'P',
             'streams': { 'min': 4, 'max': 8 },
-            'length': 1
+            'length': { 'hours': 1, 'minutes': 20 },
+            'sessions': 1
         }
     ], [
         {
             'name': 'U',
             'streams': { 'min': 2, 'max': 5 },
-            'length': { 'min': 2, 'max': 4 }
+            'length': { 'hours': 2, 'minutes': 50 },
+            'sessions': 1
         }, {
             'name': 'L',
             'streams': 1,
-            'length': 2
+            'length': { 'hours': 0, 'minutes': 50 },
+            'sessions': 1
         }
     ], [
         {
             'name': 'L',
             'streams': { 'min': 1, 'max': 2 },
-            'hours': 2
+            'length': { 'hours': 1, 'minutes': 50 },
+            'sessions': 1
         }, {
             'name': 'P',
             'streams': { 'min': 3, 'max': 6 },
-            'length': 1
+            'length': { 'hours': 1, 'minutes': 50 },
+            'sessions': 1
         }
     ]
 ]
@@ -77,46 +84,34 @@ def gen_random_class(class_type: {}) -> {}:
     }
 
 def gen_random_stream(class_type: {}) -> {}:
-    sessions = []
-
-    try:
-        class_length = class_type.get('length')
-        sessions = [gen_random_session(class_length)]
-
-    except:
-        hour_data = class_type.get('hours')
-        hours_of_class = 0
-
-        try:
-            hours_of_class = int(hour_data)
-        except:
-            hours_of_class = random.randint(hour_data.get('min'), hour_data.get('max'))
-
-        first_class_length = random.randint(1, hours_of_class)
-        second_class_length = hours_of_class - first_class_length
-
-        sessions = [gen_random_session(first_class_length), gen_random_session(second_class_length)]
+    class_length = class_type.get('length')
+    num_sessions = class_type.get('sessions')
+    sessions = [gen_random_session(class_length) for s in range(num_sessions)]
 
     return {
         'classes': sessions
     }
 
-def gen_random_session(length_hours: int) -> {}:
+def gen_random_session(length) -> {}:
     day = random.randint(0, 4)
-    start_time = random.randint(8, 18)
+    start_time = { 'hours': random.randint(8, 18), 'minutes': 30 if random.randint(0, 9) == 9 else 0 }
     location = ''.join(random.choices(string.ascii_letters + ' ', k = 20))
 
-    end_time_hours = start_time + length_hours
+    end_time = sum_times(start_time, length)
 
     return {
         'day': day,
-        'startTime': {
-            'hours': start_time,
-            'minutes': 0
-        },
-        'endTime': {
-            'hours': end_time_hours,
-            'minutes': 0
-        },
+        'startTime': start_time,
+        'endTime': end_time,
         'location': location
     }
+
+def sum_times(t1, t2):
+    m1 = t1.get('hours') * 60 + t1.get('minutes')
+    m2 = t2.get('hours') * 60 + t2.get('minutes')
+
+    m_s = (m1 + m2) % 60
+    h_s = (m1 + m2 - m_s) / 60
+    t_s = { 'hours': h_s, 'minutes': m_s }
+
+    return t_s

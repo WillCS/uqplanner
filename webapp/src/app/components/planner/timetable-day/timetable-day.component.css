@@ -1,9 +1,14 @@
 div.dayColumn {
     width: 100%;
     height: 600px;
-    background-color: #bd527b;
     top: 0%;
     position: relative;
+}
+
+div.sessionBlock {
+    background-color: #bd527b;
+    position: absolute;
+    width: 100%;
 }
 
 div.scheduledClass {
@@ -13,11 +18,17 @@ div.scheduledClass {
     box-sizing: border-box;
     border-bottom: 1px solid #e6dede;
     cursor: pointer;
-    padding: 5px;
+    padding-left: 5px;
+}
+
+div.scheduledClass > p {
+    height: 100%;
+    margin: 0px;
+    font-size: 12px;
 }
 
 div.scheduledClass.editing {
-    background-color: #413941f0;
+    background-color: #41394150;
 }
 
 div.scheduledClass.editing:hover {
