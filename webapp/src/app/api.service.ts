@@ -8,17 +8,17 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private api: string = 'http://localhost:2727'
+  private api = 'http://localhost:2727';
 
   constructor(private http: HttpClient) {}
 
   public getClass(courseCode: string, year: number, semester: number): Observable<ClassListing> {
-    let endpoint: string = this.endpoint('test');
+    const endpoint: string = this.endpoint('test');
     return this.http.get<string>(endpoint).pipe(map(
         (value: string) => JSON.parse(value)));
   }
 
   private endpoint(name: string): string {
-    return `${this.api}/${name}`
+    return `${this.api}/${name}`;
   }
 }

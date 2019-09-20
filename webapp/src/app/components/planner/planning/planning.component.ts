@@ -18,7 +18,7 @@ export class PlanningComponent implements OnInit {
 
   public selections: Map<string, Map<string, number>>;
 
-  public editing: boolean = false;
+  public editing = false;
   public editingClassName: string;
   public editingClassType: string;
 
@@ -42,11 +42,11 @@ export class PlanningComponent implements OnInit {
   }
 
   public addClass(newClass: ClassListing): void {
-    if(!this.classList.some(c => c.name == newClass.name)) {
+    if(!this.classList.some(c => c.name === newClass.name)) {
       this.classList.push(newClass);
 
       if(!this.selections.has(newClass.name)) {
-          let classMap: Map<string, number> = new Map<string, number>();
+          const classMap: Map<string, number> = new Map<string, number>();
           newClass.classes.forEach((classType: ClassType) => {
               classMap.set(classType.name, 0);
           });
@@ -75,7 +75,7 @@ export class PlanningComponent implements OnInit {
       }
   }
 
-  public onSearched(searchTerm: string): void {    
+  public onSearched(searchTerm: string): void {
     this.api.getClass(searchTerm, this.year, this.semester).subscribe(
       (newClass: ClassListing) => {
         this.addClass(newClass);

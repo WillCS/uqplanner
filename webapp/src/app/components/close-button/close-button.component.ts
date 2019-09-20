@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CloseButtonComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit() {
+
   }
 
 }

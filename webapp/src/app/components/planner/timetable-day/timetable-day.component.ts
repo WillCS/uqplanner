@@ -5,9 +5,6 @@ import { ClassSession, TimetableSession, DAY_LENGTH, DAY_START_TIME, ClassStream
   selector: 'app-timetable-day',
   templateUrl: './timetable-day.component.html',
   styleUrls: ['./timetable-day.component.css'],
-  providers: [
-  
-  ]
 })
 export class TimetableDayComponent implements OnInit {
   @Input()
@@ -22,7 +19,7 @@ export class TimetableDayComponent implements OnInit {
   @Input()
   public editingClassType: string;
   @Input()
-  public selections: Map<string, Map<string, ClassStream>>
+  public selections: Map<string, Map<string, ClassStream>>;
 
   constructor() {
 
@@ -32,19 +29,19 @@ export class TimetableDayComponent implements OnInit {
   }
 
   public displaySessonAsEditing(session: TimetableSession): boolean {
-    return this.editing 
-        && this.editingClassName == session.className 
-        && this.editingClassType == session.classType;
+    return this.editing
+        && this.editingClassName === session.className
+        && this.editingClassType === session.classType;
   }
 
   public getSessionTopPercentage(session: ClassSession): number {
-    let relative_time: number = session.startTime.hours
+    const relativeTime: number = session.startTime.hours
       - DAY_START_TIME.hours;
-    return 100 * (relative_time / DAY_LENGTH);
+    return 100 * (relativeTime / DAY_LENGTH);
   }
 
   public getSessionHeightPercentage(session: ClassSession): number {
-    let length: number = session.endTime.hours - session.startTime.hours;
+    const length: number = session.endTime.hours - session.startTime.hours;
     return 100 * (length / DAY_LENGTH);
   }
 }

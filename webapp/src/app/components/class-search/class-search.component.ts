@@ -17,13 +17,13 @@ export class ClassSearchComponent implements OnInit {
   @ViewChild('courseCode', { read: ElementRef, static: false })
   private input: ElementRef;
 
-  private isExpanded: boolean = false;
-  private isReady: boolean    = false;
+  private isExpanded = false;
+  private isReady    = false;
 
-  private searchText: string = '';
+  private searchText = '';
 
   constructor(private api: ApiService) {
-    
+
   }
 
   ngOnInit() {
@@ -58,13 +58,13 @@ export class ClassSearchComponent implements OnInit {
 
   private handleEnterPress(courseCode: string): void {
     if(this.isReady) {
-      this.executeSearch(courseCode)
+      this.executeSearch(courseCode);
     }
   }
 
   private handleEscapePress(): void {
     if(this.isExpanded) {
-      this.closeTextInput()
+      this.closeTextInput();
     }
   }
 
@@ -81,4 +81,5 @@ export class ClassSearchComponent implements OnInit {
   private executeSearch(courseCode: string): void {
     this.search.emit(courseCode);
   }
+
 }

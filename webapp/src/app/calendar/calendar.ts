@@ -12,7 +12,7 @@ export const DAY_START_TIME: Time = { hours: 8, minutes: 0 };
 
 export const DAY_END_TIME: Time = { hours: 20, minutes: 0 };
 
-export const DAY_LENGTH: number = 12;
+export const DAY_LENGTH = 12;
 
 export const TIMETABLE_HOURS: number[] = [
     8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
