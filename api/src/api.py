@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
 
-from calendar import get_infs
+from calendar import get_infs, gen_random_subject
 
 app: Flask = Flask(__name__)
 CORS(app, origins = 'http://localhost:4200')
@@ -12,7 +12,7 @@ api: Api = Api(app)
 
 class Test(Resource):
     def get(self):
-        return json.dumps(get_infs())
+        return json.dumps(gen_random_subject())
 
 api.add_resource(Test, '/test')
 
