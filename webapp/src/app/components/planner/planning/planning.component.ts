@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ClassListing, TimetableSession, ClassType } from 'src/app/calendar/calendar';
+import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
 
 @Component({
@@ -21,6 +21,7 @@ export class PlanningComponent implements OnInit {
   public editing = false;
   public editingClassName: string;
   public editingClassType: string;
+  public focusedSession: TimetableSession;
 
   constructor(public api: ApiService) {
     this.selections = new Map<string, Map<string, number>>();
@@ -39,6 +40,14 @@ export class PlanningComponent implements OnInit {
     }
 
     this.editing = !this.editing;
+  }
+
+  public handleSessionEntered(session: TimetableSession): void {
+    this.focusedSession = session;
+  }
+
+  public handleSessionLeft(): void {
+    this.focusedSession = null;
   }
 
   public addClass(newClass: ClassListing): void {

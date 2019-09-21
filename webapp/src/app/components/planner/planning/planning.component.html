@@ -9,7 +9,10 @@
         [editingClassName]='this.editingClassName'
         [editingClassType]='this.editingClassType'
         [selections]='this.selections'
+        [focusedSession]='this.focusedSession'
         (sessionClick)='this.handleSessionClicked($event)'
+        (sessionEnter)='this.handleSessionEntered($event)'
+        (sessionLeave)='this.handleSessionLeft($event)'
     >
     </app-timetable>
 

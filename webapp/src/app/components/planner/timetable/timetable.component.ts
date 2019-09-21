@@ -18,6 +18,10 @@ export class TimetableComponent implements OnInit {
 
   @Output()
   public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
+  @Output()
+  public sessionEnter: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
+  @Output()
+  public sessionLeave: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
 
   @Input()
   public editing: boolean;
@@ -25,6 +29,8 @@ export class TimetableComponent implements OnInit {
   public editingClassName: string;
   @Input()
   public editingClassType: string;
+  @Input()
+  public focusedSession: TimetableSession;
 
   @Input()
   public selections: Map<string, Map<string, number>>;
@@ -48,8 +54,8 @@ export class TimetableComponent implements OnInit {
 
         classType.streams.forEach((classStream: ClassStream, streamIndex: number) => {
 
-          if((this.editing && classType.name === this.editingClassType)
-              || streamIndex === selectionForType) {
+          if((this.editing && classType.name === this.editingClassType && classListing.name === this.editingClassName)
+              || (streamIndex === selectionForType)) {
             classStream.classes.forEach((session: ClassSession, sessionIndex: number) => {
               const day: number = session instanceof Date
                 ? (session as Date).getDay()

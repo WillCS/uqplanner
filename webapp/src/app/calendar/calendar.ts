@@ -19,6 +19,14 @@ export const TIMETABLE_HOURS: number[] = [
     8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 ];
 
+export const NULL_SESSION: TimetableSession = {
+    className: '',
+    classType: '',
+    classStream: 0,
+    classSessionIndex: 0,
+    classSession: null
+}
+
 export interface ClassListing {
     name: string;
     classes: ClassType[];

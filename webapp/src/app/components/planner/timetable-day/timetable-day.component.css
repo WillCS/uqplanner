@@ -31,10 +31,10 @@ div.scheduledClass.editing {
     background-color: #41394150;
 }
 
-div.scheduledClass.editing:hover {
+div.scheduledClass.editing.focused {
     background-color: #5a83cd;
 }
 
 div.scheduledClass.notEditing:hover {
-    cursor: auto;
+    cursor: default;
 }

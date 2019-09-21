@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ClassSession, TimetableSession, DAY_START_TIME, ClassStream, DAY_LENGTH_MINUTES, TIMETABLE_HOURS, DAY_LENGTH_HOURS } from 'src/app/calendar/calendar';
+import { ClassSession, TimetableSession, DAY_START_TIME, ClassStream,
+  DAY_LENGTH_MINUTES, TIMETABLE_HOURS, DAY_LENGTH_HOURS } from 'src/app/calendar/calendar';
 
 @Component({
   selector: 'app-timetable-day',
@@ -9,8 +10,13 @@ import { ClassSession, TimetableSession, DAY_START_TIME, ClassStream, DAY_LENGTH
 export class TimetableDayComponent implements OnInit {
   @Input()
   public sessionList: TimetableSession[];
+
   @Output()
   public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
+  @Output()
+  public sessionEnter: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
+  @Output()
+  public sessionLeave: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
 
   @Input()
   public editing: boolean;
@@ -19,9 +25,12 @@ export class TimetableDayComponent implements OnInit {
   @Input()
   public editingClassType: string;
   @Input()
+  public focusedSession: TimetableSession;
+  @Input()
   public selections: Map<string, Map<string, ClassStream>>;
 
   private sessionBlockHeight = 100 * (50 / DAY_LENGTH_MINUTES);
+  private sessionMarginHeight = 100 * (10 / DAY_LENGTH_MINUTES);
   private sessionStartTimes = TIMETABLE_HOURS;
 
   constructor() {
@@ -30,6 +39,16 @@ export class TimetableDayComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  public isSessionFocused(session: TimetableSession): boolean {
+    if(this.focusedSession) {
+      return this.focusedSession.className === session.className
+        && this.focusedSession.classType === session.classType
+        && this.focusedSession.classStream === session.classStream;
+    }
+
+    return false;
   }
 
   public sessionBlockTopOffset(block: number): number {
