@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ClassSession, TimetableSession, DAY_START_TIME, ClassStream,
-  DAY_LENGTH_MINUTES, TIMETABLE_HOURS, DAY_LENGTH_HOURS } from 'src/app/calendar/calendar';
+import {
+  ClassSession, TimetableSession, DAY_START_TIME, ClassStream,
+  DAY_LENGTH_MINUTES, TIMETABLE_HOURS, DAY_LENGTH_HOURS, getEarlierSession,
+  doSessionsClash, startTimeToMinutes, endTimeToMinutes
+} from 'src/app/calendar/calendar';
 
 @Component({
   selector: 'app-timetable-day',
@@ -39,6 +42,71 @@ export class TimetableDayComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  public getClashes(session: TimetableSession): TimetableSession[] {
+    return this.sessionList.filter(
+      (sessionFromList: TimetableSession) => doSessionsClash(session, sessionFromList)
+    );
+  }
+
+  public isSessionClashing(session: TimetableSession): boolean {
+    return this.getClashChain(session).length > 1;
+  }
+
+  public getClashChain(session: TimetableSession): TimetableSession[] {
+    const clashes = this.getClashes(session);
+
+    if(clashes.length === 1) {
+      return clashes;
+    }
+
+    const clashChain = [];
+
+    clashes.forEach(
+      (clashingSession: TimetableSession) => {
+        const metaClashes = this.getClashes(clashingSession);
+
+        if(metaClashes.length === 1) {
+          return;
+        } else {
+          metaClashes.forEach(
+            (metaClash: TimetableSession) => {
+              if(!clashChain.includes(metaClash)) {
+                clashChain.push(metaClash);
+              }
+            });
+        }
+      });
+
+    return clashChain;
+  }
+
+  public getSessionClashStyling(session: TimetableSession): {} {
+    const clashes = this.getClashChain(session);
+
+    if(clashes.length === 1) {
+      return {};
+    }
+
+    const sortedClashes = clashes.sort(
+      (s1: TimetableSession, s2: TimetableSession): number => {
+        const startComparison = startTimeToMinutes(s1) - startTimeToMinutes(s2);
+
+        if(startComparison === 0) {
+          return endTimeToMinutes(s1) - endTimeToMinutes(s2);
+        } else {
+          return startComparison;
+        }
+      });
+
+    const width = 100 / sortedClashes.length;
+    const index = sortedClashes.indexOf(session);
+
+    return {
+      'left.%': width * index,
+      'width.%': index === sortedClashes.length - 1 ? width : width * 0.9
+    };
   }
 
   public isSessionFocused(session: TimetableSession): boolean {

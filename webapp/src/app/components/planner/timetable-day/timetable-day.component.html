@@ -13,6 +13,8 @@
         [class.editing]='this.displaySessionAsEditing(session)'
         [class.notEditing]='this.displaySessionAsNotEditing(session)'
         [class.focused]='this.isSessionFocused(session)'
+        [class.clashing]='this.isSessionClashing(session)'
+        [ngStyle]='this.getSessionClashStyling(session)'
         [style.top.%]='this.getSessionTopPercentage(session.classSession)'
         [style.height.%]='this.getSessionHeightPercentage(session.classSession)'
         (click)='this.handleClicked(session)'

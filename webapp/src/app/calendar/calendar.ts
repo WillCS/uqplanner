@@ -25,7 +25,7 @@ export const NULL_SESSION: TimetableSession = {
     classStream: 0,
     classSessionIndex: 0,
     classSession: null
-}
+};
 
 export interface ClassListing {
     name: string;
@@ -54,4 +54,32 @@ export interface TimetableSession {
     classStream: number;
     classSessionIndex: number;
     classSession: ClassSession;
+}
+
+export function startTimeToMinutes(session: TimetableSession): number {
+    return session.classSession.startTime.hours * 60 + session.classSession.startTime.minutes;
+}
+
+export function endTimeToMinutes(session: TimetableSession): number {
+    return session.classSession.endTime.hours * 60 + session.classSession.endTime.minutes;
+}
+
+export function lengthToMinutes(session: TimetableSession): number {
+    return endTimeToMinutes(session) - startTimeToMinutes(session);
+}
+
+export function doSessionsClash(s1: TimetableSession, s2: TimetableSession): boolean {
+    const s1Start = startTimeToMinutes(s1);
+    const s2Start = startTimeToMinutes(s2);
+    const s1End = endTimeToMinutes(s1);
+    const s2End = endTimeToMinutes(s2);
+
+    return (s1Start <= s2Start && s1End > s2Start && s1End <= s2End)
+        || (s2Start <= s1Start && s2End > s1Start && s2End <= s1End)
+        || (s1Start <= s2Start && s1End >= s2End)
+        || (s2Start <= s1Start && s2End >= s1End);
+}
+
+export function getEarlierSession(s1: TimetableSession, s2: TimetableSession): TimetableSession {
+    return startTimeToMinutes(s1) <= startTimeToMinutes(s2) ? s1 : s2;
 }

@@ -3,6 +3,7 @@ div.dayColumn {
     height: 600px;
     top: 0%;
     position: relative;
+    overflow: hidden;
 }
 
 div.sessionBlock {
@@ -19,6 +20,7 @@ div.scheduledClass {
     border-bottom: 1px solid #e6dede;
     cursor: pointer;
     padding-left: 5px;
+    overflow: hidden;
 }
 
 div.scheduledClass > p {
@@ -27,12 +29,17 @@ div.scheduledClass > p {
     font-size: 12px;
 }
 
-div.scheduledClass.editing {
+div.scheduledClass.editing,
+        div.scheduledClass.clashing.editing {
     background-color: #41394150;
 }
 
 div.scheduledClass.editing.focused {
     background-color: #5a83cd;
+}
+
+div.scheduledClass.clashing {
+    background-color: #732918;
 }
 
 div.scheduledClass.notEditing:hover {
