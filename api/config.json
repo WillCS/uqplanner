@@ -1,0 +1,7 @@
+{
+    "cors": "http://localhost:4200",
+    "host": "0.0.0.0",
+    "port": "2727",
+    "db_address": "172.18.0.2",
+    "db_port": "9042"
+}

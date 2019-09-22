@@ -1,2 +1,2 @@
-from .calendar import get_infs
+from .calendar import ClassSession, ClassSessionRecurring, ClassSessionOneOff, ClassStream, Class, SubjectOffering
 from .generator import gen_random_subject
