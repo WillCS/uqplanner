@@ -7,17 +7,17 @@ div.dayColumn {
 }
 
 div.sessionBlock {
-    background-color: #bd527b;
+    background-color: #56407f;
     position: absolute;
     width: 100%;
 }
 
 div.scheduledClass {
     position: absolute;
-    background-color: #8b2962;
+    background-color: #b569af;
     width: 100%;
     box-sizing: border-box;
-    border-bottom: 1px solid #e6dede;
+    border-bottom: 1px solid white;
     cursor: pointer;
     padding-left: 5px;
     overflow: hidden;
@@ -31,15 +31,15 @@ div.scheduledClass > p {
 
 div.scheduledClass.editing,
         div.scheduledClass.clashing.editing {
-    background-color: #41394150;
+    background-color: #e0c4decc;
 }
 
 div.scheduledClass.editing.focused {
-    background-color: #5a83cd;
+    background-color: #7fb3ee;
 }
 
 div.scheduledClass.clashing {
-    background-color: #732918;
+    background-color: #ed6164;
 }
 
 div.scheduledClass.notEditing:hover {

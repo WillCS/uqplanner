@@ -8,7 +8,7 @@ input.classSearchField {
     border: 0px;
     top: -2px;
     right: 5px;
-    background-color: #e6dede;
+    background-color: white;
     transition: width 0.1s, padding 0.1s, margin 0.1s;
 }
 
@@ -26,7 +26,7 @@ button.classSearch,
     position: absolute;
     width: 40px;
     height: 40px;
-    background-color: #e6dede;
+    background-color: white;
     border-radius: 20px;
     border: 0px;
     outline: none;
@@ -36,7 +36,7 @@ button.classSearch,
 }
 
 button.classSearch > span {
-    background-color: #395a9c;
+    background-color: #56407f;
     width: 6px;
     height: 30px;
     position: absolute;
@@ -80,14 +80,14 @@ button.classSearch.expanded > span:nth-child(2) {
 
 
 button.classSearch.expanded > span {
-    background-color: #732918;
+    background-color: #aa4547;
 }
 
 button.classSearch.expanded:hover > span {
-    background-color: #9c4131;
+    background-color: #ed6164;
 }
 
 
 button.classSearch.expanded.ready > span {
-    background-color: #5a83cd;
+    background-color: #7fb3ee;
 }
