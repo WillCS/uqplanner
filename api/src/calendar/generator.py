@@ -56,16 +56,10 @@ def gen_random_subject() -> {}:
 
     classes = [gen_random_class(subject_type[n]) for n in range(num_classes)]
 
-    # if random.randint(0, 9) == 9:
-    #     classes.append(gen_random_one_off_class(random.choice(string.ascii_uppercase)))
-
     return {
         'name': name,
         'classes': classes
     }
-
-# def gen_random_one_off_class(name: str) -> {}:
-#     date = 
 
 def gen_random_class(class_type: {}) -> {}:
     num_streams = 0

@@ -1,3 +1,31 @@
+from cassandra.cqlengine import columns
+from cassandra.cqlengine.models import Model
+from cassandra.cqlengine.usertype import UserType
+
+class ClassSession(UserType):
+    start_time  = columns.Time()
+    end_time    = columns.Time()
+    location    = columns.Ascii()
+
+class ClassSessionRecurring(ClassSession):
+    day         = columns.Integer()
+
+class ClassSessionOneOff(ClassSession):
+    day         = columns.Date()
+
+class ClassStream(UserType):
+    classes     = columns.List(columns.UserDefinedType(ClassSession))
+
+class Class(UserType):
+    name        = columns.Ascii()
+    streams     = columns.Map(columns.Integer(), columns.UserDefinedType(ClassStream))
+
+class SubjectOffering(Model):
+    name        = columns.Ascii(primary_key = True)
+    year        = columns.Integer(primary_key = True)
+    semester    = columns.Integer(primary_key = True)
+    classes     = columns.List(columns.UserDefinedType(Class))
+
 def get_infs():
     return {
         'name': 'INFS3208',
