@@ -7,7 +7,7 @@ nav.navbar {
 
 nav.navbar > a, nav.navbar > a:visited {
     margin: 0 10px;
-    color: #395a9c;
+    color: #56407f;
     transition: font-size 0.1s, color 0.1s;
     outline: none;
     font-weight: bold;
@@ -17,7 +17,7 @@ nav.navbar > a, nav.navbar > a:visited {
 
 nav.navbar > a:hover, nav.navbar > a.active {
     font-size: 50px;
-    color: #5a83cd;
+    color: #7fb3ee;
     transition: font-size 0.1s, color 0.1s;
 }
 
