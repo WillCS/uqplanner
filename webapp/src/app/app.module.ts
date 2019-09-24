@@ -12,6 +12,7 @@ import { TimetableComponent } from './components/planner/timetable/timetable.com
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
 import { ClassSearchComponent } from './components/class-search/class-search.component';
 import { CloseButtonComponent } from './components/close-button/close-button.component';
+import { TimePipe } from './calendar/time.pipe';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { CloseButtonComponent } from './components/close-button/close-button.com
     TimetableDayComponent,
     ClassSearchComponent,
     CloseButtonComponent,
+    TimePipe
   ],
   imports: [
     BrowserModule,

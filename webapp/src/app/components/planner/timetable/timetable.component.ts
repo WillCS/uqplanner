@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { WEEKDAYS, WEEKDAY_INDICES, ClassListing, TimetableSession, ClassStream, ClassType, ClassSession } from 'src/app/calendar/calendar';
+import {
+  WEEKDAYS, WEEKDAY_INDICES, TIMETABLE_HOURS, ClassListing,
+  TimetableSession, ClassStream, ClassType, ClassSession
+} from 'src/app/calendar/calendar';
 import { stringify } from 'querystring';
 
 @Component({
@@ -15,6 +18,7 @@ export class TimetableComponent implements OnInit {
   public classList: ClassListing[] = [];
   public weekdays: string[] = WEEKDAYS;
   public weekdayIndices: number[] = WEEKDAY_INDICES;
+  public timetableHours: number[] = TIMETABLE_HOURS;
 
   @Output()
   public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
