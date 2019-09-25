@@ -5,9 +5,12 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 
 from calendar import gen_random_subject
+from util import get_config
+
+config = get_config()
 
 app: Flask = Flask(__name__)
-CORS(app, origins = 'http://localhost:4200')
+CORS(app, origins = config['CORS_host'])
 api: Api = Api(app)
 
 class Test(Resource):
@@ -17,4 +20,4 @@ class Test(Resource):
 api.add_resource(Test, '/test')
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', port = '2727')
+    app.run(host = config['host'], port = config['port'])

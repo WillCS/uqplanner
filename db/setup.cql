@@ -1,4 +1,10 @@
-CREATE KEYSPACE "infs3208" WITH replication = { 'class': 'SimpleStrategy', 'replication_factor':'3' };
+-- SECURITY --
+
+ALTER KEYSPACE system_auth WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': 3 };
+
+-- KEYSPACE --
+
+CREATE KEYSPACE "infs3208" WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': 3 };
 
 -- TYPES --
 
@@ -27,4 +33,11 @@ CREATE TABLE infs3208.subject_offering (
     semester int,
     classes set<frozen<infs3208.class>>,
     PRIMARY KEY (name, year, semester)
+);
+
+CREATE TABLE infs3208.semester (
+    year int,
+    semester int,
+    weeks map<int, date>,
+    PRIMARY KEY(year, semester)
 );

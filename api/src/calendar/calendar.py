@@ -21,3 +21,8 @@ class SubjectOffering(Model):
     year        = columns.Integer(primary_key = True)
     semester    = columns.Integer(primary_key = True)
     classes     = columns.Set(columns.UserDefinedType(Class))
+
+class Semester(Model):
+    year     = columns.Integer(primary_key = True)
+    semester = columns.Integer(primary_key = True)
+    weeks    = columns.Map(columns.Integer(), columns.Date())
