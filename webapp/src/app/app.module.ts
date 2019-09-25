@@ -12,7 +12,10 @@ import { TimetableComponent } from './components/planner/timetable/timetable.com
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
 import { ClassSearchComponent } from './components/class-search/class-search.component';
 import { CloseButtonComponent } from './components/close-button/close-button.component';
+import { ControlsComponent } from './components/planner/controls/controls.component';
 import { TimePipe } from './calendar/time.pipe';
+import { ModalComponent } from './components/modal/modal.component';
+import { SemesterPipe } from './calendar/semester.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { TimePipe } from './calendar/time.pipe';
     TimetableDayComponent,
     ClassSearchComponent,
     CloseButtonComponent,
-    TimePipe
+    TimePipe,
+    ControlsComponent,
+    ModalComponent,
+    SemesterPipe
   ],
   imports: [
     BrowserModule,

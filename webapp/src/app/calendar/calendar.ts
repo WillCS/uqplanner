@@ -56,6 +56,13 @@ export interface TimetableSession {
     classSession: ClassSession;
 }
 
+export interface Semester {
+    year: number;
+    semester: number;
+    active: boolean;
+    weeks: Date[];
+}
+
 export function startTimeToMinutes(session: TimetableSession): number {
     return session.classSession.startTime.hours * 60 + session.classSession.startTime.minutes;
 }

@@ -5,10 +5,7 @@ import { ApiService } from 'src/app/api.service';
 @Component({
   selector: 'app-planning',
   templateUrl: './planning.component.html',
-  styleUrls: ['./planning.component.css'],
-  providers: [
-    ApiService
-  ]
+  styleUrls: ['./planning.component.css']
 })
 export class PlanningComponent implements OnInit {
   public year: number;

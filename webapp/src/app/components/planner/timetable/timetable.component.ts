@@ -8,10 +8,7 @@ import { stringify } from 'querystring';
 @Component({
   selector: 'app-timetable',
   templateUrl: './timetable.component.html',
-  styleUrls: ['./timetable.component.css'],
-  providers: [
-
-  ]
+  styleUrls: ['./timetable.component.css']
 })
 export class TimetableComponent implements OnInit {
   @Input()

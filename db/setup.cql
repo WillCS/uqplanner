@@ -38,6 +38,7 @@ CREATE TABLE infs3208.subject_offering (
 CREATE TABLE infs3208.semester (
     year int,
     semester int,
+    active boolean,
     weeks map<int, date>,
     PRIMARY KEY(year, semester)
 );

@@ -25,4 +25,5 @@ class SubjectOffering(Model):
 class Semester(Model):
     year     = columns.Integer(primary_key = True)
     semester = columns.Integer(primary_key = True)
+    active   = columns.Boolean()
     weeks    = columns.Map(columns.Integer(), columns.Date())

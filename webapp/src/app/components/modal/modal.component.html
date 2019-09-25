@@ -1,0 +1,21 @@
+<div 
+    *ngIf='this.isActive'
+    class='modalShade'
+    [class.isActive]='this.isActive'
+>
+    <div class='modalBox'>
+        <p class='modalHeading'>{{ this.modalSettings.title }}</p>
+        <p class='modalText'>{{ this.modalSettings.text }}</p>
+
+        <div class='modalButtonContainer'>
+            <button 
+                *ngFor='let button of this.modalSettings.buttons' 
+                class='modalButton'
+                [style.background-color]='button.colour'
+                (click)='button.action()'
+            >
+            {{ button.text }}
+            </button>
+        </div>
+    </div>
+</div>

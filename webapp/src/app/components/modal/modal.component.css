@@ -1,0 +1,53 @@
+div.modalShade {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.1s;
+}
+
+div.modalShade.isActive {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+div.modalBox {
+    box-sizing: border-box;
+    padding: 20px;
+    position: relative;
+    max-width: 450px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: aliceblue;
+    border-radius: 25px;
+}
+
+p.modalHeading {
+    font-size: 25px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div.modalButtonContainer {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+button.modalButton,
+        button.closeButton:active,
+        button.closeButton:focus,
+        button.closeButton::-moz-focus-inner {
+    max-width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    flex-grow: 1;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 25px;
+    border: 0px;
+    outline: none;
+}

@@ -1,14 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { ClassListing } from 'src/app/calendar/calendar';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-class-search',
   templateUrl: './class-search.component.html',
-  styleUrls: ['./class-search.component.css'],
-  providers: [
-    ApiService
-  ]
+  styleUrls: ['./class-search.component.css']
 })
 export class ClassSearchComponent implements OnInit {
   @Output()
@@ -22,7 +18,7 @@ export class ClassSearchComponent implements OnInit {
 
   private searchText = '';
 
-  constructor(private api: ApiService) {
+  constructor() {
 
   }
 

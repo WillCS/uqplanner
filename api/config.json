@@ -6,7 +6,5 @@
         "172.18.0.2"
     ],
     "db_port": "9042",
-    "db_keyspace": "infs3208",
-    "db_username": "----",
-    "db_password": "----"
+    "db_keyspace": "infs3208"
 }
