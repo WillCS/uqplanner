@@ -1,5 +1,12 @@
 <div class='calendarColumnContainer'>
     <div *ngFor='let day of this.weekdayIndices' class='calendarColumn'>
+        <div 
+            *ngIf='day == 0'
+            class='timeLabels'
+        >
+            <p class='timestamp' *ngFor='let hour of this.timetableHours'>{{hour | time}}</p>
+            <p class='timestamp'></p>
+        </div>
         <p class='dayHeader'>{{this.weekdays[day]}}</p>
         <app-timetable-day
             [sessionList]='this.getSessionsOnDay(day)'
