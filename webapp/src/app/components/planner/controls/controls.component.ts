@@ -22,6 +22,23 @@ export class ControlsComponent implements OnInit {
     // this.api.getActiveSemesters().subscribe(
     //   (semesters: number[]) => this.semesterList = semesters
     // );
+
+    this.semesterList = [{
+      year: 2019,
+      semester: 2,
+      active: true,
+      weeks: []
+    },{
+      year: 2019,
+      semester: 3,
+      active: true,
+      weeks: []
+    },{
+      year: 2020,
+      semester: 1,
+      active: true,
+      weeks: []
+    }];
   }
 
   public openSemesterChangeModal(): void {

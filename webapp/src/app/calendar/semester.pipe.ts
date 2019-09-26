@@ -10,7 +10,7 @@ export class SemesterPipe implements PipeTransform {
     const semester = value as Semester;
     let semesterName: string;
 
-    switch(semester.year) {
+    switch(semester.semester) {
       case 1:
         semesterName = 'Semester 1';
         break;

@@ -42,26 +42,46 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
 
   /** Put the given value at the given location in the matrix.
     *  If the given location is out of bounds, does nothing.
-    *  TODO: this should probably do something else
+    *  TODO: implement error handling.
     */
-  def set(row: Int, col: Int, value: Double): SparseMatrix =
-    this.remove(row, col).add(row, col, value)
+  def set(row: Int, col: Int, value: Double): SparseMatrix = value match {
+    case 0 => this.remove(row, col)
+    case _ => this.remove(row, col).add(row, col, value)
+  }
+
+  /** Increment the value at the given location in the matrix by the given
+   *  increment. If the location is out of bounds, does nothing.
+   *  TODO: implement error handling.
+   */
+  def increment(row: Int, col: Int, inc: Double): SparseMatrix = this(row, col) match {
+    case None => this
+    case Some(value) => this.add(row, col, inc + value)
+  }
 
   /** Put the given values at their respective locations in the matrix.
     *  If any locations are out of bounds, their corresponding values will not
     *  be added.
-    *  TODO: Make this do something else
+    *  TODO: Implement error handling.
     */
-  def set(elems: Array[SparseMatrixNode]): SparseMatrix =
+  def set(elems: Traversable[SparseMatrixNode]): SparseMatrix =
     (this /: elems)(
+      (matrix: SparseMatrix, node: SparseMatrixNode) => 
+        matrix.set(node.row, node.column, node.value)
+    )
+
+  /** Incrememnt the values at the given locations by the given increments.
+   *  If any locations are out of bounds, their corresponding values will not
+   *  be added.
+   *  TODO: Implement error handling.
+   */
+  def increment(increments: Traversable[SparseMatrixNode]): SparseMatrix =
+    (this /: increments)(
       (matrix: SparseMatrix, node: SparseMatrixNode) =>
-        node match {
-          case SparseMatrixNode(row, col, value) => matrix.set(row, col, value)
-        }
+        matrix.increment(node.row, node.column, node.value)
     )
 
   /** Return the transpose of this matrix. */
-  def transpose(): SparseMatrix =
+  def transpose: SparseMatrix =
     new SparseMatrix(this.columns, this.rows, this.map(
         (node: SparseMatrixNode) =>
           new SparseMatrixNode(node.column, node.row, node.value)
@@ -78,7 +98,53 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
       MathUtils.valueInRange(col, 0, this.columns)
 
   /** Return whether or not this is a square matrix */
-  def isSquare(): Boolean = this.rows == this.columns
+  def isSquare: Boolean = this.rows == this.columns
+
+  /** Matrix addition */
+  def +(addend: SparseMatrix): SparseMatrix = this.increment(addend)
+
+  /** Compute the LU decomposiiton of this matrix, using the Doolittle
+   *  algorithm.
+   */
+  def decompose(): (SparseMatrix, SparseMatrix) =
+    ((new SparseMatrix(this.rows, this.rows), new SparseMatrix(this.rows, this.rows)
+      ) /: (1 to this.rows)) {
+        case ((l: SparseMatrix, u: SparseMatrix), k: Int) =>
+          this.decomposeKthRow(k, l, u) match { 
+            case (newL: SparseMatrix, newU: SparseMatrix) => (l + newL, u + newU) 
+          }
+      }
+
+  /** Given the first (k - 1) rows of the LU decomposition of this matrix,
+   *  compute the kth rows of the LU decomposition.
+   */
+  private def decomposeKthRow(k: Int, l: SparseMatrix, u: SparseMatrix): (SparseMatrix, SparseMatrix) =
+    ((l, u) /: (k to this.rows).map(m => (
+      ((k, m), this.computeUElement(u, l, k, m)),
+      ((m, k), this.computeLElement(u, l, m, k))
+    ))) { 
+      case ((l: SparseMatrix, u: SparseMatrix), 
+        (((uRow: Int, uCol: Int), uVal: Double), ((lRow: Int, lCol: Int), lVal: Double))) => 
+          (u.set(uRow, uCol, uVal), l.set(lRow, lCol, lVal))
+    }
+
+  /** Compute the element of this matrix's LU decomposition at position (i, k),
+   *  in the L component given a certain amount of progress into calculating
+   *  the total LU decomposition.
+   */
+  private def computeLElement(u: SparseMatrix, l: SparseMatrix, i: Int, k: Int): Double = 
+    if (i == k) 1 else (this(i, k).get - (1 until k).map(j =>
+      l(i, j).get * u(j, k).get
+    ).sum) / this.computeUElement(u, l, k, k)
+
+  /** Compute the element of this matrix's LU decomposition at position (i, k),
+   *  in the U component given a certain amount of progress into calculating
+   *  the total LU decomposition.
+   */
+  private def computeUElement(u: SparseMatrix, l: SparseMatrix, k: Int, m: Int): Double =
+    this(k, m).get - (1 until k).map(j =>
+      l(k, j).get * u(j, m).get
+    ).sum
 
   /** Get the value at the given position in the matrix. This function
     *  doesn't check if the location is valid or not and is pretty much only
