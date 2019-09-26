@@ -12,8 +12,18 @@ object Optimiser {
 
     // sparkContext.stop()
 
-    var matrix = new SparseMatrix(10, 10)
-    matrix = matrix.set(0, 0, 5)
-    println(matrix(0, 0))
+    var matrix = new SparseMatrix(3, 3)
+    matrix = matrix.increment(0, 0, 5)
+    matrix = matrix.increment(0, 1, 2)
+    matrix = matrix.increment(1, 0, 29)
+    matrix = matrix.increment(1, 1, 4)
+    matrix = matrix.increment(0, 2, 11)
+    matrix = matrix.increment(2, 0, 15)
+    matrix = matrix.increment(2, 1, 7)
+    matrix = matrix.increment(1, 2, 12)
+    matrix = matrix.increment(2, 2, 19)
+    println(matrix)
+    println(matrix.rows)
+    println(matrix.decompose())
   }
 }

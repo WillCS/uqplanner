@@ -3,6 +3,7 @@ package dev.willcs.optimiser
 // LU Decomposition to invert
 import scala.Option
 import scala.collection.immutable.List
+import scala.collection.immutable.HashMap
 
 import dev.willcs.optimiser.library.MathUtils
 
@@ -44,10 +45,9 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     *  If the given location is out of bounds, does nothing.
     *  TODO: implement error handling.
     */
-  def set(row: Int, col: Int, value: Double): SparseMatrix = value match {
-    case 0 => this.remove(row, col)
-    case _ => this.remove(row, col).add(row, col, value)
-  }
+  def set(row: Int, col: Int, value: Double): SparseMatrix = 
+    if (value == 0) this.remove(row, col)
+    else this.remove(row, col).add(row, col, value)
 
   /** Increment the value at the given location in the matrix by the given
    *  increment. If the location is out of bounds, does nothing.
@@ -65,8 +65,7 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     */
   def set(elems: Traversable[SparseMatrixNode]): SparseMatrix =
     (this /: elems)(
-      (matrix: SparseMatrix, node: SparseMatrixNode) => 
-        matrix.set(node.row, node.column, node.value)
+      (matrix, node) => matrix.set(node.row, node.column, node.value)
     )
 
   /** Incrememnt the values at the given locations by the given increments.
@@ -76,16 +75,14 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
    */
   def increment(increments: Traversable[SparseMatrixNode]): SparseMatrix =
     (this /: increments)(
-      (matrix: SparseMatrix, node: SparseMatrixNode) =>
-        matrix.increment(node.row, node.column, node.value)
+      (matrix, node) => matrix.increment(node.row, node.column, node.value)
     )
 
   /** Return the transpose of this matrix. */
   def transpose: SparseMatrix =
     new SparseMatrix(this.columns, this.rows, this.map(
-        (node: SparseMatrixNode) =>
-          new SparseMatrixNode(node.column, node.row, node.value)
-      ))
+        (node) => new SparseMatrixNode(node.column, node.row, node.value)
+    ))
 
   /** From `Traversable`, iterate over every value-location pair in this matrix. */
   def foreach[U](f: SparseMatrixNode => U): Unit = this.matrixList.foreach(f)
@@ -100,6 +97,16 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
   /** Return whether or not this is a square matrix */
   def isSquare: Boolean = this.rows == this.columns
 
+  def setRow(rowIndex: Int, row: SparseVector): SparseMatrix = 
+    (this /: row)(
+      (matrix, element) => matrix.set(rowIndex, element.index, element.value)
+    )
+
+  def setColumn(columnIndex: Int, column: SparseVector): SparseMatrix =
+    (this /: column)(
+      (matrix, element) => matrix.set(element.index, columnIndex, element.value)
+    )
+
   /** Matrix addition */
   def +(addend: SparseMatrix): SparseMatrix = this.increment(addend)
 
@@ -108,41 +115,47 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
    */
   def decompose(): (SparseMatrix, SparseMatrix) =
     ((new SparseMatrix(this.rows, this.rows), new SparseMatrix(this.rows, this.rows)
-      ) /: (1 to this.rows)) {
-        case ((l: SparseMatrix, u: SparseMatrix), k: Int) =>
-          this.decomposeKthRow(k, l, u) match { 
-            case (newL: SparseMatrix, newU: SparseMatrix) => (l + newL, u + newU) 
-          }
+      ) /: (0 until this.rows)) {
+        case ((l, u), k) => ((newU: SparseMatrix) =>
+          (l.setColumn(k, decomposeKthRowToL(k, l, newU)), newU)
+        )(u.setRow(k, decomposeKthRowToU(k, l, u)))
       }
 
-  /** Given the first (k - 1) rows of the LU decomposition of this matrix,
-   *  compute the kth rows of the LU decomposition.
+  /** Given the the partially computed LU decomposition of this matrix,
+   *  compute the kth row of the U component of the LU decomposition.
    */
-  private def decomposeKthRow(k: Int, l: SparseMatrix, u: SparseMatrix): (SparseMatrix, SparseMatrix) =
-    ((l, u) /: (k to this.rows).map(m => (
-      ((k, m), this.computeUElement(u, l, k, m)),
-      ((m, k), this.computeLElement(u, l, m, k))
-    ))) { 
-      case ((l: SparseMatrix, u: SparseMatrix), 
-        (((uRow: Int, uCol: Int), uVal: Double), ((lRow: Int, lCol: Int), lVal: Double))) => 
-          (u.set(uRow, uCol, uVal), l.set(lRow, lCol, lVal))
+  private def decomposeKthRowToU(k: Int, l: SparseMatrix, u: SparseMatrix): SparseVector =
+    (new SparseVector(this.rows) /: (k until this.rows).map(m => 
+      (m, (this.computeUElement(u, l, k, m)))
+    )) { 
+      case (row, (rowIndex, value)) => row.set(rowIndex, value)
     }
+
+  /** Given the the partially computed LU decomposition of this matrix,
+   *  compute the kth column of the L component of the LU decomposition.
+   */
+  private def decomposeKthRowToL(k: Int, l: SparseMatrix, u: SparseMatrix): SparseVector =
+  (new SparseVector(this.rows) /: (k until this.rows).map(i => 
+    (i, (this.computeLElement(u, l, i, k)))
+  )) { 
+    case (column, (columnIndex, value)) => column.set(columnIndex, value)
+  }
 
   /** Compute the element of this matrix's LU decomposition at position (i, k),
    *  in the L component given a certain amount of progress into calculating
    *  the total LU decomposition.
    */
   private def computeLElement(u: SparseMatrix, l: SparseMatrix, i: Int, k: Int): Double = 
-    if (i == k) 1 else (this(i, k).get - (1 until k).map(j =>
+    if (i == k) 1 else (this(i, k).get - (0 until k).map(j =>
       l(i, j).get * u(j, k).get
     ).sum) / this.computeUElement(u, l, k, k)
 
-  /** Compute the element of this matrix's LU decomposition at position (i, k),
+  /** Compute the element of this matrix's LU decomposition at position (k, m),
    *  in the U component given a certain amount of progress into calculating
    *  the total LU decomposition.
    */
-  private def computeUElement(u: SparseMatrix, l: SparseMatrix, k: Int, m: Int): Double =
-    this(k, m).get - (1 until k).map(j =>
+  private def computeUElement(u: SparseMatrix, l: SparseMatrix, k: Int, m: Int): Double = 
+    this(k, m).get - (0 until k).map(j =>
       l(k, j).get * u(j, m).get
     ).sum
 
@@ -162,11 +175,10 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
 
   /** Remove a value from the matrix, effectively setting that value to zero. */
   private def remove(row: Int, col: Int): SparseMatrix =
-    this.rebuild(this.matrixList.filter(
-      (node: SparseMatrixNode) => node match {
-          case SparseMatrixNode(row, col, _) => false
-          case _                             => true
-      }))
+    this.rebuild(this.matrixList.filter {
+          case SparseMatrixNode(`row`, `col`, _) => false
+          case _                                 => true
+      })
 
   /** Add a value to the matrix, regardless of whether it not it already exists.
     *  This is only used internally in situations where it's ensured that no
@@ -178,3 +190,23 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
 
 /** Case class representing a single value in a matrix and its location. */
 case class SparseMatrixNode(row: Int, column: Int, value: Double)
+
+class SparseVector(size: Int, elems: Map[Int, Double])
+    extends Traversable[SparseVectorElement] {
+  private val vectorMap = elems;
+
+  def this(size: Int) = this(size, new HashMap[Int, Double]())
+
+  def foreach[U](f: SparseVectorElement => U) = (0 until this.size).map(
+    index => f(new SparseVectorElement(index, 
+      if (this.elems.get(index).isDefined) this.elems.get(index).get
+      else 0))
+  )
+
+  def set(index: Int, element: Double): SparseVector = element match {
+    case 0 => new SparseVector(this.size, this.vectorMap - index)
+    case _ => new SparseVector(this.size, this.vectorMap + (index -> element))
+  }
+}
+
+case class SparseVectorElement(index: Int, value: Double)
