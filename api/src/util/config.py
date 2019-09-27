@@ -17,8 +17,6 @@ def get_config() -> dict:
                 for k, v in config_dict.items():
                     default_dict[k] = v
 
-                print(default_dict)
-
                 return default_dict
 
     else:

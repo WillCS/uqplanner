@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private api = 'http://192.168.0.9:2727';
+  private api = 'http://localhost:2727';
 
   constructor(private http: HttpClient) {
 

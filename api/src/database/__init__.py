@@ -1,1 +1,1 @@
-from .orm import get_cluster
+from .orm import get_cluster, setup_connection
