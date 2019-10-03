@@ -22,8 +22,23 @@ object Optimiser {
     matrix = matrix.increment(2, 1, 7)
     matrix = matrix.increment(1, 2, 12)
     matrix = matrix.increment(2, 2, 19)
+    println("Matrix")
     println(matrix)
-    println(matrix.rows)
-    println(matrix.decompose())
+
+    val (l, u) = matrix.decompose()
+
+    println("U")
+    println(u)
+    
+    val uInverse = matrix.invertU(u)
+    println("Identity")
+    println(uInverse)
+
+    // val inverse = matrix.invert()
+    // println("Inverse")
+    // println(inverse.get)
+
+    // println("Test")
+    // println(matrix * SparseMatrix.identity(3))
   }
 }
