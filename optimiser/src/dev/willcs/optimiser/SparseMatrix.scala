@@ -3,6 +3,7 @@ package dev.willcs.optimiser
 import scala.Option
 import scala.collection.immutable.List
 import scala.collection.immutable.HashMap
+import scala.collection.Map
 
 import dev.willcs.optimiser.library.MathUtils
 
@@ -10,6 +11,18 @@ object SparseMatrix {
   def identity(n: Int): SparseMatrix = new SparseMatrix(n, n,
     (0 until n).map((index: Int) => 
       new SparseMatrixNode(index, index, 1)))
+
+  def fromRows(rows: Seq[SparseVector]): SparseMatrix = new SparseMatrix(
+    rows.head.size, rows.size, (0 until rows.size).flatMap(row =>
+      rows(row).map(element =>
+        new SparseMatrixNode(row, element.index, element.value)))
+  )
+
+  def fromColumns(columns: Seq[SparseVector]): SparseMatrix = new SparseMatrix(
+    columns.size, columns.head.size, (0 until columns.size).flatMap(column =>
+      columns(column).map(element =>
+        new SparseMatrixNode(element.index, column, element.value)))
+  )
 }
 
 /** Implementation of a sparse Matrix. i.e. it's optimised for large matrices
@@ -114,13 +127,16 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     this.matrixList.filter(node => node.row == rowIndex).map((node) => 
       (node.column, node.value)).toMap)
 
-  def getRowsFrom(f: Int): Iterable[SparseVector] = this.getRows(f, this.rows)
+  def getRowsFrom(f: Int): Seq[SparseVector] = this.getRows(f, this.rows)
 
-  def getRowsUntil(u: Int): Iterable[SparseVector] = this.getRows(0, u)
+  def getRowsUntil(u: Int): Seq[SparseVector] = this.getRows(0, u)
 
-  def getRows(f: Int, u: Int): Iterable[SparseVector] = 
-    (f until u).map(row => 
-      this.getRow(row))
+  def getRows(f: Int, u: Int): Seq[SparseVector] = this.getRows(f until u)
+
+  def getRows(): Seq[SparseVector] = this.getRowsFrom(0)
+
+  def getRows(range: Seq[Int]): Seq[SparseVector] = 
+    range.map(row => this.getRow(row))
 
   def setColumn(columnIndex: Int, column: SparseVector): SparseMatrix =
     (this /: column)(
@@ -131,6 +147,9 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     new SparseVector(this.rows, this.matrixList.filter(node => 
       node.column == columnIndex).map((node) =>
         (node.row, node.value)).toMap)
+
+  def getColumns(range: Seq[Int]): Seq[SparseVector] = 
+    range.map(column => this.getColumn(column))
 
   /** Matrix addition */
   def +(that: SparseMatrix): SparseMatrix = this.increment(that)
@@ -257,23 +276,18 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     toReduce - (by * factor)
 
   private def eliminateRowForwards(matrix: AugmentedMatrix, row: Int): Option[(SparseVector, SparseVector)] = 
-    matrix.matrix.getRow(row).firstValue match {
-      case None => None
-      case Some(value@_) =>
-        Some(eliminateRow(
+    matrix.matrix.getRow(row).firstValue.map(value =>
+      eliminateRow(
         matrix.matrix.getRow(row),
         matrix.augment.getRow(row),
         value))
-    }
 
   private def eliminateRowBackwards(matrix: AugmentedMatrix, row: Int): Option[(SparseVector, SparseVector)] = 
-    matrix.matrix.getRow(row).lastValue match {
-      case None => None
-      case Some(value@_) => Some(eliminateRow(
+    matrix.matrix.getRow(row).lastValue.map(value =>
+      eliminateRow(
         matrix.matrix.getRow(row),
         matrix.augment.getRow(row),
         value))
-    }
 
   private def eliminateRow(matrixRow: SparseVector, augmentedRow: SparseVector, constant: Double): (SparseVector, SparseVector) = (
     new SparseVector(matrixRow.size, matrixRow.map(element => 
@@ -362,40 +376,26 @@ class SparseVector(size: Int, elems: Map[Int, Double])
       (element.index, element.value * that)).toMap)
 
   def firstNonZero: Option[SparseVectorElement] = 
-    this.find(element => element.value != 0) match {
-      case None => None
-      case Some(element@_) => Some(element)
-    }
+    this.find(element => element.value != 0)
 
   def firstValue: Option[Double] = 
-    this.firstNonZero match {
-      case None => None
-      case Some(element@_) => Some(element.value)
-    }
+    this.firstNonZero.map(
+      element => element.value)
 
   def firstIndex: Option[Int] =
-    this.firstNonZero match {
-      case None => None
-      case Some(element@_) => Some(element.index)
-    }
+    this.firstNonZero.map(
+      element => element.index)
 
   def lastNonZero: Option[SparseVectorElement] = 
-    this.reversed.find(element => element.value != 0) match {
-      case None => None
-      case Some(element@_) => Some(element)
-    }
+    this.reversed.find(element => element.value != 0)
 
   def lastValue: Option[Double] = 
-    this.lastNonZero match {
-      case None => None
-      case Some(element@_) => Some(element.value)
-    }
+    this.lastNonZero.map(
+      element => element.value)
 
   def lastIndex: Option[Int] =
-    this.lastNonZero match {
-      case None => None
-      case Some(element@_) => Some(element.index)
-    }
+    this.lastNonZero.map(
+      element => element.index)
 }
 
 case class SparseVectorElement(index: Int, value: Double)

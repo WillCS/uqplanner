@@ -6,11 +6,13 @@ import org.apache.spark.SparkContext
 import dev.willcs.optimiser.library.SortedArrayList
 
 object Optimiser {
-  def main(args: Array[String]): Unit = {
-    // val sparkConfig: SparkConf = new SparkConf().setAppName("Timetable Optimiser").setMaster("local[4]")
-    // val sparkContext: SparkContext = new SparkContext(sparkConfig)
+  var sparkContext: SparkContext = null
 
-    // sparkContext.stop()
+  def main(args: Array[String]): Unit = {
+    val sparkConfig: SparkConf = new SparkConf().setAppName("Timetable Optimiser").setMaster("local[4]")
+    this.sparkContext = new SparkContext(sparkConfig)
+
+    sparkContext.stop()
 
     var matrix = new SparseMatrix(3, 3)
     matrix = matrix.increment(0, 0, 5)
