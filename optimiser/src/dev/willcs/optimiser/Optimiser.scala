@@ -24,15 +24,10 @@ object Optimiser {
     matrix = matrix.increment(2, 2, 19)
     println("Matrix")
     println(matrix)
-
-    val (l, u) = matrix.decompose()
-
-    println("U")
-    println(u)
     
-    val uInverse = matrix.invertU(u)
-    println("Identity")
-    println(uInverse)
+    val inverse = matrix.invert()
+    println("Inverse")
+    println(inverse)
 
     // val inverse = matrix.invert()
     // println("Inverse")

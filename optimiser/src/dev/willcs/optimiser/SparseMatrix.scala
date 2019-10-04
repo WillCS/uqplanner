@@ -1,6 +1,5 @@
 package dev.willcs.optimiser
 
-// LU Decomposition to invert
 import scala.Option
 import scala.collection.immutable.List
 import scala.collection.immutable.HashMap
@@ -131,7 +130,7 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
   def getColumn(columnIndex: Int): SparseVector = 
     new SparseVector(this.rows, this.matrixList.filter(node => 
       node.column == columnIndex).map((node) =>
-        (node.column, node.value)).toMap)
+        (node.row, node.value)).toMap)
 
   /** Matrix addition */
   def +(that: SparseMatrix): SparseMatrix = this.increment(that)
@@ -139,9 +138,9 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
   def *(that: SparseMatrix): Option[SparseMatrix] = 
     if(this.columns == that.rows)
       Some(new SparseMatrix(this.rows, that.columns,
-        (0 until this.columns).map(column =>
-          (0 until that.rows).map(row => 
-            SparseMatrixNode(row, column, this.getColumn(column).dot(that.getRow(row))
+        (0 until this.rows).map(row =>
+          (0 until that.columns).map(column => 
+            SparseMatrixNode(row, column, this.getRow(row).dot(that.getColumn(column))
           ))).flatten))
     else None
 
@@ -198,7 +197,8 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     this.decompose() match {
       case (l, u) => (invertL(l), invertU(u)) match {
         case (None, None) | (None, _) | (_, None) => None
-        case (Some(lInverse), Some(uInverse)) => uInverse * lInverse
+        case (Some(lInverse), Some(uInverse)) => 
+          uInverse * lInverse
       }
     }
 
@@ -215,10 +215,10 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
       case Some(value@_) => Some(value.augment)
     }
 
-  def invertU(u: SparseMatrix): Option[SparseMatrix] = 
+  private def invertU(u: SparseMatrix): Option[SparseMatrix] = 
     (Option(new AugmentedMatrix(u, SparseMatrix.identity(this.rows))) /: (u.rows - 1 to 0 by -1))(
       (augmented, row) => 
-        if(augmented.isEmpty) None
+        if (augmented.isEmpty) None
         else this.eliminateRowForwards(augmented.get, row) match {
           case None => None
           case Some(eliminatedRows@_) => {
@@ -230,9 +230,14 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     }
 
   private def guassianElimStep(matrix: AugmentedMatrix, remainingRows: Iterable[Int], augmentedRows: (SparseVector, SparseVector)): Option[AugmentedMatrix] =
-    (Option(matrix) /: remainingRows.tail)(
+    (Option(matrix) /: remainingRows)(
       (augmentedMatrix, row) => 
-        if(augmentedMatrix.isEmpty || augmentedRows._1.firstIndex.isEmpty) None
+        if (augmentedMatrix.isEmpty) None
+        else if (row == remainingRows.head) 
+          Some(new AugmentedMatrix(
+            augmentedMatrix.get.matrix.setRow(row, augmentedRows._1),
+            augmentedMatrix.get.augment.setRow(row, augmentedRows._2)))
+        else if (augmentedRows._1.firstIndex.isEmpty) None
         else ((factor: Double) => Some(new AugmentedMatrix(
           augmentedMatrix.get.matrix.updateRow(row, (rowVector) =>
             this.reduceRowBy(
@@ -254,7 +259,8 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
   private def eliminateRowForwards(matrix: AugmentedMatrix, row: Int): Option[(SparseVector, SparseVector)] = 
     matrix.matrix.getRow(row).firstValue match {
       case None => None
-      case Some(value@_) => Some(eliminateRow(
+      case Some(value@_) =>
+        Some(eliminateRow(
         matrix.matrix.getRow(row),
         matrix.augment.getRow(row),
         value))
@@ -335,7 +341,7 @@ class SparseVector(size: Int, elems: Map[Int, Double])
 
   def dot(that: SparseVector): Double = 
     (0D /: (0 until this.size))((total, index) => 
-      if(this(index) == 0 || that(index) == 0)
+      if (this(index) == 0 || that(index) == 0)
         total
       else
         total + (this(index) * that(index))
