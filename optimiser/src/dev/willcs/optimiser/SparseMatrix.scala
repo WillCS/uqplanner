@@ -40,7 +40,7 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     */
   private val matrixList: List[SparseMatrixNode] = elements match {
     case already: List[SparseMatrixNode]          => already
-    case otherwise: Traversable[SparseMatrixNode] => elements toList
+    case otherwise: Traversable[SparseMatrixNode] => elements.toList
   }
 
   /** The number of rows in this matrix. */
@@ -188,11 +188,11 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
    *  compute the kth column of the L component of the LU decomposition.
    */
   private def decomposeKthRowToL(k: Int, l: SparseMatrix, u: SparseMatrix): SparseVector =
-  (new SparseVector(this.rows) /: (k until this.rows).map(i => 
-    (i, (this.computeLElement(u, l, i, k)))
-  )) { 
-    case (column, (columnIndex, value)) => column.set(columnIndex, value)
-  }
+    (new SparseVector(this.rows) /: (k until this.rows).map(i => 
+      (i, (this.computeLElement(u, l, i, k)))
+    )) { 
+      case (column, (columnIndex, value)) => column.set(columnIndex, value)
+    }
 
   /** Compute the element of this matrix's LU decomposition at position (i, k),
    *  in the L component given a certain amount of progress into calculating
@@ -224,76 +224,95 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
   private def invertL(l: SparseMatrix): Option[SparseMatrix] = 
     (Option(new AugmentedMatrix(l, SparseMatrix.identity(this.rows))) /: (0 until l.rows))(
       (augmented, row) => 
-        if(augmented.isEmpty) None
-        else this.eliminateRowBackwards(augmented.get, row) match {
-          case None => None
-          case Some(eliminatedRows@_) =>
-            this.guassianElimStep(augmented.get, (row until l.rows), eliminatedRows)
-        }) match {
-      case None => None
-      case Some(value@_) => Some(value.augment)
-    }
+        if(augmented.isEmpty) 
+          None
+        else
+          this.eliminateRowBackwards(augmented.get, row) match {
+            case None => None
+            case Some(eliminatedRows@_) =>
+              this.guassianElimStep(augmented.get, (row until l.rows), eliminatedRows)
+          }) match {
+            case None => None
+            case Some(value@_) => Some(value.augment)
+          }
 
   private def invertU(u: SparseMatrix): Option[SparseMatrix] = 
     (Option(new AugmentedMatrix(u, SparseMatrix.identity(this.rows))) /: (u.rows - 1 to 0 by -1))(
       (augmented, row) => 
-        if (augmented.isEmpty) None
-        else this.eliminateRowForwards(augmented.get, row) match {
-          case None => None
-          case Some(eliminatedRows@_) => {
-            this.guassianElimStep(augmented.get, (row to 0 by -1), eliminatedRows)
+        if (augmented.isEmpty)
+          None
+        else
+          this.eliminateRowForwards(augmented.get, row) match {
+            case None => None
+            case Some(eliminatedRows@_) => {
+              this.guassianElimStep(augmented.get, (row to 0 by -1), eliminatedRows)
+            }
+          }) match {
+            case None => None
+            case Some(value@_) => Some(value.augment)
           }
-        }) match {
-      case None => None
-      case Some(value@_) => Some(value.augment)
-    }
 
-  private def guassianElimStep(matrix: AugmentedMatrix, remainingRows: Iterable[Int], augmentedRows: (SparseVector, SparseVector)): Option[AugmentedMatrix] =
-    (Option(matrix) /: remainingRows)(
-      (augmentedMatrix, row) => 
-        if (augmentedMatrix.isEmpty) None
-        else if (row == remainingRows.head) 
-          Some(new AugmentedMatrix(
-            augmentedMatrix.get.matrix.setRow(row, augmentedRows._1),
-            augmentedMatrix.get.augment.setRow(row, augmentedRows._2)))
-        else if (augmentedRows._1.firstIndex.isEmpty) None
-        else ((factor: Double) => Some(new AugmentedMatrix(
-          augmentedMatrix.get.matrix.updateRow(row, (rowVector) =>
-            this.reduceRowBy(
-              rowVector,
-              augmentedRows._1,
-              factor
-            )),
-          augmentedMatrix.get.augment.updateRow(row, (rowVector) =>
-            this.reduceRowBy(
-              rowVector,
-              augmentedRows._2,
-              factor
-            ))))
-        )(augmentedMatrix.get.matrix.getRow(row)(augmentedRows._1.firstIndex.get)))
+  private def guassianElimStep(
+    matrix: AugmentedMatrix,
+    remainingRows: Iterable[Int],
+    augmentedRows: (SparseVector, SparseVector)): Option[AugmentedMatrix] =
+      (Option(matrix) /: remainingRows)(
+        (augmentedMatrix, row) => 
+          if (augmentedMatrix.isEmpty)
+            None
+          else 
+            if (row == remainingRows.head) 
+              Some(new AugmentedMatrix(
+                augmentedMatrix.get.matrix.setRow(row, augmentedRows._1),
+                augmentedMatrix.get.augment.setRow(row, augmentedRows._2)))
+            else 
+              if (augmentedRows._1.firstIndex.isEmpty)
+                None
+              else 
+                ((factor: Double) => Some(new AugmentedMatrix(
+                  augmentedMatrix.get.matrix.updateRow(row, (rowVector) =>
+                    this.reduceRowBy(
+                      rowVector,
+                      augmentedRows._1,
+                      factor
+                    )),
+                  augmentedMatrix.get.augment.updateRow(row, (rowVector) =>
+                    this.reduceRowBy(
+                      rowVector,
+                      augmentedRows._2,
+                      factor
+                    ))))
+                )(augmentedMatrix.get.matrix.getRow(row)(augmentedRows._1.firstIndex.get)))
 
   private def reduceRowBy(toReduce: SparseVector, by: SparseVector, factor: Double): SparseVector = 
     toReduce - (by * factor)
 
-  private def eliminateRowForwards(matrix: AugmentedMatrix, row: Int): Option[(SparseVector, SparseVector)] = 
-    matrix.matrix.getRow(row).firstValue.map(value =>
-      eliminateRow(
-        matrix.matrix.getRow(row),
-        matrix.augment.getRow(row),
-        value))
+  private def eliminateRowForwards(
+    matrix: AugmentedMatrix,
+    row: Int): Option[(SparseVector, SparseVector)] = 
+      matrix.matrix.getRow(row).firstValue.map(value =>
+        eliminateRow(
+          matrix.matrix.getRow(row),
+          matrix.augment.getRow(row),
+          value))
 
-  private def eliminateRowBackwards(matrix: AugmentedMatrix, row: Int): Option[(SparseVector, SparseVector)] = 
-    matrix.matrix.getRow(row).lastValue.map(value =>
-      eliminateRow(
-        matrix.matrix.getRow(row),
-        matrix.augment.getRow(row),
-        value))
+  private def eliminateRowBackwards(
+    matrix: AugmentedMatrix,
+    row: Int): Option[(SparseVector, SparseVector)] = 
+      matrix.matrix.getRow(row).lastValue.map(value =>
+        eliminateRow(
+          matrix.matrix.getRow(row),
+          matrix.augment.getRow(row),
+          value))
 
-  private def eliminateRow(matrixRow: SparseVector, augmentedRow: SparseVector, constant: Double): (SparseVector, SparseVector) = (
-    new SparseVector(matrixRow.size, matrixRow.map(element => 
-      (element.index, element.value / constant)).toMap),
-    new SparseVector(augmentedRow.size, augmentedRow.map(element =>
-      (element.index, element.value / constant)).toMap))
+  private def eliminateRow(
+    matrixRow: SparseVector,
+    augmentedRow: SparseVector,
+    constant: Double): (SparseVector, SparseVector) = (
+      new SparseVector(matrixRow.size, matrixRow.map(element => 
+        (element.index, element.value / constant)).toMap),
+      new SparseVector(augmentedRow.size, augmentedRow.map(element =>
+        (element.index, element.value / constant)).toMap))
 
   /** Get the value at the given position in the matrix. This function
     *  doesn't check if the location is valid or not and is pretty much only
@@ -324,7 +343,8 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     this.rebuild(this.matrixList :+ SparseMatrixNode(row, col, value))
 
   override def toString(): String = (0 until this.rows).map(row =>
-    (0 until this.columns).map(column => s"${this(row, column).get}").mkString(" ")).mkString("\n")
+    (0 until this.columns).map(column => 
+      s"${this(row, column).get}").mkString(" ")).mkString("\n")
 }
 
 /** Case class representing a single value in a matrix and its location. */
