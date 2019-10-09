@@ -1,64 +1,99 @@
+package dev.willcs.optimiser
+
 import org.apache.spark.SparkContext
 
 import scala.collection.mutable.Map
+import scala.util.{Try, Success, Failure}
 
-import dev.willcs.optimiser.SparseMatrix
-import dev.willcs.optimiser.SparseVector
-import dev.willcs.optimiser.Optimiser
+import dev.willcs.optimiser.library.Debug
 
 object RevisedSimplexSolver {
-  def solve(model: LinearProgrammingModel): Option[SparseVector] = 
+  def solve(model: LinearProgrammingModel): Try[VariableSet] = 
     initialiseVariables(model).flatMap(variables =>
-      calculateNewBInverse(model, variables).flatMap(bInverse =>
+      calculateNewBInverse(model, variables).flatMap(newBInverse =>
         doSimplexIteration(
+          1,
           model,
           variables,
-          bInverse))).map(variableSet =>
-            variableSet.variables
-          )
+          newBInverse
+        )
+      )
+    )
 
-  private def initialiseVariables(model: LinearProgrammingModel): Option[VariableSet] =
-    None
+  private def initialiseVariables(model: LinearProgrammingModel): Try[VariableSet] =
+    Optimiser.sparkContext.parallelize(
+      (0 until model.constraintMatrix.columns)
+    ).filter(columnIndex =>
+      model.constraintMatrix.getColumn(columnIndex).get.nonZeroCount == 1).collect() match {
+        case basicIndices if basicIndices.size != 0 => 
+          Success(
+            new VariableSet(
+              basicIndices.toSeq,
+              Optimiser.sparkContext.parallelize(0 until model.bVector.size).filter(index =>
+                !basicIndices.contains(index)).collect().toSeq,
+              model.bVector
+            )
+          )
+        case basicIndices => Failure(new Exception(s"Basis has no indices: ${basicIndices}"))
+      }
 
   private def doSimplexIteration(
+    i: Int,
     model: LinearProgrammingModel,
     variables: VariableSet,
-    bInverse: SparseMatrix): Option[VariableSet] =
-        getMaxReducedCostIndex(
-          calculateReducedCosts(
-            model,
-            variables,
-            calculateDualVariables(model, variables, bInverse))
-        ) match {
-          case None => Some(variables)
-          case Some(enteringIndex) =>
-            getLeavingVariableIndex(
+    bInverse: SparseMatrix): Try[VariableSet] =
+        Debug.printThen(
+          Array(
+            s"Iteration ${i}",
+            s"Basic Variables: ${variables.basic}",
+            s"Nonbasic Variables: ${variables.nonbasic}",
+            s"Current Solution: ${variables.variables}",
+            s"B^-1:\n${bInverse}"
+          ).mkString("\n"),
+          getMaxReducedCostIndex(
+            calculateReducedCosts(
               model,
               variables,
-              calculateDirection(enteringIndex, model, bInverse)
-            ).flatMap(leavingIndex =>
-              completeSimplexIteration(
+              calculateDualVariables(model, variables, bInverse)
+            )
+          )) match {
+            case None => Success(variables)
+            case Some(enteringIndex) =>
+              getLeavingVariableIndex(
                 model,
-                getNewBasis(leavingIndex, enteringIndex, variables)))
-        }
+                variables,
+                calculateDirection(enteringIndex, model, variables, bInverse)
+              ).flatMap(leavingIndex =>
+                completeSimplexIteration(
+                  i,
+                  model,
+                  getNewBasis(leavingIndex, enteringIndex, variables)
+                )
+              )
+          }
 
   private def completeSimplexIteration(
+    i: Int,
     model: LinearProgrammingModel,
-    newBasis: VariableSet): Option[VariableSet] =
+    newBasis: VariableSet): Try[VariableSet] =
       calculateNewBInverse(model, newBasis).flatMap(newBInverse =>
         doSimplexIteration(
+          i + 1,
           model,
           new VariableSet(
             newBasis.basic,
             newBasis.nonbasic,
-            calculateNewSolution(model, newBInverse)),
-          newBInverse))
+            calculateNewSolution(model, newBInverse)
+          ),
+          newBInverse
+        )
+      )
 
   private def calculateDualVariables(
     model: LinearProgrammingModel,
     variables: VariableSet,
     bInverse: SparseMatrix): SparseVector =
-      multiplyMatByVec(bInverse, model.basicCosts(variables))
+      multiplyMatByVec(bInverse.transpose, model.basicCosts(variables))
   
   private def calculateReducedCosts(
     model: LinearProgrammingModel,
@@ -71,12 +106,11 @@ object RevisedSimplexSolver {
               case (yValue, aValue) => yValue.value * aValue.value
             } sum())).collect()
 
-  private def getMaxReducedCostIndex(reducedCosts: Seq[Double]): Option[Int] =
-    reducedCosts.indexOf(reducedCosts.max) match {
-      case value@_ => 
-        if (value <= 0) None
-        else Some(value)
-    }
+  private def getMaxReducedCostIndex(reducedCosts: Seq[Double]): Option[Int] = 
+    if (reducedCosts.max < 0)
+       None
+    else 
+      Some(reducedCosts.indexOf(reducedCosts.max))
 
   private def checkFeasibility(variables: VariableSet): Boolean = 
     if (Optimiser.sparkContext.parallelize(variables.basic).fold(1)((l, r) => 
@@ -87,26 +121,28 @@ object RevisedSimplexSolver {
   private def calculateDirection(
     enteringIndex: Int,
     model: LinearProgrammingModel,
+    variables: VariableSet,
     bInverse: SparseMatrix): SparseVector =
-      multiplyMatByVec(bInverse, model.constraintsForVar(enteringIndex))
+      multiplyMatByVec(bInverse, model.constraintsForVar(variables.nonbasic(enteringIndex)))
 
   private def getLeavingVariableIndex(
     model: LinearProgrammingModel,
     variables: VariableSet, 
-    direction: SparseVector): Option[Int] =
-      Optimiser.sparkContext.parallelize(direction.toSeq).filter(elem =>
-        elem.value > 0  
-      ).map(elem =>
-        (elem.index, variables.variables(elem.index) / elem.value)
-      ).fold((0, 0D)) {
-        case (k1@(index1, value1), k2@(index2, value2)) =>
-          if (value1 < value2) 
-            k1 
+    direction: SparseVector): Try[Int] = 
+      Optimiser.sparkContext.parallelize(0 until variables.basic.length).filter(basicIndex =>
+        direction(basicIndex).get > 0
+      ).map(basicIndex =>
+        (basicIndex, variables(basicIndex) / direction(basicIndex).get)
+      ).fold((-1, Double.MaxValue)) {
+        case (p1@(k1, v1), p2@(k2, v2)) => 
+          if (v1 < v2)
+            p1
           else
-            k2
+            p2
       } match {
-        case (index, value) if value > 0 => Some(index)
-        case _ => None
+        case (-1, _) => Failure(new Exception("Infeasible Model"))
+        case (index, value) => 
+          Success(index)
       }
 
   private def getNewBasis(
@@ -114,8 +150,8 @@ object RevisedSimplexSolver {
     enteringIndex: Int,
     variables: VariableSet): VariableSet =
       new VariableSet(
-        getNewBasicVariables(leavingIndex, enteringIndex, variables),
-        getNewNonBasicVariables(leavingIndex, enteringIndex, variables),
+        getNewBasicVariables(leavingIndex, enteringIndex, variables).sorted,
+        getNewNonBasicVariables(leavingIndex, enteringIndex, variables).sorted,
         variables.variables
       )
 
@@ -123,46 +159,50 @@ object RevisedSimplexSolver {
     leavingIndex: Int, 
     enteringIndex: Int, 
     variables: VariableSet): Seq[Int] =
-      variables.basic.take(leavingIndex) :+ enteringIndex
+      variables.basic.filter(variable =>
+        variable != variables.basic(leavingIndex)
+      ) :+ variables.nonbasic(enteringIndex)
 
   private def getNewNonBasicVariables(
     leavingIndex: Int, 
     enteringIndex: Int, 
     variables: VariableSet): Seq[Int] =
-      variables.nonbasic.take(enteringIndex) :+ leavingIndex
+      variables.nonbasic.filter(variable =>
+        variable != variables.nonbasic(enteringIndex)
+      ) :+ variables.basic(leavingIndex)
 
-  private def calculateNewBInverse(model: LinearProgrammingModel, variables: VariableSet): Option[SparseMatrix] = 
+  private def calculateNewBInverse(model: LinearProgrammingModel, variables: VariableSet): Try[SparseMatrix] =
     model.basicConstraints(variables).invert()
 
-  private def calculateNewSolution(model: LinearProgrammingModel, bInverse: SparseMatrix): SparseVector = 
+  private def calculateNewSolution(model: LinearProgrammingModel, bInverse: SparseMatrix): SparseVector =
     multiplyMatByVec(bInverse, model.bVector)
 
   private def multiplyMatByVec(matrix: SparseMatrix, vector: SparseVector): SparseVector =
-    new SparseVector(matrix.columns, Optimiser.sparkContext.parallelize(vector.toSeq).zip(
-      Optimiser.sparkContext.parallelize(matrix.getRows())).map {
-        case (vectorElem, matRow) => vectorElem.value match {
-          case 0 => (vectorElem.index, 0D)
-          case _ => (vectorElem.index, Optimiser.sparkContext.parallelize(matRow.toSeq).map(elem =>
-            elem.value * vectorElem.value).sum())
-        }
-      } collectAsMap())
+    new SparseVector(vector.size, Optimiser.sparkContext.parallelize(0 until matrix.rows).map(rowIndex =>
+      (rowIndex, 
+        if (matrix.getRow(rowIndex).get.nonZeroCount == 0) 
+          0D
+        else
+          matrix.getRow(rowIndex).get.dot(vector).get)
+    ).collect().toMap)
 }
 
 class LinearProgrammingModel(
   val constraintMatrix: SparseMatrix,
   val costVector: SparseVector,
-  val bVector: SparseVector) {
+  val bVector: SparseVector) extends Serializable {
 
-  def basicConstraints(variables: VariableSet): SparseMatrix = 
-      SparseMatrix.fromColumns(this.constraintMatrix.getColumns(variables.basic).toSeq)
+  def basicConstraints(variables: VariableSet): SparseMatrix =
+    SparseMatrix.fromColumns(this.constraintMatrix.getColumns(variables.basic).get.toSeq)
 
   def basicCosts(variables: VariableSet): SparseVector =
     new SparseVector(variables.basic.size, 
       (0 until variables.basic.size).map(index =>
-        (index, this.costVector(variables.basic(index)))).toMap)
+        (index, this.costVector(variables.basic(index)).get)
+        ).toMap)
 
   def constraintsForVar(variable: Int): SparseVector =
-    this.constraintMatrix.getColumn(variable)
+    this.constraintMatrix.getColumn(variable).get
 
   def numVariables: Int = bVector.size
 }
@@ -170,4 +210,8 @@ class LinearProgrammingModel(
 class VariableSet(
   val basic: Seq[Int],
   val nonbasic: Seq[Int],
-  val variables: SparseVector)
+  val variables: SparseVector) extends Serializable {
+
+    def apply(index: Int): Double =
+      this.variables(index).get
+  }
