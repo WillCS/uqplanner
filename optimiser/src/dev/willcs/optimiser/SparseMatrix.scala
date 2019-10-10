@@ -217,9 +217,9 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
    *  compute the kth row of the U component of the LU decomposition.
    */
   private def decomposeKthRowToU(k: Int, l: SparseMatrix, u: SparseMatrix): SparseVector =
-    (new SparseVector(this.rows) /: (k until this.rows).map(m => 
+    (new SparseVector(this.rows) /: Optimiser.sparkContext.parallelize(k until this.rows).map(m => 
       (m, (this.computeUElement(u, l, k, m)))
-    )) { 
+    ).collect()) { 
       case (row, (rowIndex, value)) => row.set(rowIndex, value)
     }
 
@@ -227,9 +227,9 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
    *  compute the kth column of the L component of the LU decomposition.
    */
   private def decomposeKthRowToL(k: Int, l: SparseMatrix, u: SparseMatrix): SparseVector =
-    (new SparseVector(this.rows) /: (k until this.rows).map(i => 
+    (new SparseVector(this.rows) /: Optimiser.sparkContext.parallelize(k until this.rows).map(i => 
       (i, (this.computeLElement(u, l, i, k)))
-    )) { 
+    ).collect()) { 
       case (column, (columnIndex, value)) => column.set(columnIndex, value)
     }
 
@@ -356,10 +356,14 @@ class SparseMatrix(r: Int, c: Int, elements: Traversable[SparseMatrixNode])
     matrixRow: SparseVector,
     augmentedRow: SparseVector,
     constant: Double): (SparseVector, SparseVector) = (
-      new SparseVector(matrixRow.size, matrixRow.map(element => 
-        (element.index, element.value / constant)).toMap),
-      new SparseVector(augmentedRow.size, augmentedRow.map(element =>
-        (element.index, element.value / constant)).toMap))
+      new SparseVector(matrixRow.size, 
+        Optimiser.sparkContext.parallelize(matrixRow.toSeq).map(element => 
+          (element.index, element.value / constant)
+        ).collect().toMap),
+      new SparseVector(augmentedRow.size,
+        Optimiser.sparkContext.parallelize(augmentedRow.toSeq).map(element =>
+          (element.index, element.value / constant)
+        ).collect().toMap))
 
   /** Get the value at the given position in the matrix. This function
     *  doesn't check if the location is valid or not and is pretty much only

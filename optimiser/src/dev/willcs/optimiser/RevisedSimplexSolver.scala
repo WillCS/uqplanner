@@ -25,7 +25,32 @@ object RevisedSimplexSolver {
       (0 until model.constraintMatrix.columns)
     ).filter(columnIndex =>
       model.constraintMatrix.getColumn(columnIndex).get.nonZeroCount == 1).collect() match {
-        case basicIndices if basicIndices.size != 0 => 
+        case basicIndices if basicIndices.size == 0 => 
+          Failure(new Exception(s"Basis has no indices: ${basicIndices}"))
+        case basicIndices if basicIndices.size < model.bVector.length =>
+          chooseRemainingBasicVariables(
+            model, 
+            (0 until model.constraintMatrix.columns).filter(columnIndex =>
+              !basicIndices.contains(columnIndex)
+            ),
+            model.bVector.length - basicIndices.length,
+            2
+          ) match {
+            case Some(additionalColumns) =>
+              Success(
+                new VariableSet(
+                  (basicIndices ++ additionalColumns).sortBy(index =>
+                    model.constraintMatrix.getColumn(index).get.firstIndex.get
+                  ),
+                  (model.decisionVariables ++ model.slackVariables).filter(variable =>
+                    !(basicIndices ++ additionalColumns).contains(variable)
+                  ),
+                  model.bVector
+                )
+              )
+            case None => Failure(new Exception(s"Something bad happened"))
+          }
+        case basicIndices if basicIndices.size == model.bVector.length =>
           Success(
             new VariableSet(
               basicIndices.toSeq,
@@ -36,6 +61,33 @@ object RevisedSimplexSolver {
           )
         case basicIndices => Failure(new Exception(s"Basis has no indices: ${basicIndices}"))
       }
+
+  private def chooseRemainingBasicVariables(
+    model: LinearProgrammingModel,
+    remainingCols: Seq[Int],
+    left: Int,
+    withNonZeroes: Int): Option[Seq[Int]] =
+      if (left == 0)
+        Some(Seq[Int]())
+      else if (withNonZeroes > model.bVector.length || remainingCols.isEmpty)
+        None
+      else
+        Optimiser.sparkContext.parallelize(remainingCols).filter(columnIndex =>
+          model.constraintMatrix.getColumn(columnIndex).get.nonZeroCount == withNonZeroes).collect() match {
+            case eligibleColumnIndices if eligibleColumnIndices.length == 0 => 
+              chooseRemainingBasicVariables(model, remainingCols, left, withNonZeroes + 1)
+            case eligibleColumnIndices => 
+              ((newColumn: Int) => 
+                chooseRemainingBasicVariables(
+                  model,
+                  remainingCols.filter(i => i != newColumn),
+                  left - 1,
+                  withNonZeroes).map(vars =>
+                    vars :+ newColumn)
+              )(eligibleColumnIndices.max)
+          }
+      
+      
 
   private def doSimplexIteration(
     i: Int,
@@ -177,7 +229,6 @@ object RevisedSimplexSolver {
       ) :+ variables.basic(leavingIndex)
 
   private def calculateNewBInverse(model: LinearProgrammingModel, variables: VariableSet): Try[SparseMatrix] = {
-    println(model.basicConstraints(variables))
     model.basicConstraints(variables).invert()
   }
 

@@ -43,35 +43,43 @@ object Optimiser {
      *  | 1 0 0 0 1 | |x_4|   | 40|
      *                |x_5|
      */
-    // var constraintMatrix = new SparseMatrix(3, 5)
-    // constraintMatrix = constraintMatrix.set(0, 0, 2).get.set(0, 1, 1).get.set(0, 2, 1).get
-    // constraintMatrix = constraintMatrix.set(1, 0, 1).get.set(1, 1, 1).get.set(1, 3, 1).get
-    // constraintMatrix = constraintMatrix.set(2, 0, 1).get.set(2, 4, 1).get
+    var constraintMatrix = new SparseMatrix(3, 5)
+    constraintMatrix = constraintMatrix.set(0, 0, 2).get.set(0, 1, 1).get.set(0, 2, 1).get
+    constraintMatrix = constraintMatrix.set(1, 0, 1).get.set(1, 1, 1).get.set(1, 3, 1).get
+    constraintMatrix = constraintMatrix.set(2, 0, 1).get.set(2, 4, 1).get
 
-    // val costVector = new SparseVector(5).set(0, 3).set(1, 2)
+    val costVector = new SparseVector(5).set(0, 3).set(1, 2)
 
-    // val bVector = new SparseVector(3).set(0, 100).set(1, 80).set(2, 40)
+    val bVector = new SparseVector(3).set(0, 100).set(1, 80).set(2, 40)
 
     RevisedSimplexSolver.solve(
-      Debug.doThenPrint(Calendar.createLinearProgrammingModel(
-        new CalendarConstraints(
-          Array(new Time(10, 0), new Time(10, 0), new Time(10, 0), new Time(10, 0), new Time(10, 0)),
-          Array(new Time(18, 0), new Time(18, 0), new Time(18, 0), new Time(18, 0), new Time(18, 0)),
-          Array(0, 1, 2, 3, 4),
-          4,
-          true,
-          (0 until 6).map(index =>
-            Calendar.genRandomSubject()
-          )
-        )), ((model: LinearProgrammingModel) =>
-          Array(
-            s"${model.constraintMatrix.rows}x${model.constraintMatrix.columns} Constraint matrix",
-            s"${model.costVector.length}-dimensional Cost vector",
-            s"${model.bVector.length}-dimensional B vector",
-            s"${model.slackVariables.size} slack variables",
-            s"${model.decisionVariables.size} decision variables"
-          ).mkString("\n")
-        ))
+      new LinearProgrammingModel(
+        constraintMatrix,
+        costVector,
+        bVector,
+        Array(1, 2, 3),
+        Array(4, 5)
+      )
+      // Debug.doThenPrint(
+      //   Calendar.createLinearProgrammingModel(
+      //     new CalendarConstraints(
+      //       Array(new Time(10, 0), new Time(10, 0), new Time(10, 0), new Time(10, 0), new Time(10, 0)),
+      //       Array(new Time(18, 0), new Time(18, 0), new Time(18, 0), new Time(18, 0), new Time(18, 0)),
+      //       Array(2, 3, 4),
+      //       2,
+      //       true,
+      //       (0 until 4).map(index =>
+      //         Calendar.genRandomSubject()
+      //       )
+      //     )), ((model: LinearProgrammingModel) =>
+      //     Array(
+      //       s"${model.constraintMatrix.rows}x${model.constraintMatrix.columns} Constraint matrix",
+      //       s"${model.costVector.length}-dimensional Cost vector",
+      //       s"${model.bVector.length}-dimensional B vector",
+      //       s"${model.slackVariables.size} slack variables",
+      //       s"${model.decisionVariables.size} decision variables"
+      //     ).mkString("\n")
+      //   ))
       ) match {
       case Success(value) => 
         println((0 until value.basic.size).map(index =>
