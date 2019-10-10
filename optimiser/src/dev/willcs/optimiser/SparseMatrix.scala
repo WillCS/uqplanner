@@ -14,13 +14,13 @@ object SparseMatrix {
       new SparseMatrixNode(index, index, 1)))
 
   def fromRows(rows: Seq[SparseVector]): SparseMatrix = new SparseMatrix(
-    rows.head.size, rows.size, (0 until rows.size).flatMap(row =>
+    rows.size, rows.head.size, (0 until rows.size).flatMap(row =>
       rows(row).map(element =>
         new SparseMatrixNode(row, element.index, element.value)))
   )
 
   def fromColumns(columns: Seq[SparseVector]): SparseMatrix = new SparseMatrix(
-    columns.size, columns.head.size, (0 until columns.size).flatMap(column =>
+    columns.head.size, columns.size, (0 until columns.size).flatMap(column =>
       columns(column).map(element =>
         new SparseMatrixNode(element.index, column, element.value)))
   )

@@ -48,13 +48,18 @@ object RevisedSimplexSolver {
             s"Basic Variables: ${variables.basic}",
             s"Nonbasic Variables: ${variables.nonbasic}",
             s"Current Solution: ${variables.variables}",
-            s"B^-1:\n${bInverse}"
+            s"B^-1: (${bInverse.rows}x${bInverse.columns})\n${bInverse}"
           ).mkString("\n"),
           getMaxReducedCostIndex(
             calculateReducedCosts(
               model,
               variables,
-              calculateDualVariables(model, variables, bInverse)
+              Debug.doThenPrint(
+                calculateDualVariables(model, variables, bInverse),
+                ((dualVector: SparseVector) =>
+                  s"Dual Vector: ${dualVector.toString()}"
+                )
+              )
             )
           )) match {
             case None => Success(variables)
@@ -171,8 +176,10 @@ object RevisedSimplexSolver {
         variable != variables.nonbasic(enteringIndex)
       ) :+ variables.basic(leavingIndex)
 
-  private def calculateNewBInverse(model: LinearProgrammingModel, variables: VariableSet): Try[SparseMatrix] =
+  private def calculateNewBInverse(model: LinearProgrammingModel, variables: VariableSet): Try[SparseMatrix] = {
+    println(model.basicConstraints(variables))
     model.basicConstraints(variables).invert()
+  }
 
   private def calculateNewSolution(model: LinearProgrammingModel, bInverse: SparseMatrix): SparseVector =
     multiplyMatByVec(bInverse, model.bVector)
@@ -190,7 +197,9 @@ object RevisedSimplexSolver {
 class LinearProgrammingModel(
   val constraintMatrix: SparseMatrix,
   val costVector: SparseVector,
-  val bVector: SparseVector) extends Serializable {
+  val bVector: SparseVector,
+  val decisionVariables: Seq[Int],
+  val slackVariables: Seq[Int]) extends Serializable {
 
   def basicConstraints(variables: VariableSet): SparseMatrix =
     SparseMatrix.fromColumns(this.constraintMatrix.getColumns(variables.basic).get.toSeq)

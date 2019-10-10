@@ -1,32 +1,133 @@
 package dev.willcs.optimiser
 
 import scala.collection.Set
+import scala.util.Random
+import dev.willcs.optimiser.library.Debug
 
 object Calendar {
   def LectureName = "L"
 
-  def createLinearProgrammingModel(constraints: CalendarConstraints): LinearProgrammingModel = 
-    constructModel(
-      constraints,
-      constructConstraints(
-        constraints,
-        flattenSubjects(constraints.subjects)
+  def ClassTypes = Array(
+    Array(
+      Map(
+        ("name", "L"),
+          ("streams", Map( 
+            ("min", 1),
+            ("max", 3) 
+          )),
+          ("length", Map( 
+            ("hours", 0),
+            ("minutes", 50)
+          )),
+          ("sessions", 3)
+      ), Map(
+        ("name", "T"),
+        ("streams", Map( 
+          ("min", 4),
+          ("max", 8)
+        )),
+        ("length", Map( 
+          ("hours", 0),
+          ("minutes", 50)
+        )),
+        ("sessions", 1)
+      ), Map(
+        ("name", "P"),
+        ("streams", Map(
+          ("min", 4),
+          ("max", 8)
+        )),
+        ("length", Map(
+          ("hours", 1),
+          ("minutes", 20)
+        )),
+        ("sessions", 1)
+      )
+    ), Array(
+      Map(
+        ("name", "U"),
+        ("streams", Map(
+          ("min", 2),
+          ("max", 5)
+        )),
+        ("length", Map(
+          ("hours", 2),
+          ("minutes", 50)
+        )),
+        ("sessions", 1)
+      ), Map(
+        ("name", "L"),
+        ("streams", 1),
+        ("length", Map(
+          ("hours", 0),
+          ("minutes", 50)
+        )),
+        ("sessions", 1)
+      )
+    ), Array(
+      Map(
+        ("name", "L"),
+        ("streams", Map(
+          ("min", 1),
+          ("max", 2)
+        )),
+        ("length", Map(
+          ("hours", 1),
+          ("minutes", 50)
+        )),
+        ("sessions", 1)
+      ), Map(
+        ("name", "P"),
+        ("streams", Map(
+          ("min", 3),
+          ("max", 6)
+        )),
+        ("length", Map(
+          ("hours", 1),
+          ("minutes", 50)
+        )),
+        ("sessions", 1)
       )
     )
+  )
+
+  def createLinearProgrammingModel(constraints: CalendarConstraints): LinearProgrammingModel = 
+    constructModelWithFlattenedSubjects(
+      constraints,
+      flattenSubjects(constraints.subjects)
+    )
+
+  def constructModelWithFlattenedSubjects(
+    constraints: CalendarConstraints,
+    flattenedSubjects: Seq[TimetableStream]): LinearProgrammingModel =
+      constructModel(
+        constraints,
+        flattenedSubjects.length,
+        constructConstraints(
+          constraints,
+          flattenedSubjects
+        )
+      )
 
   private def constructModel(
     constraints: CalendarConstraints,
+    numBasicVariables: Int,
     constraintMatrixAndVector: (SparseMatrix, SparseVector)): LinearProgrammingModel =
       new LinearProgrammingModel(
         constraintMatrixAndVector._1,
         new SparseVector(constraintMatrixAndVector._1.columns),
-        constraintMatrixAndVector._2
+        constraintMatrixAndVector._2,
+        (0 until numBasicVariables) ++ (0 until constraints.subjects.length).map(subjectIndex =>
+          numBasicVariables * 3 + subjectIndex  
+        ),
+        (numBasicVariables until numBasicVariables * 3) ++ 
+          (numBasicVariables * 3 + constraints.subjects.length until numBasicVariables * 3 + constraints.subjects.length * 2)
       )
 
   private def getNumVariables(
     constraints: CalendarConstraints,
     flattenedStreams: Seq[TimetableStream]): Int = 
-      flattenedStreams.length * 3 + constraints.subjects.length
+      flattenedStreams.length * 3 + constraints.subjects.length * 2
 
   private def constructConstraints(
     constraints: CalendarConstraints, 
@@ -57,16 +158,34 @@ object Calendar {
     constraints: CalendarConstraints,
     flattenedStreams: Seq[TimetableStream],
     numVariables: Int): Seq[(SparseVector, Double)] = 
-      ((constructBinaryConstraints(constraints, flattenedStreams, numVariables) :+
-        constructAllStreamsConstraint(constraints, flattenedStreams, numVariables) :+
-        constructSubjectCountConstraint(constraints, flattenedStreams, numVariables)) ++
-        consutructWholeSubjectConstraints(constraints, flattenedStreams, numVariables) ++
-        constructClashConstraints(
-          constraints, 
-          flattenedStreams, 
-          numVariables, 
-          calculateClashes(flattenedStreams, constraints.subjects)
-        )
+      ((Debug.doThenPrint(
+        constructBinaryConstraints(constraints, flattenedStreams, numVariables),
+          ((constraints: Seq[(SparseVector, Double)]) =>
+            s"Added ${constraints.length} constraints."
+          )
+       ) :+
+        Debug.doThenPrint(
+          constructAllStreamsConstraint(constraints, flattenedStreams, numVariables),
+          ((u: Any) => "Added 1 constraint.")
+        ) :+
+        Debug.doThenPrint(
+          constructSubjectCountConstraint(constraints, flattenedStreams, numVariables),
+          ((u: Any) => s"Added 1 constraint."
+          ))) ++
+        Debug.doThenPrint(
+          consutructWholeSubjectConstraints(constraints, flattenedStreams, numVariables),
+          ((constraints: Seq[(SparseVector, Double)]) =>
+            s"Added ${constraints.length} constraints."
+          )) ++
+        Debug.doThenPrint(
+          constructClashConstraints(
+            constraints, 
+            flattenedStreams, 
+            numVariables, 
+            calculateClashes(flattenedStreams, constraints.subjects)
+          ),((constraints: Seq[(SparseVector, Double)]) =>
+          s"Added ${constraints.length} constraints."
+        ))
       )
 
   private def constructAllStreamsConstraint (
@@ -99,12 +218,21 @@ object Calendar {
     constraints: CalendarConstraints,
     flattenedStreams: Seq[TimetableStream],
     numVariables: Int): Seq[(SparseVector, Double)] =
-      Optimiser.sparkContext.parallelize(0 until flattenedStreams.length).map(streamIndex =>
+      Optimiser.sparkContext.parallelize(
+        (0 until flattenedStreams.length) ++ (flattenedStreams.length * 3 until flattenedStreams.length * 3 + constraints.subjects.length)
+      ).map(streamIndex =>
         (
-          new SparseVector(numVariables, Array(
-            (streamIndex, 1.0),
-            (streamIndex + flattenedStreams.length, 1.0)
-          ).toMap),
+          new SparseVector(
+            numVariables,
+            Array(
+              (streamIndex, 1.0),
+              (streamIndex + 
+                (if (streamIndex < flattenedStreams.length) 
+                  flattenedStreams.length
+                else
+                  constraints.subjects.length
+                ), 1.0)
+            ).toMap),
           1.0
         )
       ).collect().toSeq
@@ -146,12 +274,15 @@ object Calendar {
             if (secondaryStreamIndex == streamIndex)
               Array(
                 (streamIndex, 1.0 * flattenedStreams.length),
-                (streamIndex + 2 * flattenedStreams.length, 1.0 * flattenedStreams.length)
+                (streamIndex + 2 * flattenedStreams.length, 1.0)
               )
             else
               Array((secondaryStreamIndex,
-                if (clashes(flattenedStreams(streamIndex), flattenedStreams(secondaryStreamIndex)))
-                  1.0
+                if (clashes.contains((flattenedStreams(streamIndex), flattenedStreams(secondaryStreamIndex))))
+                  if (clashes((flattenedStreams(streamIndex), flattenedStreams(secondaryStreamIndex))))
+                    1.0
+                  else
+                    0.0
                 else
                   0.0
               ))
@@ -221,8 +352,8 @@ object Calendar {
               optionStream.flatMap(stream =>
                 if (stream.classes.exists(session =>
                   days.contains(session.day) ||
-                  startTimes(session.day).toMinutes() > session.startTime.toMinutes() ||
-                    endTimes(session.day).toMinutes() < session.endTime.toMinutes()
+                  startTimes(session.day).toMinutes() > session.start_time.toMinutes() ||
+                    endTimes(session.day).toMinutes() < session.end_time.toMinutes()
                 )) 
                   None
                 else
@@ -232,10 +363,66 @@ object Calendar {
           ))
       ).filter(optionalClassType =>
         optionalClassType.isDefined
-      ))
+      ),
+      subject.year,
+      subject.semester
+    )
+
+  def genRandomSubject(): Subject =
+    new Subject(
+      Random.nextString(4)
+        + Random.nextInt(10).toString()
+        + Random.nextInt(10).toString()
+        + Random.nextInt(10).toString()
+        + Random.nextInt(10).toString(),
+      ClassTypes(Random.nextInt(ClassTypes.length)).map(classData =>
+        Some(genRandomClass(classData))
+      ),
+      2019,
+      2
+    )
+
+  def genRandomClass(classData: Map[String, Any]): ClassType =
+    new ClassType(
+      classData("name").toString(),
+      (0 until (
+        if (classData("streams").isInstanceOf[Int])
+          classData("streams").asInstanceOf[Int]
+        else
+          classData("streams").asInstanceOf[Map[String, Any]]("min").asInstanceOf[Int] +
+            Random.nextInt(
+              classData("streams").asInstanceOf[Map[String, Any]]("max").asInstanceOf[Int] -
+                classData("streams").asInstanceOf[Map[String, Any]]("min").asInstanceOf[Int]
+            )
+      )).map(classIndex =>
+        Some(genRandomStream(classData))
+      )
+    )
+
+  def genRandomStream(classData: Map[String, Any]): ClassStream =
+    new ClassStream(
+      Array[Int](),
+      (0 until classData("sessions").asInstanceOf[Int]).map(sessionIndex =>
+        genRandomSession(
+          new Time(8 + Random.nextInt(10), 0),
+          timeFromMap(classData("length").asInstanceOf[Map[String, Int]])
+        )
+      )
+    )
+
+  def genRandomSession(startTime: Time, length: Time): ClassSession =
+    new ClassSession(
+      startTime,
+      startTime + length,
+      Random.nextString(20),
+      Random.nextInt(5)
+    ) 
+
+  private def timeFromMap(map: Map[String, Int]): Time =
+    new Time(map("hours"), map("minutes"))
 }
 
-class Time(
+case class Time(
   val hours: Int, 
   val minutes: Int) extends Serializable {
     def +(that: Time): Time = 
@@ -254,14 +441,14 @@ class Time(
       this.hours * 60 + this.minutes
 }
 
-class ClassSession(
-  val startTime: Time,
-  val endTime: Time,
+case class ClassSession(
+  val start_time: Time,
+  val end_time: Time,
   val location: String,
   val day: Int
 ) extends Serializable {
   def clashesWith(that: ClassSession): Boolean =
-    if(this == that)
+    if (this == that)
       false
     else ((thisStart: Int, thatStart: Int, thisEnd: Int, thatEnd: Int) =>
       (thisStart <= thatStart && thisEnd > thatStart && thisEnd <= thatEnd) ||
@@ -269,19 +456,19 @@ class ClassSession(
         (thisStart <= thatStart && thisEnd >= thatEnd) ||
         (thatStart <= thisStart && thatEnd >= thisEnd)
     )(
-      this.startTime.toMinutes(),
-      that.startTime.toMinutes(), 
-      this.endTime.toMinutes(),
-      that.endTime.toMinutes()
+      this.start_time.toMinutes(),
+      that.start_time.toMinutes(), 
+      this.end_time.toMinutes(),
+      that.end_time.toMinutes()
     )
 }
 
-class ClassStream(
+case class ClassStream(
   val weeks: Seq[Int],
   val classes: Seq[ClassSession]
 ) extends Serializable {
   def clashesWith(that: ClassStream): Boolean =
-    if(this == that || this.weeks.intersect(that.weeks).isEmpty)
+    if (this == that || this.weeks.intersect(that.weeks).isEmpty)
       false
     else 
       Optimiser.sparkContext.parallelize(this.classes).map(thisSession =>
@@ -291,14 +478,16 @@ class ClassStream(
       ).filter(clashes => clashes.nonEmpty).count() == 0
 }
 
-class ClassType(
+case class ClassType(
   val name: String,
   val streams: Seq[Option[ClassStream]]
 ) extends Serializable
 
-class Subject(
+case class Subject(
   val name: String,
-  val classes: Seq[Option[ClassType]]
+  val classes: Seq[Option[ClassType]],
+  val year: Int,
+  val semester: Int
 ) extends Serializable
 
 class TimetableStream(
