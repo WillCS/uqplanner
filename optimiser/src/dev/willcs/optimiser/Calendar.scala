@@ -3,6 +3,13 @@ package dev.willcs.optimiser
 import scala.collection.Set
 import scala.util.Random
 import dev.willcs.optimiser.library.Debug
+import com.datastax.driver.core.schemabuilder.UDTType
+import com.datastax.driver.mapping.annotations.UDT
+import com.datastax.driver.mapping.annotations.Table
+import com.datastax.spark.connector.types.TypeConverter
+import java.time.Instant
+import java.time.ZoneId
+import java.time.LocalTime
 
 object Calendar {
   def LectureName = "L"
@@ -251,7 +258,7 @@ object Calendar {
                   1.0
                 else if (variableIndex >= flattenedStreams.length * 3)
                   if (variableIndex == flattenedStreams.length * 3 + (constraints.subjects.indexOf(subject)))
-                    -subject.classes.length
+                    -subject.classes.size
                   else
                     0.0
                 else
@@ -352,8 +359,8 @@ object Calendar {
               optionStream.flatMap(stream =>
                 if (stream.classes.exists(session =>
                   days.contains(session.day) ||
-                  startTimes(session.day).toMinutes() > session.start_time.toMinutes() ||
-                    endTimes(session.day).toMinutes() < session.end_time.toMinutes()
+                  startTimes(session.day).toMinutes() > session.startTime.toMinutes() ||
+                    endTimes(session.day).toMinutes() < session.endTime.toMinutes()
                 )) 
                   None
                 else
@@ -377,7 +384,7 @@ object Calendar {
         + Random.nextInt(10).toString(),
       ClassTypes(Random.nextInt(ClassTypes.length)).map(classData =>
         Some(genRandomClass(classData))
-      ),
+      ).toSet,
       2019,
       2
     )
@@ -396,18 +403,18 @@ object Calendar {
             )
       )).map(classIndex =>
         Some(genRandomStream(classData))
-      )
+      ).toList
     )
 
   def genRandomStream(classData: Map[String, Any]): ClassStream =
     new ClassStream(
-      Array[Int](),
+      Set[Int](),
       (0 until classData("sessions").asInstanceOf[Int]).map(sessionIndex =>
         genRandomSession(
           new Time(8 + Random.nextInt(10), 0),
           timeFromMap(classData("length").asInstanceOf[Map[String, Int]])
         )
-      )
+      ).toList
     )
 
   def genRandomSession(startTime: Time, length: Time): ClassSession =
@@ -421,6 +428,7 @@ object Calendar {
   private def timeFromMap(map: Map[String, Int]): Time =
     new Time(map("hours"), map("minutes"))
 }
+
 
 case class Time(
   val hours: Int, 
@@ -441,9 +449,24 @@ case class Time(
       this.hours * 60 + this.minutes
 }
 
+object TimeToIntConverter extends TypeConverter[java.lang.Integer] {
+  def targetTypeTag = reflect.runtime.universe.typeTag[Integer]
+  def convertPF = {
+    case t: Time => t.toMinutes() * 60
+  }
+}
+
+object IntToTimeConverter extends TypeConverter[Time] with Serializable {
+  def targetTypeTag = reflect.runtime.universe.typeTag[Time]
+  def convertPF = {
+    case t: java.lang.Integer => new Time((t - t % 60) / 60, t % 60)
+  }
+}
+
+@UDT(name = "class_session")
 case class ClassSession(
-  val start_time: Time,
-  val end_time: Time,
+  val startTime: Time,
+  val endTime: Time,
   val location: String,
   val day: Int
 ) extends Serializable {
@@ -456,36 +479,39 @@ case class ClassSession(
         (thisStart <= thatStart && thisEnd >= thatEnd) ||
         (thatStart <= thisStart && thatEnd >= thisEnd)
     )(
-      this.start_time.toMinutes(),
-      that.start_time.toMinutes(), 
-      this.end_time.toMinutes(),
-      that.end_time.toMinutes()
+      this.startTime.toMinutes(),
+      that.startTime.toMinutes(), 
+      this.endTime.toMinutes(),
+      that.endTime.toMinutes()
     )
 }
 
+@UDT(name = "class_stream")
 case class ClassStream(
-  val weeks: Seq[Int],
-  val classes: Seq[ClassSession]
+  val weeks: Set[Int],
+  val classes: List[ClassSession]
 ) extends Serializable {
   def clashesWith(that: ClassStream): Boolean =
     if (this == that || this.weeks.intersect(that.weeks).isEmpty)
       false
     else 
-      Optimiser.sparkContext.parallelize(this.classes).map(thisSession =>
+      Optimiser.sparkContext.parallelize(this.classes).flatMap(thisSession =>
         Optimiser.sparkContext.parallelize(that.classes).map(thatSession =>
           thisSession.clashesWith(thatSession)
-        ).filter(clashes => clashes).collect()
-      ).filter(clashes => clashes.nonEmpty).count() == 0
+        ).collect()
+      ).filter(clashes => clashes).count() != 0
 }
 
+@UDT(name = "class")
 case class ClassType(
   val name: String,
-  val streams: Seq[Option[ClassStream]]
+  val streams: List[Option[ClassStream]]
 ) extends Serializable
 
+@Table(name = "subject_offering")
 case class Subject(
   val name: String,
-  val classes: Seq[Option[ClassType]],
+  val classes: Set[Option[ClassType]],
   val year: Int,
   val semester: Int
 ) extends Serializable

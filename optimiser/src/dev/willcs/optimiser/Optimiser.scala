@@ -12,23 +12,33 @@ import dev.willcs.optimiser.library.SortedArrayList
 
 import scala.util.Success
 import dev.willcs.optimiser.library.Debug
+import com.datastax.spark.connector.types.TypeConverter
 
 object Optimiser {
+  
   var sparkContext: SparkContext = null
 
   val CassandraKeyspace: String = "infs3208"
+
+  def registerTypeConverters(): Unit = {
+    TypeConverter.registerConverter(TimeToIntConverter)
+    TypeConverter.registerConverter(IntToTimeConverter)
+  }
+
+  def setSparkContext(spark: SparkContext): Unit = {
+    this.sparkContext = spark
+  }
 
   def main(args: Array[String]): Unit = {
     val sparkConfig: SparkConf = new SparkConf()
       .setAppName("Timetable Optimiser")
       .setMaster("local[4]")
-      // .set("spark.cassandra.connection.host", "192.168.0.15")
-      // .set("spark.cassandra.connection.port", "9042")
-      // .set("spark.cassandra.auth.username", "api")            
-      // .set("spark.cassandra.auth.password", "OPYRtSEe6bowS4MfV0V7p6hYeAYLfaqY")
+      .set("spark.cassandra.connection.host", "192.168.0.45")
+      .set("spark.cassandra.connection.port", "9042")
+      .set("spark.cassandra.auth.username", "api")            
+      .set("spark.cassandra.auth.password", "OPYRtSEe6bowS4MfV0V7p6hYeAYLfaqY")
 
-    this.sparkContext = new SparkContext(sparkConfig)
-    this.sparkContext.setLogLevel("WARN")
+    this.setSparkContext(new SparkContext(sparkConfig))
 
     /**
      *  Maximise |3|^T |x_1|
@@ -52,7 +62,33 @@ object Optimiser {
 
     val bVector = new SparseVector(3).set(0, 100).set(1, 80).set(2, 40)
 
-    RevisedSimplexSolver.solve(
+    // sparkContext.parallelize(0 until 10).map(index =>
+    //   Calendar.genRandomSubject()
+    // ).saveToCassandra(CassandraKeyspace, "subject_offering", SomeColumns("name", "classes", "year", "semester"))
+
+    val timetableOptimisationProblem = Debug.doThenPrint(
+      Calendar.createLinearProgrammingModel(
+        new CalendarConstraints(
+          Array(new Time(10, 0), new Time(14, 0), new Time(10, 0), new Time(10, 0), new Time(10, 0)),
+          Array(new Time(18, 0), new Time(18, 0), new Time(12, 0), new Time(14, 0), new Time(18, 0)),
+          Array(0, 1, 2, 3, 4),
+          1,
+          false,
+          (0 until 3).map(index =>
+            Calendar.genRandomSubject()
+          )
+        )), ((model: LinearProgrammingModel) =>
+        Array(
+          s"${model.constraintMatrix.rows}x${model.constraintMatrix.columns} Constraint matrix",
+          s"${model.constraintMatrix}",
+          s"${model.costVector.length}-dimensional Cost vector",
+          s"${model.bVector.length}-dimensional B vector",
+          s"${model.slackVariables.size} slack variables",
+          s"${model.decisionVariables.size} decision variables"
+        ).mkString("\n")
+      ))
+
+    val simpleLinearProgram = 
       new LinearProgrammingModel(
         constraintMatrix,
         costVector,
@@ -60,27 +96,8 @@ object Optimiser {
         Array(1, 2, 3),
         Array(4, 5)
       )
-      // Debug.doThenPrint(
-      //   Calendar.createLinearProgrammingModel(
-      //     new CalendarConstraints(
-      //       Array(new Time(10, 0), new Time(10, 0), new Time(10, 0), new Time(10, 0), new Time(10, 0)),
-      //       Array(new Time(18, 0), new Time(18, 0), new Time(18, 0), new Time(18, 0), new Time(18, 0)),
-      //       Array(2, 3, 4),
-      //       2,
-      //       true,
-      //       (0 until 4).map(index =>
-      //         Calendar.genRandomSubject()
-      //       )
-      //     )), ((model: LinearProgrammingModel) =>
-      //     Array(
-      //       s"${model.constraintMatrix.rows}x${model.constraintMatrix.columns} Constraint matrix",
-      //       s"${model.costVector.length}-dimensional Cost vector",
-      //       s"${model.bVector.length}-dimensional B vector",
-      //       s"${model.slackVariables.size} slack variables",
-      //       s"${model.decisionVariables.size} decision variables"
-      //     ).mkString("\n")
-      //   ))
-      ) match {
+
+    RevisedSimplexSolver.solve(simpleLinearProgram) match {
       case Success(value) => 
         println((0 until value.basic.size).map(index =>
           s"x_${value.basic(index) + 1} = ${value.variables(index).get}"

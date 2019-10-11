@@ -9,15 +9,15 @@ CREATE KEYSPACE "infs3208" WITH replication = { 'class': 'SimpleStrategy', 'repl
 -- TYPES --
 
 CREATE TYPE infs3208.class_session (
-    start_time time,
-    end_time time,
+    start_time int,
+    end_time int,
     location text,
     day int
 );
 
 CREATE TYPE infs3208.class_stream (
     weeks set<int>,
-    streams set<frozen<infs3208.class_session>>
+    classes set<frozen<infs3208.class_session>>
 );
 
 CREATE TYPE infs3208.class (
@@ -39,7 +39,7 @@ CREATE TABLE infs3208.semester (
     year int,
     semester int,
     active boolean,
-    weeks map<int, date>,active
+    weeks map<int, date>,
     PRIMARY KEY(year, semester)
 );
 
