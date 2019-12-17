@@ -1,10 +1,7 @@
-# INFS3208 Assignment 2 - 2019
-Timetable Optimiser Cloud Application
+# Timetable Optimiser Cloud Application
+An unfinished project that helped me learn about functional programming. (THIS CODE IS BAD)
 
 ## Components
 * Front-end `/webapp/`
 * Api       `/api/`
 * Spark Processing `/optimiser/`
-
-## Colour Palette (maybe?)
-[Hydreigon](http://pokepalettes.com/#hydreigon)
