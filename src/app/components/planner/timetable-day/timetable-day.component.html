@@ -4,7 +4,7 @@
         *ngFor='let block of this.sessionStartTimes'
         [style.height.%]='this.sessionBlockHeight'
         [style.top.%]='this.sessionBlockTopOffset(block)'
-        (mouseenter)='this.sessionLeave.emit(session)'
+        (mouseenter)='this.sessionLeave.emit(null)'
     >
     </div>
     <div 
