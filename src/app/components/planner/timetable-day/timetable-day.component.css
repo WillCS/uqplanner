@@ -4,29 +4,36 @@ div.dayColumn {
     top: 0%;
     position: relative;
     overflow: hidden;
+    color: white;
 }
 
 div.sessionBlock {
-    background-color: #56407f;
+    background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.1) 2px,
+        rgba(255, 255, 255, 0.1) 4px
+    );
     position: absolute;
     width: 100%;
 }
 
 div.scheduledClass {
     position: absolute;
-    background-color: #b569af;
+    background-color: #4eace2;
     width: 100%;
     box-sizing: border-box;
-    border-bottom: 1px solid white;
     cursor: pointer;
-    padding-left: 5px;
+    padding-top: 6px;
+    padding-left: 8px;
     overflow: hidden;
 }
 
 div.scheduledClass > p {
     height: 100%;
     margin: 0px;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 div.scheduledClass.editing,
@@ -39,7 +46,7 @@ div.scheduledClass.editing.focused {
 }
 
 div.scheduledClass.clashing {
-    background-color: #ed6164;
+    background-color: #d80209;
 }
 
 div.scheduledClass.notEditing:hover {

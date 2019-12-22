@@ -5,7 +5,7 @@ export const WEEKDAY_INDICES: number[] = [
 ];
 
 export const WEEKDAYS: string[] = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
+    'MON', 'TUE', 'WED', 'THU', 'FRI'
 ];
 
 export const DAY_START_TIME: Time = { hours: 8, minutes: 0 };

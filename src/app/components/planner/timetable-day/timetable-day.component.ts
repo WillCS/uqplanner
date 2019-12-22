@@ -32,7 +32,7 @@ export class TimetableDayComponent implements OnInit {
   @Input()
   public selections: Map<string, Map<string, ClassStream>>;
 
-  private sessionBlockHeight = 100 * (50 / DAY_LENGTH_MINUTES);
+  private sessionBlockHeight = 100 * (55 / DAY_LENGTH_MINUTES);
   private sessionMarginHeight = 100 * (10 / DAY_LENGTH_MINUTES);
   private sessionStartTimes = TIMETABLE_HOURS;
 
@@ -105,7 +105,7 @@ export class TimetableDayComponent implements OnInit {
 
     return {
       'left.%': width * index,
-      'width.%': index === sortedClashes.length - 1 ? width : width * 0.9
+      'width.%': index === sortedClashes.length - 1 ? width : width * 0.92
     };
   }
 
@@ -148,6 +148,6 @@ export class TimetableDayComponent implements OnInit {
   public getSessionHeightPercentage(session: ClassSession): number {
     const length: number = (session.endTime.hours * 60 + session.endTime.minutes)
       - (session.startTime.hours * 60 + session.startTime.minutes);
-    return 100 * (length / DAY_LENGTH_MINUTES);
+    return 92 * (length / DAY_LENGTH_MINUTES);
   }
 }

@@ -14,7 +14,7 @@ export class TimePipe implements PipeTransform {
       actualTime = 12;
     }
 
-    return `${actualTime}${ampm}`;
+    return `${actualTime}`;
   }
 
 }

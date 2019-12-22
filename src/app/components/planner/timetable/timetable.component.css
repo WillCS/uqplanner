@@ -15,8 +15,9 @@ p.timestamp {
     height: 20px;
     text-align: right;
     box-sizing: border-box;
-    padding-right: 5px;
-    transform: translateY(-15px);
+    font-size: 10px;
+    transform: translate(5px, -10px);
+    font-weight: bold;
 }
 
 div.calendarColumnContainer {
@@ -33,11 +34,14 @@ div.calendarColumn {
     display: inline-block;
     width: 150px;
     height: 100%;
-    margin-left: 10px;
+    margin-left: 3px;
+}
+
+div.calendarColumn > .dayHeader {
+    font-size: 10px;
+    font-weight: bold;
 }
 
 div.calendarColumn > p {
-    text-align: center;
-    height: 25px;
     margin: 5px auto;
 }

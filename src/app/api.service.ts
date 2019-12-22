@@ -59,7 +59,7 @@ export class ApiService {
         name: act[0]['activity_group_code'].split("_")[0],
         streams: [{
           classes: act.map((s: Object): ClassSession => ({
-            day: WEEKDAYS.findIndex(d => d.startsWith(s['day_of_week'])),
+            day: WEEKDAYS.findIndex(d => d.startsWith(s['day_of_week'].toUpperCase())),
             startTime: {
               hours: parseInt(s['start_time'].split(":")[0]), 
               minutes: parseInt(s['start_time'].split(":")[1])
@@ -68,7 +68,7 @@ export class ApiService {
               hours: parseInt(s['start_time'].split(":")[0]) + parseInt(s['duration']) / 60, 
               minutes: parseInt(s['start_time'].split(":")[1]) + parseInt(s['duration']) % 60
             },
-            location: s['location']
+            location: s['location'].split(" ")[0]
           }))
         }]
       }
