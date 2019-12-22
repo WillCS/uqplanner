@@ -15,7 +15,7 @@ p.timestamp {
     height: 20px;
     text-align: right;
     box-sizing: border-box;
-    font-size: 10px;
+    font-size: 12px;
     transform: translate(5px, -10px);
     font-weight: bold;
 }

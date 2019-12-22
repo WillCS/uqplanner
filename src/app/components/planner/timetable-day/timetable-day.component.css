@@ -17,6 +17,7 @@ div.sessionBlock {
     );
     position: absolute;
     width: 100%;
+    white-space: nowrap;
 }
 
 div.scheduledClass {
@@ -33,7 +34,8 @@ div.scheduledClass {
 div.scheduledClass > p {
     height: 100%;
     margin: 0px;
-    font-size: 10px;
+    font-size: 11px;
+    line-height: 14px;
 }
 
 div.scheduledClass.editing,

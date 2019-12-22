@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 body {
     margin: 0px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: "Helvetica Neue", Verdana, Geneva, Tahoma, sans-serif;
     color: white;
     background: linear-gradient(
         -45deg,
