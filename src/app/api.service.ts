@@ -43,9 +43,10 @@ export class ApiService {
   }
 
   private reformatClass(courseCode: string, obj: JSON): ClassListing {
+    console.log(obj)
     let name = Object.keys(obj)
       .filter(key => !key.includes("_EX"))
-      .find(key => key.split('_')[0] == courseCode);
+      .find(key => key.split('_')[0] == courseCode.toUpperCase());
     
     let activities = Object.values(obj[name].activities).reduce((acc: Object, val: Object) => {
       acc.hasOwnProperty(val['activity_group_code']) 
