@@ -58,8 +58,8 @@ export class ApiService {
     let classes = Object.values(activities).map((act: any): ClassType => {
       return {
         name: act[0]['activity_group_code'].split("_")[0],
-        streams: [{
-          classes: act.map((s: Object): ClassSession => ({
+        streams: act.map((s: Object): ClassStream => ({
+          classes:[{
             day: WEEKDAYS.findIndex(d => d.startsWith(s['day_of_week'].toUpperCase())),
             startTime: {
               hours: parseInt(s['start_time'].split(":")[0]), 
@@ -70,8 +70,8 @@ export class ApiService {
               minutes: parseInt(s['start_time'].split(":")[1]) + parseInt(s['duration']) % 60
             },
             location: s['location'].split(" ")[0]
-          }))
-        }]
+          }]
+        }))
       }
     });
 

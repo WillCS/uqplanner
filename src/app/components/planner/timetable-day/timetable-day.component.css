@@ -17,7 +17,6 @@ div.sessionBlock {
     );
     position: absolute;
     width: 100%;
-    white-space: nowrap;
 }
 
 div.scheduledClass {
@@ -29,6 +28,7 @@ div.scheduledClass {
     padding-top: 6px;
     padding-left: 8px;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 div.scheduledClass > p {
