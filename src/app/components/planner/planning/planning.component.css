@@ -1,17 +1,43 @@
-div.classList {
+.classList {
+    padding-top: 82px;
     float: left;
+    margin: 5px;
+}
+
+.classList > p {
+    font-size: 11px;
+    font-weight: bold;
+    color: #b4aeb6;
+    text-transform: uppercase;
+    margin-bottom: 10px;
 }
 
 div.classObject {
     width: 175px;
     padding: 15px 40px 15px 15px;
-    margin: 5px;
+    margin-bottom: 10px;
     color: white;
     box-sizing: border-box;
-    background-color: #381343;    
-    border: 1px solid #715678;
     border-radius: 5px;
     position: relative;
+}
+
+div.classObject.normal {
+    border: 1px solid #715678;
+    background-color: #381343;    
+}
+
+div.classObject.placeholder {
+    border: 2px dashed#68596c;
+    text-transform: uppercase;
+    height: 360px;
+    padding: 80px 35px;
+}
+
+div.classObject.placeholder > p {
+    width: 100%;
+    text-align: center;
+    color: #9d89a3;
 }
 
 div.classObject > p {

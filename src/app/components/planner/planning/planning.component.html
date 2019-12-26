@@ -1,8 +1,15 @@
 <!-- <app-controls></app-controls> -->
 
 <div class='classList'>
+    <p>Courses</p>
     <div
-        class='classObject'
+        class='classObject placeholder'
+        *ngIf='!this.classList?.length > 0'
+    >
+        <p><b>Your courses go here</b></p>
+    </div>
+    <div
+        class='classObject normal'
         *ngFor='let class of this.classList' 
     >
         <p><b>{{class.name}}</b></p>

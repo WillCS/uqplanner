@@ -10,6 +10,7 @@ input.classSearchField {
     opacity: 0;
     background-color: white;
     transition: width 0.2s, padding 0.2s, margin 0.2s;
+    text-transform: uppercase;
 }
 
 input.classSearchField.expanded {
