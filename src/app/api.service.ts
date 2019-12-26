@@ -77,6 +77,7 @@ export class ApiService {
 
     let classList = {
       name: name.split("_")[0],
+      description: obj[name]['description'],
       classes: classes
     };
 

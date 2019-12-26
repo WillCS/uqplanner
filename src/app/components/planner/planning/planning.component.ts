@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-planning',
@@ -18,6 +19,8 @@ export class PlanningComponent implements OnInit {
   public editing = false;
   public editingClassName: string;
   public editingClassType: string;
+
+  faTimesCircle = faTimesCircle;
 
   constructor(public api: ApiService) {
     this.selections = new Map<string, Map<string, number>>();

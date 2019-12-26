@@ -6,12 +6,12 @@ html {
 body {
     margin: 0px;
     height: 100%;
-    font-family: "Helvetica Neue", Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Helvetica Neue', Verdana, Geneva, Tahoma, sans-serif;
     color: white;
     background: linear-gradient(
         -45deg,
-        #4a2b7b,
-        #51266b
+        #2f033d,
+        #2a0237
     );
     position: relative;
 }

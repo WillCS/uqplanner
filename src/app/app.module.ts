@@ -11,11 +11,12 @@ import { OptimisingComponent } from './components/optimiser/optimising/optimisin
 import { TimetableComponent } from './components/planner/timetable/timetable.component';
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
 import { ClassSearchComponent } from './components/class-search/class-search.component';
-import { CloseButtonComponent } from './components/close-button/close-button.component';
 import { ControlsComponent } from './components/planner/controls/controls.component';
 import { TimePipe } from './calendar/time.pipe';
 import { ModalComponent } from './components/modal/modal.component';
 import { SemesterPipe } from './calendar/semester.pipe';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,6 @@ import { SemesterPipe } from './calendar/semester.pipe';
     TimetableComponent,
     TimetableDayComponent,
     ClassSearchComponent,
-    CloseButtonComponent,
     TimePipe,
     ControlsComponent,
     ModalComponent,
@@ -36,7 +36,8 @@ import { SemesterPipe } from './calendar/semester.pipe';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

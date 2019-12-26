@@ -1,36 +1,31 @@
-<div>
-    <app-controls
+<!-- <app-controls></app-controls> -->
+
+<div class='classList'>
+    <div
+        class='classObject'
+        *ngFor='let class of this.classList' 
     >
-    </app-controls>
-
-    <app-timetable
-        [classList]='this.classList'
-        [editing]='this.editing'
-        [editingClassName]='this.editingClassName'
-        [editingClassType]='this.editingClassType'
-        [selections]='this.selections'
-        (sessionClick)='this.handleSessionClicked($event)'
-    >
-    </app-timetable>
-
-    <div class='classContainer'>
-        <div class='classList'>
-            <div
-                class='classObject'
-                *ngFor='let class of this.classList' 
-            >
-                <p>{{class.name}}</p>
-                <app-close-button
-                    class='classCloseButton'
-                    (click)='this.onClassCloseClicked(class.name)'
-                >
-                </app-close-button>
-            </div>
-        </div>
-
-        <app-class-search
-            (search)='this.onSearched($event)'
-        >
-        </app-class-search>
+        <p><b>{{class.name}}</b></p>
+        <p><b>{{class.description | uppercase}}</b></p>
+        
+        <fa-icon 
+            class='closeButton' 
+            [icon]='faTimesCircle' 
+            (click)='this.onClassCloseClicked(class.name)'
+        ></fa-icon>
     </div>
 </div>
+
+<app-timetable
+    [classList]='this.classList'
+    [editing]='this.editing'
+    [editingClassName]='this.editingClassName'
+    [editingClassType]='this.editingClassType'
+    [selections]='this.selections'
+    (sessionClick)='this.handleSessionClicked($event)'
+>
+</app-timetable>
+
+<app-class-search
+    (search)='this.onSearched($event)'
+></app-class-search>
