@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-planning',
@@ -27,7 +27,50 @@ export class PlanningComponent implements OnInit {
   }
 
   ngOnInit() {
+    let reviver = function(key, value) {
+      if(typeof value === 'object' && value !== null) {
+        if (value.dataType === 'Map') {
+          return new Map(value.value);
+        }
+      }
+      return value;
+    }
 
+    if (localStorage.hasOwnProperty('timetableData')) {
+      let data = JSON.parse(localStorage.getItem('timetableData'), reviver);
+      if (data.classList) {
+        this.classList = data.classList;
+      }
+      if (data.selections) {
+        this.selections = data.selections;
+      }
+    }
+  }
+
+  public saveData(): void {
+    let replacer = function (key, value) {
+      const originalObject = this[key];
+      if(originalObject instanceof Map) {
+        return {
+          dataType: 'Map',
+          value: Array.from(originalObject.entries()), // or with spread: value: [...originalObject]
+        };
+      } else {
+        return value;
+      }
+    }
+
+    console.log(this.selections)
+    let data = {
+      classList: this.classList,
+      selections: this.selections
+    }
+
+    let dataString = JSON.stringify(data, replacer);
+
+    console.log(dataString);
+
+    localStorage.setItem('timetableData', dataString);
   }
 
   public handleSessionClicked(session: TimetableSession): void {
@@ -39,6 +82,7 @@ export class PlanningComponent implements OnInit {
     }
 
     this.editing = !this.editing;
+    this.saveData();
   }
 
   public addClass(newClass: ClassListing): void {
@@ -53,6 +97,7 @@ export class PlanningComponent implements OnInit {
           this.selections.set(newClass.name, classMap);
       }
     }
+    this.saveData();
   }
 
   public removeClass(className: string): void {
@@ -61,12 +106,14 @@ export class PlanningComponent implements OnInit {
     if(this.selections.has(className)) {
       this.selections.delete(className);
     }
+    this.saveData();
   }
 
   public SetSelection(className: string, classType: string, selection: number): void {
       if(this.selections.has(className) && this.selections[className].has(classType)) {
           this.selections[className][classType] = selection;
       }
+      this.saveData();
   }
 
   public GetSelection(className: string, classType: string): number {
@@ -84,5 +131,6 @@ export class PlanningComponent implements OnInit {
 
   public onClassCloseClicked(className: string): void {
     this.removeClass(className);
+    this.saveData();
   }
 }
