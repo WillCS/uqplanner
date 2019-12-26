@@ -1,34 +1,3 @@
-nav.navbar {
-    margin: 0px auto;
-    margin-top: 50px;
-    text-align: center;
-    font-size: 40px;
-}
-
-nav.navbar > a, nav.navbar > a:visited {
-    margin: 0 10px;
-    color: #56407f;
-    transition: font-size 0.1s, color 0.1s;
-    outline: none;
-    font-weight: bold;
-    font-variant-caps: small-caps;
-    text-decoration: none;
-}
-
-nav.navbar > a:hover, nav.navbar > a.active {
-    font-size: 50px;
-    color: #7fb3ee;
-    transition: font-size 0.1s, color 0.1s;
-}
-
-nav.navbar > :first-of-type:a {
-    margin-left: 0;
-}
-
-nav.navbar > :last-of-type:a {
-    margin-right: 0;
-}
-
 div.contentContainer {
     max-width: 900px;
     margin: 0px auto;
