@@ -4,7 +4,6 @@
         *ngFor='let block of this.sessionStartTimes'
         [style.height.%]='this.sessionBlockHeight'
         [style.top.%]='this.sessionBlockTopOffset(block)'
-        (mouseenter)='this.sessionLeave.emit(session)'
     >
     </div>
     <div 
@@ -12,13 +11,11 @@
         *ngFor='let session of this.sessionList'
         [class.editing]='this.displaySessionAsEditing(session)'
         [class.notEditing]='this.displaySessionAsNotEditing(session)'
-        [class.focused]='this.isSessionFocused(session)'
         [class.clashing]='this.isSessionClashing(session)'
         [ngStyle]='this.getSessionClashStyling(session)'
         [style.top.%]='this.getSessionTopPercentage(session.classSession)'
         [style.height.%]='this.getSessionHeightPercentage(session.classSession)'
-        (click)='this.handleClicked(session)'
-        (mouseenter)='this.sessionEnter.emit(session)'
+        (mousedown)='this.handleClicked(session)'
     >
         <p>
             <b>{{session.className}}</b> {{session.classType}}0{{session.classStream + 1}}

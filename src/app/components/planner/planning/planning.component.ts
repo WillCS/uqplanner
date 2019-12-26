@@ -18,7 +18,6 @@ export class PlanningComponent implements OnInit {
   public editing = false;
   public editingClassName: string;
   public editingClassType: string;
-  public focusedSession: TimetableSession;
 
   constructor(public api: ApiService) {
     this.selections = new Map<string, Map<string, number>>();
@@ -37,14 +36,6 @@ export class PlanningComponent implements OnInit {
     }
 
     this.editing = !this.editing;
-  }
-
-  public handleSessionEntered(session: TimetableSession): void {
-    this.focusedSession = session;
-  }
-
-  public handleSessionLeft(): void {
-    this.focusedSession = null;
   }
 
   public addClass(newClass: ClassListing): void {

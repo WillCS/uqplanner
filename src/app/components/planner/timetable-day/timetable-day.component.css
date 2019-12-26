@@ -43,7 +43,7 @@ div.scheduledClass.editing,
     background-color: #e0c4decc;
 }
 
-div.scheduledClass.editing.focused {
+div.editing:hover {
     background-color: #7fb3ee;
 }
 

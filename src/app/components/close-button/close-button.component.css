@@ -1,7 +1,6 @@
 button.closeButton,
         button.closeButton:active,
-        button.closeButton:focus,
-        button.closeButton::-moz-focus-inner {
+        button.closeButton:focus {
     width: 40px;
     height: 40px;
     background-color: white;

@@ -19,10 +19,6 @@ export class TimetableComponent implements OnInit {
 
   @Output()
   public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
-  @Output()
-  public sessionEnter: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
-  @Output()
-  public sessionLeave: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
 
   @Input()
   public editing: boolean;
@@ -30,8 +26,6 @@ export class TimetableComponent implements OnInit {
   public editingClassName: string;
   @Input()
   public editingClassType: string;
-  @Input()
-  public focusedSession: TimetableSession;
 
   @Input()
   public selections: Map<string, Map<string, number>>;

@@ -28,8 +28,6 @@ export class TimetableDayComponent implements OnInit {
   @Input()
   public editingClassType: string;
   @Input()
-  public focusedSession: TimetableSession;
-  @Input()
   public selections: Map<string, Map<string, ClassStream>>;
 
   private sessionBlockHeight = 100 * (55 / DAY_LENGTH_MINUTES);
@@ -109,21 +107,12 @@ export class TimetableDayComponent implements OnInit {
     };
   }
 
-  public isSessionFocused(session: TimetableSession): boolean {
-    if(this.focusedSession) {
-      return this.focusedSession.className === session.className
-        && this.focusedSession.classType === session.classType
-        && this.focusedSession.classStream === session.classStream;
-    }
-
-    return false;
-  }
-
   public sessionBlockTopOffset(block: number): number {
     return 100 * ((block - DAY_START_TIME.hours) / DAY_LENGTH_HOURS);
   }
 
   public handleClicked(session: TimetableSession) {
+    console.log('a');
     if(this.displaySessionAsEditing(session) || !this.editing) {
       this.sessionClick.emit(session);
     }

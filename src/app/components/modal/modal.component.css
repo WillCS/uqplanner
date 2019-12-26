@@ -39,8 +39,7 @@ div.modalButtonContainer {
 
 button.modalButton,
         button.closeButton:active,
-        button.closeButton:focus,
-        button.closeButton::-moz-focus-inner {
+        button.closeButton:focus {
     max-width: 100px;
     height: 40px;
     border-radius: 20px;
