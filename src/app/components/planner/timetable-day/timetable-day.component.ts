@@ -30,9 +30,9 @@ export class TimetableDayComponent implements OnInit {
   @Input()
   public selections: Map<string, Map<string, ClassStream>>;
 
-  private sessionBlockHeight = 100 * (55 / DAY_LENGTH_MINUTES);
-  private sessionMarginHeight = 100 * (10 / DAY_LENGTH_MINUTES);
-  private sessionStartTimes = TIMETABLE_HOURS;
+  public sessionBlockHeight = 100 * (55 / DAY_LENGTH_MINUTES);
+  public sessionMarginHeight = 100 * (10 / DAY_LENGTH_MINUTES);
+  public sessionStartTimes = TIMETABLE_HOURS;
 
   constructor() {
 

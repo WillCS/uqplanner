@@ -45,7 +45,7 @@ export class TimetableComponent implements OnInit {
   }
 
   public setTitle(event: Event) {
-    this.titleChange.emit(event.target.value);
+    // this.titleChange.emit(event.target.value);
   }
 
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
