@@ -17,22 +17,20 @@
 div.timeLabels {
     position: absolute;
     height: 620px;
-    width: 50px;
     flex: 0 0 100%;
-    left: 10px;
-    top: 35px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-align: right;
+    top: 25px;
+    left: -18px;
 }
 
 p.timestamp {
     margin: 0px;
     height: 20px;
-    text-align: right;
     box-sizing: border-box;
     font-size: 12px;
-    transform: translate(-65px, -10px);
     font-weight: bold;
 }
 
@@ -50,7 +48,7 @@ div.calendarColumn {
     display: inline-block;
     width: 150px;
     height: 100%;
-    margin-left: 3px;
+    margin-left: 4px;
 }
 
 div.calendarColumn > .dayHeader {

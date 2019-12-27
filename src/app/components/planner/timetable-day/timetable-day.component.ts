@@ -136,6 +136,6 @@ export class TimetableDayComponent implements OnInit {
   public getSessionHeightPercentage(session: ClassSession): number {
     const length: number = (session.endTime.hours * 60 + session.endTime.minutes)
       - (session.startTime.hours * 60 + session.startTime.minutes);
-    return 92 * (length / DAY_LENGTH_MINUTES);
+    return 100 * (length / DAY_LENGTH_MINUTES) - 8 * (60 / DAY_LENGTH_MINUTES);
   }
 }
