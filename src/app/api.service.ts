@@ -8,7 +8,8 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private api = 'http://localhost:8010/proxy/even/rest/timetable';
+  private proxy = 'https://lingering-bush-c27d.late-night.workers.dev';
+  private url = 'https://timetable.my.uq.edu.au/even/rest/timetable';
 
   constructor(private http: HttpClient) {
 
@@ -17,7 +18,7 @@ export class ApiService {
   public getClass(courseCode: string, year: number, semester: number): Observable<ClassListing> {
     const endpoint: string = this.endpoint('subjects');
 
-    return this.http.post<JSON>(
+    return this.http.post<string>(
       endpoint,
       `search-term=${courseCode}&semester=ALL&campus=ALL&faculty=ALL&type=ALL&days=1&days=2&days=3&days=4&days=5&days=6&days=0&start-time=00%3A00&end-time=23%3A00`,
       {
@@ -25,10 +26,10 @@ export class ApiService {
           "accept": "application/json, text/javascript, */*; q=0.01",
           "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
           "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-          "x-requested-with": "XMLHttpRequest"
+          "x-requested-with": "XMLHttpRequest",
         }
       }).pipe(
-        map((classObj: JSON) => this.reformatClass(courseCode, classObj))
+        map( (classObj: any) => this.reformatClass(courseCode, classObj))
       );
   }
 
@@ -39,7 +40,7 @@ export class ApiService {
   }
 
   private endpoint(name: string): string {
-    return `${this.api}/${name}`;
+    return `${this.proxy}?${this.url}/${name}`;
   }
 
   private reformatClass(courseCode: string, obj: JSON): ClassListing {

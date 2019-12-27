@@ -21,10 +21,6 @@ input.classSearchField.expanded {
     opacity: 1;
 }
 
-input:focus {
-    outline: none;
-}
-
 button.classSearch,
         button.classSearch:active,
         button.classSearch:focus {

@@ -3,12 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "lcp --port 8010 --proxyUrl https://timetable.my.uq.edu.au & ng serve",
+    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "proxy": "lcp --port 8010 --proxyUrl https://timetable.my.uq.edu.au"
   },
   "private": true,
   "dependencies": {
