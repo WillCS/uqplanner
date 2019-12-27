@@ -24,12 +24,14 @@
 </div>
 
 <app-timetable
+    [name]='this.name'
     [classList]='this.classList'
     [editing]='this.editing'
     [editingClassName]='this.editingClassName'
     [editingClassType]='this.editingClassType'
     [selections]='this.selections'
     (sessionClick)='this.handleSessionClicked($event)'
+    (titleChange)='this.handleTitleChanged($event)'
 >
 </app-timetable>
 

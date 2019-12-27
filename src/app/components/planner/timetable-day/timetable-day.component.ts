@@ -112,7 +112,6 @@ export class TimetableDayComponent implements OnInit {
   }
 
   public handleClicked(session: TimetableSession) {
-    console.log('a');
     if(this.displaySessionAsEditing(session) || !this.editing) {
       this.sessionClick.emit(session);
     }

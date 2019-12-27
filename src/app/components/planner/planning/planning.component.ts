@@ -9,6 +9,7 @@ import { faTimesCircle, faCloudDownloadAlt } from '@fortawesome/free-solid-svg-i
   styleUrls: ['./planning.component.css']
 })
 export class PlanningComponent implements OnInit {
+  public name: string;
   public year: number;
   public semester: number;
 
@@ -38,6 +39,9 @@ export class PlanningComponent implements OnInit {
 
     if (localStorage.hasOwnProperty('timetableData')) {
       let data = JSON.parse(localStorage.getItem('timetableData'), reviver);
+      if (data.name) {
+        this.name = data.name;
+      }
       if (data.classList) {
         this.classList = data.classList;
       }
@@ -60,15 +64,13 @@ export class PlanningComponent implements OnInit {
       }
     }
 
-    console.log(this.selections)
     let data = {
+      name: this.name,
       classList: this.classList,
       selections: this.selections
     }
 
     let dataString = JSON.stringify(data, replacer);
-
-    console.log(dataString);
 
     localStorage.setItem('timetableData', dataString);
   }
@@ -82,6 +84,11 @@ export class PlanningComponent implements OnInit {
     }
 
     this.editing = !this.editing;
+    this.saveData();
+  }
+
+  public handleTitleChanged(title: string): void {
+    this.name = title;
     this.saveData();
   }
 

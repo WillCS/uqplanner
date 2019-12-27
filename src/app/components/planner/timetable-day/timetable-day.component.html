@@ -18,7 +18,7 @@
         (mousedown)='this.handleClicked(session)'
     >
         <p>
-            <b>{{session.className}}</b> {{session.classType}}0{{session.classStream + 1}}
+            <b>{{session.className}}</b> {{session.classType}}{{session.classStream + 1 | number:'2.0'}}
             <br />
             {{session.classSession.location}}
         </p>

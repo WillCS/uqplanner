@@ -12,6 +12,9 @@ import { stringify } from 'querystring';
 })
 export class TimetableComponent implements OnInit {
   @Input()
+  public name: string;
+  
+  @Input()
   public classList: ClassListing[] = [];
   public weekdays: string[] = WEEKDAYS;
   public weekdayIndices: number[] = WEEKDAY_INDICES;
@@ -19,6 +22,9 @@ export class TimetableComponent implements OnInit {
 
   @Output()
   public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
+
+  @Output()
+  public titleChange: EventEmitter<string> = new EventEmitter<string>();
 
   @Input()
   public editing: boolean;
@@ -36,6 +42,10 @@ export class TimetableComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  public setTitle(event: Event) {
+    this.titleChange.emit(event.target.value);
   }
 
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
