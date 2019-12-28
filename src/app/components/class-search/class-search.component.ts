@@ -11,12 +11,12 @@ export class ClassSearchComponent implements OnInit {
   public search: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('courseCode', { read: ElementRef, static: false })
-  private input: ElementRef;
+  public input: ElementRef;
 
-  private isExpanded = false;
-  private isReady    = false;
+  public isExpanded = false;
+  public isReady    = false;
 
-  private searchText = '';
+  public searchText = '';
 
   constructor() {
 
@@ -26,21 +26,21 @@ export class ClassSearchComponent implements OnInit {
 
   }
 
-  private closeTextInput(): void {
+  public closeTextInput(): void {
     this.isExpanded = false;
     this.input.nativeElement.disabled = true;
     this.input.nativeElement.blur();
     this.isReady = false;
   }
 
-  private openTextInput(): void {
+  public openTextInput(): void {
     this.isExpanded = true;
     this.input.nativeElement.disabled = false;
     this.input.nativeElement.focus();
     this.handleTextChange(this.input.nativeElement.value);
   }
 
-  private handleClick(): void {
+  public handleClick(): void {
     if(!this.isReady) {
       if(this.isExpanded) {
         this.closeTextInput();
@@ -52,19 +52,19 @@ export class ClassSearchComponent implements OnInit {
     }
   }
 
-  private handleEnterPress(courseCode: string): void {
+  public handleEnterPress(courseCode: string): void {
     if(this.isReady) {
       this.executeSearch(courseCode);
     }
   }
 
-  private handleEscapePress(): void {
+  public handleEscapePress(): void {
     if(this.isExpanded) {
       this.closeTextInput();
     }
   }
 
-  private handleTextChange(courseCode: string): void {
+  public handleTextChange(courseCode: string): void {
     if(!this.isExpanded) {
       this.isReady = false;
     } else if(!(courseCode == null || courseCode === '')) {
@@ -74,7 +74,7 @@ export class ClassSearchComponent implements OnInit {
     }
   }
 
-  private executeSearch(courseCode: string): void {
+  public executeSearch(courseCode: string): void {
     this.search.emit(courseCode);
   }
 

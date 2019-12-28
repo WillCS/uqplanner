@@ -12,7 +12,7 @@ export class ControlsComponent implements OnInit {
   @Output()
   public semesterChange: EventEmitter<number> = new EventEmitter<number>();
   public semesterLocked = false;
-  private semesterList: Semester[];
+  public semesterList: Semester[];
 
   constructor(private api: ApiService, private modalController: ModalService) {
 
