@@ -107,7 +107,7 @@ export class PlanningComponent implements OnInit {
           endTime.setMinutes(session.endTime.minutes);
 
           cal.addEvent(
-            subjectName,
+            `${subjectName} ${stream.name}${(id + 1).toString().padStart(2, '0')}`,
             streamName,
             session.location, 
             startTime,
