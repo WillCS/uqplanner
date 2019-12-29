@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
-import { faTimesCircle, faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faSave } from '@fortawesome/free-solid-svg-icons';
+import { ClassSession } from '../../../calendar/calendar';
+declare const ics: any;
 
 @Component({
   selector: 'app-planning',
@@ -22,6 +24,7 @@ export class PlanningComponent implements OnInit {
   public editingClassType: string;
 
   faTimesCircle = faTimesCircle;
+  faSave = faSave;
 
   constructor(public api: ApiService) {
     this.selections = new Map<string, Map<string, number>>();
@@ -73,6 +76,49 @@ export class PlanningComponent implements OnInit {
     let dataString = JSON.stringify(data, replacer);
 
     localStorage.setItem('timetableData', dataString);
+  }
+
+  public saveICal(): void {
+    let cal = ics();
+    console.log(this.selections);
+    this.selections.forEach( (streams: Map<string, number>, subjectName: string) => {
+      streams.forEach((id: number, streamName: string) => {
+        let subject: ClassListing = this.classList.find(c => c.name == subjectName);
+        let stream: ClassType = subject.classes.find(s => s.name == streamName);
+        let session: ClassSession = stream.streams[id].classes[0];
+
+        session.weekPattern.reduce((acc, val, pos): Date[] => {
+          if (!val) {
+            return acc;
+          }
+          console.log(session.startDate);
+          let newDate = new Date(session.startDate);
+          newDate.setDate(newDate.getDate() + 7 * pos + session.day);
+          acc.push(newDate);
+          return acc;
+        }, []).forEach( (date: Date) => {
+          let startTime = new Date(date.getTime());
+          let endTime = new Date(date.getTime());
+
+          startTime.setHours(session.startTime.hours);
+          startTime.setMinutes(session.startTime.minutes);
+
+          endTime.setHours(session.endTime.hours);
+          endTime.setMinutes(session.endTime.minutes);
+
+          cal.addEvent(
+            subjectName,
+            streamName,
+            session.location, 
+            startTime,
+            endTime
+          );
+        });
+      });
+    });
+
+    cal.download(this.name ? this.name : 'timetable');
+
   }
 
   public handleSessionClicked(session: TimetableSession): void {

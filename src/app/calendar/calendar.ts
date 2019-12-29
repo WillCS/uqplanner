@@ -42,10 +42,12 @@ export interface ClassStream {
 }
 
 export interface ClassSession {
-    day: number | Date;
+    day: number;
     startTime: Time;
     endTime: Time;
     location: string;
+    weekPattern?: Array<boolean>;
+    startDate?: Date
 }
 
 export interface TimetableSession {
