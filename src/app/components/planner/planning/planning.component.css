@@ -64,6 +64,7 @@ div.classObject > p {
 
 app-timetable {
     float: right;
+    width: 750px;
 }
 
 app-class-search {

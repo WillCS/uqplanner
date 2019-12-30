@@ -6,6 +6,12 @@
         (change)='this.setTitle($event)'
     />
 </div>
+<app-calendar-export-button
+    [selections]='this.selections'
+    [classList]='this.classList'
+    [name]='this.name'
+></app-calendar-export-button
+    >
 <div class='calendarColumnContainer'>
     <div *ngFor='let day of this.weekdayIndices' class='calendarColumn'>
         <div 
