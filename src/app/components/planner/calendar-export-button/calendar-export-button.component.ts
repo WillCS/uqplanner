@@ -59,7 +59,7 @@ export class CalendarExportButtonComponent implements OnInit {
           cal.addEvent(
             `${subjectName} ${stream.name}${(id + 1).toString().padStart(2, '0')}`,
             streamName,
-            session.location, 
+            session.location,
             startTime,
             endTime
           );
