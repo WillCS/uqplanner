@@ -1,39 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import {
-  ClassListing, ClassType, ClassSession
-} from 'src/app/calendar/calendar';
+import { Injectable } from '@angular/core';
+import { StorageService } from './storage.service';
+import { ClassListing, ClassType, ClassSession } from './calendar';
 declare const ics: any;
 
-@Component({
-  selector: 'app-calendar-export-button',
-  templateUrl: './calendar-export-button.component.html',
-  styleUrls: ['./calendar-export-button.component.css']
+@Injectable({
+  providedIn: 'root'
 })
-export class CalendarExportButtonComponent implements OnInit {
+export class ExportService {
 
-  @Input()
-  public selections: Map<string, Map<string, number>>;
+  constructor(
+    public storage: StorageService
+  ) { }
 
-  @Input()
-  public classList: ClassListing[] = [];
+  public exportCalendar(name: string): void {
+    const calData = this.storage.getCalendarByName(name);
 
-  @Input()
-  public name: string;
-
-  faDownload = faDownload;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  public saveICal(): void {
-    console.log('ical');
+    console.log('Exporting as iCal');
     const cal = ics();
-    this.selections.forEach( (streams: Map<string, number>, subjectName: string) => {
+    calData.selections.forEach((streams: Map<string, number>, subjectName: string) => {
       streams.forEach((id: number, streamName: string) => {
-        const subject: ClassListing = this.classList.find(c => c.name === subjectName);
+        const subject: ClassListing = calData.classList.find(c => c.name === subjectName);
         const stream: ClassType = subject.classes.find(s => s.name === streamName);
         const session: ClassSession = stream.streams[id].classes[0];
 
@@ -46,7 +32,7 @@ export class CalendarExportButtonComponent implements OnInit {
           newDate.setDate(newDate.getDate() + 7 * pos + session.day);
           acc.push(newDate);
           return acc;
-        }, []).forEach( (date: Date) => {
+        }, []).forEach((date: Date) => {
           const startTime = new Date(date.getTime());
           const endTime = new Date(date.getTime());
 
@@ -67,8 +53,6 @@ export class CalendarExportButtonComponent implements OnInit {
       });
     });
 
-    cal.download(this.name ? this.name : 'timetable');
-
+    cal.download(calData.name ? calData.name : 'timetable');
   }
-
 }

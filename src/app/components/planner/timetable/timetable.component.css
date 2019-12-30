@@ -47,8 +47,28 @@
     background-color: #712e81;
 }
 
-app-calendar-export-button {
+.controls {
     float: right;
+}
+
+.controlBtn {
+    background-color: white;
+    color: black;
+    width: 28px;
+    height: 28px;
+    border-radius: 28px;
+    border: none;
+    transition: background-color 0.2s;
+    margin-left: 5px;
+}
+
+.controlBtn:hover {
+    background-color: #bc9fc5;
+}
+
+.controlBtn > fa-icon {
+color: #2f033d;
+font-size: 11px;
 }
 
 div.timeLabels {

@@ -4,7 +4,8 @@ import {
   TimetableSession, ClassStream, ClassType, ClassSession
 } from 'src/app/calendar/calendar';
 import { StorageService } from 'src/app/calendar/storage.service';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { ExportService } from 'src/app/calendar/export.service';
+import { faDownload, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-timetable',
@@ -50,13 +51,16 @@ export class TimetableComponent implements OnInit {
   public selections: Map<string, Map<string, number>>;
 
   faPlus = faPlus;
+  faTrash = faTrash;
+  faDownload = faDownload;
+  faSave = faSave;
 
-  constructor(public storage: StorageService) {
+  constructor(public storageService: StorageService, public exportService: ExportService) {
 
   }
 
   ngOnInit() {
-    if (this.storage.doTimetablesExist()) {
+    if (this.storageService.doTimetablesExist()) {
       this.updateSavedList();
     }
   }
@@ -70,6 +74,10 @@ export class TimetableComponent implements OnInit {
 
     this.deletable = target.value in this.calendarNames;
     this.titleChange.emit(target.value);
+  }
+
+  public exportCalendar(): void {
+    this.exportService.exportCalendar
   }
 
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
@@ -123,6 +131,6 @@ export class TimetableComponent implements OnInit {
   }
 
   private updateSavedList(): void {
-    this.calendarNames = this.storage.getSavedCalendarNames();
+    this.calendarNames = this.storageService.getSavedCalendarNames();
   }
 }
