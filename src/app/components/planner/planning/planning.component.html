@@ -1,4 +1,11 @@
-<!-- <app-controls></app-controls> -->
+<div class='title'>
+    <input 
+        type='text' 
+        placeholder='Semester Timetable'
+        value='{{this.name}}'
+        (change)='this.handleTitleChanged($event)'
+    />
+</div>
 
 <div class='classList'>
 
@@ -46,7 +53,6 @@
     [editingClassType]='this.editingClassType'
     [selections]='this.selections'
     (sessionClick)='this.handleSessionClicked($event)'
-    (titleChange)='this.handleTitleChanged($event)'
     (timetableClick)='this.handleTimetableChangeRequest($event)'
     (saveClick)='this.saveData()'
     (deleteClick)='this.deleteTimetable(this.getName())'

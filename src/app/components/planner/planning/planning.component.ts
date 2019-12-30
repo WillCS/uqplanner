@@ -30,16 +30,21 @@ export class PlanningComponent implements OnInit {
 
   constructor(
       public api: ApiService,
-      public storage: StorageService,
+      public storageService: StorageService,
       public modalService: ModalService) {
     this.selections = new Map<string, Map<string, number>>();
   }
 
   ngOnInit() {
+    if (this.storageService.doTimetablesExist()) {
+      if (this.storageService.getSavedCalendarNames().length > 0) {
+        this.loadTimetable(this.storageService.getSavedCalendarNames()[0]);
+      }
+    }
   }
 
   public loadTimetable(name: string): void {
-    const timetable = this.storage.getCalendarByName(name);
+    const timetable = this.storageService.getCalendarByName(name);
 
     if (timetable) {
       this.name = timetable.name;
@@ -58,7 +63,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public deleteTimetable(name: string): void {
-    this.storage.deleteCalendar(name);
+    this.storageService.deleteCalendar(name);
   }
 
   public saveData(): void {
@@ -68,7 +73,7 @@ export class PlanningComponent implements OnInit {
       selections: this.selections
     };
 
-    this.storage.saveCalendar(this.getName(), data);
+    this.storageService.saveCalendar(this.getName(), data);
   }
 
   public handleSessionClicked(session: TimetableSession): void {

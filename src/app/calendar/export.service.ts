@@ -13,9 +13,10 @@ export class ExportService {
   ) { }
 
   public exportCalendar(name: string): void {
+    console.log(`Exporting ${name} as iCal`);
     const calData = this.storage.getCalendarByName(name);
+    console.log(calData);
 
-    console.log('Exporting as iCal');
     const cal = ics();
     calData.selections.forEach((streams: Map<string, number>, subjectName: string) => {
       streams.forEach((id: number, streamName: string) => {

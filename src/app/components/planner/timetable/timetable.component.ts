@@ -37,9 +37,6 @@ export class TimetableComponent implements OnInit {
   @Output()
   public deleteClick: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  @Output()
-  public titleChange: EventEmitter<string> = new EventEmitter<string>();
-
   @Input()
   public editing: boolean;
   @Input()
@@ -77,7 +74,7 @@ export class TimetableComponent implements OnInit {
   }
 
   public exportCalendar(): void {
-    this.exportService.exportCalendar
+    this.exportService.exportCalendar(this.name);
   }
 
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
