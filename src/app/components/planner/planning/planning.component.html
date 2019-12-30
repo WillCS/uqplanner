@@ -1,6 +1,14 @@
 <!-- <app-controls></app-controls> -->
 
 <div class='classList'>
+
+    <input #courseCode
+        type='text'
+        placeholder='Add a course'
+        class='classSearchField'
+        (keyup.enter)='this.onSearched(courseCode.value)'
+    >
+
     <p>Courses</p>
     <div
         class='classObject placeholder'
@@ -34,7 +42,3 @@
     (titleChange)='this.handleTitleChanged($event)'
 >
 </app-timetable>
-
-<app-class-search
-    (search)='this.onSearched($event)'
-></app-class-search>

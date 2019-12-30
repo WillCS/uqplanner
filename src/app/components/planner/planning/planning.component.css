@@ -1,3 +1,13 @@
+input.classSearchField {
+    height: 40px;
+    border-radius: 6px;
+    border: 0px;
+    text-transform: uppercase;
+    width: 100%;
+    padding: 6px 12px;
+    box-sizing: border-box;
+}
+
 .classList {
     padding-top: 82px;
     float: left;
@@ -21,6 +31,7 @@ div.classObject {
     box-sizing: border-box;
     border-radius: 5px;
     position: relative;
+    user-select: none;
 }
 
 div.classObject.normal {
