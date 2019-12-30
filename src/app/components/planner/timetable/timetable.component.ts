@@ -62,17 +62,6 @@ export class TimetableComponent implements OnInit {
     }
   }
 
-  public setTitle(event: Event) {
-    const target = event.target as HTMLInputElement;
-    let name = target.value;
-    if (target.value === '' || target.value === undefined || target.value === null) {
-      name = 'Timetable';
-    }
-
-    this.deletable = target.value in this.calendarNames;
-    this.titleChange.emit(target.value);
-  }
-
   public exportCalendar(): void {
     this.exportService.exportCalendar(this.name);
   }

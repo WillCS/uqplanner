@@ -7,8 +7,8 @@
     />
 </div>
 
+<!-- Sidebar -->
 <div class='classList'>
-
     <div class='search'>
         <input #courseCode
             type='text'
@@ -22,18 +22,11 @@
             (click)='this.onSearched(courseCode.value)'
         ></fa-icon>
     </div>
-
     <p>Courses</p>
-    <div
-        class='classObject placeholder'
-        *ngIf='!(this.classList?.length > 0)'
-    >
+    <div class='classObject placeholder' *ngIf='!(this.classList?.length > 0)'>
         <p><b>Your courses go here</b></p>
     </div>
-    <div
-        class='classObject normal'
-        *ngFor='let class of this.classList' 
-    >
+    <div class='classObject normal' *ngFor='let class of this.classList'>
         <p><b>{{class.name}}</b></p>
         <p><b>{{class.description | uppercase}}</b></p>
         
@@ -45,6 +38,7 @@
     </div>
 </div>
 
+<!-- Timetable -->
 <app-timetable
     [name]='this.name'
     [classList]='this.classList'

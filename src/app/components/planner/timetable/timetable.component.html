@@ -13,11 +13,11 @@
 
     </div>
     <div class='controls'>
-        <button class='controlBtn exportBtn' (click)='this.exportCalendar()' title='Export as iCal'>
-            <fa-icon [icon]='faDownload'></fa-icon>
-        </button>
         <button class='controlBtn saveBtn' (click)='this.handleSaveClicked()' title='Save timetable'>
             <fa-icon [icon]='faSave'></fa-icon>
+        </button>
+        <button class='controlBtn exportBtn' (click)='this.exportCalendar()' title='Export as iCal'>
+            <fa-icon [icon]='faDownload'></fa-icon>
         </button>
         <button class='controlBtn deleteBtn' (click)='this.handleDeleteClicked()' title='Delete this timetable'>
             <fa-icon [icon]='faTrash'></fa-icon>
