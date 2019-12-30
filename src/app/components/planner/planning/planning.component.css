@@ -10,6 +10,7 @@
     color: #b4aeb6;
     text-transform: uppercase;
     margin-bottom: 10px;
+    max-height: 800px;
 }
 
 div.classObject {
