@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
-import { faTimesCircle, faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
+import { StorageService } from 'src/app/calendar/storage.service';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { ModalService } from '../../modal/modal.service';
 
 @Component({
   selector: 'app-planning',
@@ -21,58 +23,51 @@ export class PlanningComponent implements OnInit {
   public editingClassName: string;
   public editingClassType: string;
 
+  public isDirty = false;
+
   faTimesCircle = faTimesCircle;
 
-  constructor(public api: ApiService) {
+  constructor(
+      public api: ApiService,
+      public storage: StorageService,
+      public modalService: ModalService) {
     this.selections = new Map<string, Map<string, number>>();
   }
 
   ngOnInit() {
-    let reviver = function(key, value) {
-      if(typeof value === 'object' && value !== null) {
-        if (value.dataType === 'Map') {
-          return new Map(value.value);
-        }
-      }
-      return value;
-    }
+  }
 
-    if (localStorage.hasOwnProperty('timetableData')) {
-      let data = JSON.parse(localStorage.getItem('timetableData'), reviver);
-      if (data.name) {
-        this.name = data.name;
-      }
-      if (data.classList) {
-        this.classList = data.classList;
-      }
-      if (data.selections) {
-        this.selections = data.selections;
-      }
+  public loadTimetable(name: string): void {
+    const timetable = this.storage.getCalendarByName(name);
+
+    if (timetable) {
+      this.name = timetable.name;
+      this.classList = timetable.classList;
+      this.selections = timetable.selections;
+      this.isDirty = false;
     }
   }
 
-  public saveData(): void {
-    let replacer = function (key, value) {
-      const originalObject = this[key];
-      if(originalObject instanceof Map) {
-        return {
-          dataType: 'Map',
-          value: Array.from(originalObject.entries()), // or with spread: value: [...originalObject]
-        };
-      } else {
-        return value;
-      }
+  public getName(): string {
+    if (this.name === '' || this.name === undefined || this.name === null) {
+      return 'Timetable';
     }
 
-    let data = {
-      name: this.name,
+    return this.name;
+  }
+
+  public deleteTimetable(): void {
+    this.storage.deleteCalendar(this.getName());
+  }
+
+  public saveData(): void {
+    const data = {
+      name: this.getName(),
       classList: this.classList,
       selections: this.selections
-    }
+    };
 
-    let dataString = JSON.stringify(data, replacer);
-
-    localStorage.setItem('timetableData', dataString);
+    this.storage.saveCalendar(this.getName(), data);
   }
 
   public handleSessionClicked(session: TimetableSession): void {
@@ -84,12 +79,13 @@ export class PlanningComponent implements OnInit {
     }
 
     this.editing = !this.editing;
-    this.saveData();
+    this.isDirty = true;
   }
 
   public handleTitleChanged(title: string): void {
     this.name = title;
-    this.saveData();
+
+    this.isDirty = true;
   }
 
   public addClass(newClass: ClassListing): void {
@@ -104,7 +100,7 @@ export class PlanningComponent implements OnInit {
           this.selections.set(newClass.name, classMap);
       }
     }
-    this.saveData();
+    this.isDirty = true;
   }
 
   public removeClass(className: string): void {
@@ -113,20 +109,20 @@ export class PlanningComponent implements OnInit {
     if(this.selections.has(className)) {
       this.selections.delete(className);
     }
-    this.saveData();
+    this.isDirty = true;
   }
 
-  public SetSelection(className: string, classType: string, selection: number): void {
-      if(this.selections.has(className) && this.selections[className].has(classType)) {
-          this.selections[className][classType] = selection;
-      }
-      this.saveData();
+  public setSelection(className: string, classType: string, selection: number): void {
+    if(this.selections.has(className) && this.selections[className].has(classType)) {
+        this.selections[className][classType] = selection;
+    }
+    this.isDirty = true;
   }
 
   public GetSelection(className: string, classType: string): number {
-      if(this.selections.has(className) && this.selections[className].has(classType)) {
-          return this.selections[className][classType];
-      }
+    if(this.selections.has(className) && this.selections[className].has(classType)) {
+        return this.selections[className][classType];
+    }
   }
 
   public onSearched(searchTerm: string): void {
@@ -138,6 +134,19 @@ export class PlanningComponent implements OnInit {
 
   public onClassCloseClicked(className: string): void {
     this.removeClass(className);
-    this.saveData();
+    this.isDirty = true;
+  }
+
+  public handleTimetableChangeRequest(name: string): void {
+    if (this.isDirty) {
+      this.modalService.showConfirmationModal(
+        'Unsaved Changes',
+        'You have made changes to your current timetable that ' +
+        'have not been saved. Are you sure you want to load ' +
+        'another timetable?',
+        () => this.loadTimetable(name));
+    } else {
+      this.loadTimetable(name);
+    }
   }
 }

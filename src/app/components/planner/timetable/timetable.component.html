@@ -6,6 +6,31 @@
         (change)='this.setTitle($event)'
     />
 </div>
+<div class='topMenu'>
+    <div class='timetableList'>
+        <button
+            class='timetableButton'
+            *ngFor='let timetable of this.calendarNames'
+            (click)='this.handleTimetableClicked(timetable)'
+        >
+            {{timetable}}
+        </button>
+    </div>
+    <div class='controls'>
+        <button
+            class='saveButton'
+            (click)='this.handleSaveClicked()'
+        >
+            S
+        </button>
+        <button
+            class='deleteButton'
+            (click)='this.handleDeleteClicked()'
+        >
+            D
+        </button>
+    </div>
+</div>
 <div class='calendarColumnContainer'>
     <div *ngFor='let day of this.weekdayIndices' class='calendarColumn'>
         <div 

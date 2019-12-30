@@ -3,7 +3,7 @@ import {
   WEEKDAYS, WEEKDAY_INDICES, TIMETABLE_HOURS, ClassListing,
   TimetableSession, ClassStream, ClassType, ClassSession
 } from 'src/app/calendar/calendar';
-import { stringify } from 'querystring';
+import { StorageService } from 'src/app/calendar/storage.service';
 
 @Component({
   selector: 'app-timetable',
@@ -13,15 +13,27 @@ import { stringify } from 'querystring';
 export class TimetableComponent implements OnInit {
   @Input()
   public name: string;
-  
+
   @Input()
   public classList: ClassListing[] = [];
   public weekdays: string[] = WEEKDAYS;
   public weekdayIndices: number[] = WEEKDAY_INDICES;
   public timetableHours: number[] = TIMETABLE_HOURS;
 
+  public calendarNames: string[];
+  public deletable = false;
+
   @Output()
   public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
+
+  @Output()
+  public saveClick: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @Output()
+  public timetableClick: EventEmitter<string> = new EventEmitter<string>();
+
+  @Output()
+  public deleteClick: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Output()
   public titleChange: EventEmitter<string> = new EventEmitter<string>();
@@ -36,16 +48,24 @@ export class TimetableComponent implements OnInit {
   @Input()
   public selections: Map<string, Map<string, number>>;
 
-  constructor() {
+  constructor(public storage: StorageService) {
 
   }
 
   ngOnInit() {
-
+    if (this.storage.doTimetablesExist()) {
+      this.updateSavedList();
+    }
   }
 
   public setTitle(event: Event) {
-    let target = event.target as HTMLInputElement
+    const target = event.target as HTMLInputElement;
+    let name = target.value;
+    if (target.value === '' || target.value === undefined || target.value === null) {
+      name = 'Timetable';
+    }
+
+    this.deletable = target.value in this.calendarNames;
     this.titleChange.emit(target.value);
   }
 
@@ -83,5 +103,23 @@ export class TimetableComponent implements OnInit {
     });
 
     return sessions;
+  }
+
+  public handleSaveClicked(): void {
+    this.saveClick.emit();
+    this.updateSavedList();
+  }
+
+  public handleDeleteClicked(): void {
+    this.deleteClick.emit();
+    this.updateSavedList();
+  }
+
+  public handleTimetableClicked(name: string): void {
+    this.timetableClick.emit(name);
+  }
+
+  private updateSavedList(): void {
+    this.calendarNames = this.storage.getSavedCalendarNames();
   }
 }
