@@ -12,12 +12,17 @@
     margin: 0;
     color: white;
     font-family: 'Lato', Arial;
+    width: 100%;
 }
 
 
 .title > input::placeholder {
     color: white;
     opacity: 0.5;
+}
+
+app-calendar-export-button {
+    float: right;
 }
 
 div.timeLabels {

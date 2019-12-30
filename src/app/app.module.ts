@@ -17,6 +17,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { SemesterPipe } from './calendar/semester.pipe';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CalendarExportButtonComponent } from './components/planner/calendar-export-button/calendar-export-button.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     TimePipe,
     ControlsComponent,
     ModalComponent,
-    SemesterPipe
+    SemesterPipe,
+    CalendarExportButtonComponent
   ],
   imports: [
     BrowserModule,
