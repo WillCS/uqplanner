@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
-import { faTimesCircle, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class PlanningComponent implements OnInit {
   public editingClassType: string;
 
   faTimesCircle = faTimesCircle;
-  faSave = faSave;
+  faSearch = faSearch;
 
   constructor(public api: ApiService) {
     this.selections = new Map<string, Map<string, number>>();
@@ -95,6 +95,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public addClass(newClass: ClassListing): void {
+    
     if(!this.classList.some(c => c.name === newClass.name)) {
       this.classList.push(newClass);
 
