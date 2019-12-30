@@ -1,5 +1,27 @@
+.search {
+    position: relative;
+}
+
+input.classSearchField {
+    height: 40px;
+    border-radius: 6px;
+    border: 0px;
+    text-transform: uppercase;
+    width: 100%;
+    padding: 6px 12px;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+}
+
+.searchButton {
+    position: absolute;
+    right: 10px;
+    line-height: 40px;
+    color: #b09fb6;
+}
+
 .classList {
-    padding-top: 82px;
+    padding-top: 110px;
     float: left;
     margin: 5px;
 }
@@ -10,6 +32,7 @@
     color: #b4aeb6;
     text-transform: uppercase;
     margin-bottom: 10px;
+    max-height: 800px;
 }
 
 div.classObject {
@@ -20,6 +43,7 @@ div.classObject {
     box-sizing: border-box;
     border-radius: 5px;
     position: relative;
+    user-select: none;
 }
 
 div.classObject.normal {
@@ -28,7 +52,7 @@ div.classObject.normal {
 }
 
 div.classObject.placeholder {
-    border: 2px dashed#68596c;
+    border: 2px dashed #68596c;
     text-transform: uppercase;
     height: 360px;
     padding: 80px 35px;
@@ -64,6 +88,7 @@ div.classObject > p {
 
 app-timetable {
     float: right;
+    width: 750px;
 }
 
 app-class-search {

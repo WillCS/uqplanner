@@ -1,6 +1,21 @@
 <!-- <app-controls></app-controls> -->
 
 <div class='classList'>
+
+    <div class='search'>
+        <input #courseCode
+            type='text'
+            placeholder='Add a course'
+            class='classSearchField'
+            (keyup.enter)='courseCode.value = this.onSearched(courseCode.value)'
+        >
+        <fa-icon
+            class='searchButton'
+            [icon]='faSearch'
+            (click)='this.onSearched(courseCode.value)'
+        ></fa-icon>
+    </div>
+
     <p>Courses</p>
     <div
         class='classObject placeholder'
@@ -37,7 +52,3 @@
     (deleteClick)='this.deleteTimetable()'
 >
 </app-timetable>
-
-<app-class-search
-    (search)='this.onSearched($event)'
-></app-class-search>

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
 import { StorageService } from 'src/app/calendar/storage.service';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { ModalService } from '../../modal/modal.service';
+import { faTimesCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-planning',
@@ -26,6 +26,7 @@ export class PlanningComponent implements OnInit {
   public isDirty = false;
 
   faTimesCircle = faTimesCircle;
+  faSearch = faSearch;
 
   constructor(
       public api: ApiService,
@@ -89,6 +90,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public addClass(newClass: ClassListing): void {
+    
     if(!this.classList.some(c => c.name === newClass.name)) {
       this.classList.push(newClass);
 
