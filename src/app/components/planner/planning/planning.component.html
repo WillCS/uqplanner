@@ -8,18 +8,20 @@
     >
         <p><b>Your courses go here</b></p>
     </div>
-    <div
-        class='classObject normal'
-        *ngFor='let class of this.classList' 
-    >
-        <p><b>{{class.name}}</b></p>
-        <p><b>{{class.description | uppercase}}</b></p>
-        
-        <fa-icon 
-            class='closeButton' 
-            [icon]='faTimesCircle' 
-            (click)='this.onClassCloseClicked(class.name)'
-        ></fa-icon>
+    <div class='classListWrap'>
+        <div
+            class='classObject normal'
+            *ngFor='let class of this.classList' 
+        >
+            <p><b>{{class.name}}</b></p>
+            <p><b>{{class.description | uppercase}}</b></p>
+            
+            <fa-icon 
+                class='closeButton' 
+                [icon]='faTimesCircle' 
+                (click)='this.onClassCloseClicked(class.name)'
+            ></fa-icon>
+        </div>
     </div>
 </div>
 

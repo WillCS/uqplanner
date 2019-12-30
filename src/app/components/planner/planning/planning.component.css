@@ -13,6 +13,11 @@
     max-height: 800px;
 }
 
+div.classListWrap {
+    max-height: 580px;
+    overflow: scroll;
+}
+
 div.classObject {
     width: 175px;
     padding: 15px 40px 15px 15px;
