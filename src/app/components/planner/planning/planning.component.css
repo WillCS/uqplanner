@@ -1,3 +1,26 @@
+.title {
+    padding-bottom: 25px;
+}
+
+.title > input {
+    font-size: 36px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: 'Lato', Arial;
+    width: 100%;
+    padding-bottom: 15px;
+    border-bottom: 0.5px solid #918694;
+}
+
+
+.title > input::placeholder {
+    color: white;
+    opacity: 0.5;
+}
+
 .search {
     position: relative;
 }
@@ -18,12 +41,16 @@ input.classSearchField {
     right: 10px;
     line-height: 40px;
     color: #b09fb6;
+    transition: color 0.2s;
+}
+
+.searchButton:hover {
+    color: #715c79;
 }
 
 .classList {
-    padding-top: 110px;
+    padding-top: 0px;
     float: left;
-    margin: 5px;
 }
 
 .classList > p {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +6,7 @@ import { stringify } from 'querystring';
 export class StorageService {
   public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = 'timetableData';
 
-  constructor() {
-
-  }
+  constructor() { }
 
   public doTimetablesExist(): boolean {
     return localStorage.hasOwnProperty(StorageService.TIMETABLE_STORAGE_IDENTIFIER);

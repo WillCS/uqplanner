@@ -30,16 +30,21 @@ export class PlanningComponent implements OnInit {
 
   constructor(
       public api: ApiService,
-      public storage: StorageService,
+      public storageService: StorageService,
       public modalService: ModalService) {
     this.selections = new Map<string, Map<string, number>>();
   }
 
   ngOnInit() {
+    if (this.storageService.doTimetablesExist()) {
+      if (this.storageService.getSavedCalendarNames().length > 0) {
+        this.loadTimetable(this.storageService.getSavedCalendarNames()[0]);
+      }
+    }
   }
 
   public loadTimetable(name: string): void {
-    const timetable = this.storage.getCalendarByName(name);
+    const timetable = this.storageService.getCalendarByName(name);
 
     if (timetable) {
       this.name = timetable.name;
@@ -51,14 +56,14 @@ export class PlanningComponent implements OnInit {
 
   public getName(): string {
     if (this.name === '' || this.name === undefined || this.name === null) {
-      return 'Timetable';
+      this.name = 'Semester Timetable';
     }
 
     return this.name;
   }
 
-  public deleteTimetable(): void {
-    this.storage.deleteCalendar(this.getName());
+  public deleteTimetable(name: string): void {
+    this.storageService.deleteCalendar(name);
   }
 
   public saveData(): void {
@@ -68,7 +73,7 @@ export class PlanningComponent implements OnInit {
       selections: this.selections
     };
 
-    this.storage.saveCalendar(this.getName(), data);
+    this.storageService.saveCalendar(this.getName(), data);
   }
 
   public handleSessionClicked(session: TimetableSession): void {
@@ -83,8 +88,15 @@ export class PlanningComponent implements OnInit {
     this.isDirty = true;
   }
 
-  public handleTitleChanged(title: string): void {
-    this.name = title;
+  public handleTitleChanged(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    let name = target.value;
+    if (target.value === '' || target.value === undefined || target.value === null) {
+      name = 'Timetable';
+    }
+
+    // this.deletable = target.value in this.calendarNames;
+    this.name = target.value;
 
     this.isDirty = true;
   }
@@ -127,11 +139,13 @@ export class PlanningComponent implements OnInit {
     }
   }
 
-  public onSearched(searchTerm: string): void {
+  public onSearched(searchTerm: string): string {
     this.api.getClass(searchTerm, this.year, this.semester).subscribe(
       (newClass: ClassListing) => {
         this.addClass(newClass);
       });
+
+    return '';
   }
 
   public onClassCloseClicked(className: string): void {

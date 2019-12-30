@@ -1,7 +1,14 @@
-<!-- <app-controls></app-controls> -->
+<div class='title'>
+    <input 
+        type='text' 
+        placeholder='Semester Timetable'
+        value='{{this.name}}'
+        (change)='this.handleTitleChanged($event)'
+    />
+</div>
 
+<!-- Sidebar -->
 <div class='classList'>
-
     <div class='search'>
         <input #courseCode
             type='text'
@@ -15,18 +22,11 @@
             (click)='this.onSearched(courseCode.value)'
         ></fa-icon>
     </div>
-
     <p>Courses</p>
-    <div
-        class='classObject placeholder'
-        *ngIf='!(this.classList?.length > 0)'
-    >
+    <div class='classObject placeholder' *ngIf='!(this.classList?.length > 0)'>
         <p><b>Your courses go here</b></p>
     </div>
-    <div
-        class='classObject normal'
-        *ngFor='let class of this.classList' 
-    >
+    <div class='classObject normal' *ngFor='let class of this.classList'>
         <p><b>{{class.name}}</b></p>
         <p><b>{{class.description | uppercase}}</b></p>
         
@@ -38,6 +38,7 @@
     </div>
 </div>
 
+<!-- Timetable -->
 <app-timetable
     [name]='this.name'
     [classList]='this.classList'
@@ -46,9 +47,8 @@
     [editingClassType]='this.editingClassType'
     [selections]='this.selections'
     (sessionClick)='this.handleSessionClicked($event)'
-    (titleChange)='this.handleTitleChanged($event)'
     (timetableClick)='this.handleTimetableChangeRequest($event)'
     (saveClick)='this.saveData()'
-    (deleteClick)='this.deleteTimetable()'
+    (deleteClick)='this.deleteTimetable(this.getName())'
 >
 </app-timetable>

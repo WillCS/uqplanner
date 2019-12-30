@@ -4,6 +4,8 @@ import {
   TimetableSession, ClassStream, ClassType, ClassSession
 } from 'src/app/calendar/calendar';
 import { StorageService } from 'src/app/calendar/storage.service';
+import { ExportService } from 'src/app/calendar/export.service';
+import { faDownload, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-timetable',
@@ -35,9 +37,6 @@ export class TimetableComponent implements OnInit {
   @Output()
   public deleteClick: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  @Output()
-  public titleChange: EventEmitter<string> = new EventEmitter<string>();
-
   @Input()
   public editing: boolean;
   @Input()
@@ -48,25 +47,23 @@ export class TimetableComponent implements OnInit {
   @Input()
   public selections: Map<string, Map<string, number>>;
 
-  constructor(public storage: StorageService) {
+  faPlus = faPlus;
+  faTrash = faTrash;
+  faDownload = faDownload;
+  faSave = faSave;
+
+  constructor(public storageService: StorageService, public exportService: ExportService) {
 
   }
 
   ngOnInit() {
-    if (this.storage.doTimetablesExist()) {
+    if (this.storageService.doTimetablesExist()) {
       this.updateSavedList();
     }
   }
 
-  public setTitle(event: Event) {
-    const target = event.target as HTMLInputElement;
-    let name = target.value;
-    if (target.value === '' || target.value === undefined || target.value === null) {
-      name = 'Timetable';
-    }
-
-    this.deletable = target.value in this.calendarNames;
-    this.titleChange.emit(target.value);
+  public exportCalendar(): void {
+    this.exportService.exportCalendar(this.name);
   }
 
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
@@ -120,6 +117,6 @@ export class TimetableComponent implements OnInit {
   }
 
   private updateSavedList(): void {
-    this.calendarNames = this.storage.getSavedCalendarNames();
+    this.calendarNames = this.storageService.getSavedCalendarNames();
   }
 }
