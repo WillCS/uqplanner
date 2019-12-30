@@ -70,3 +70,20 @@ div.calendarColumn > .dayHeader {
 div.calendarColumn > p {
     margin: 5px auto;
 }
+
+div.topMenu {
+    max-width: 770px;
+}
+
+div.timetableList {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    width: 80%;
+}
+
+div.controls {
+    display: inline-block;
+}

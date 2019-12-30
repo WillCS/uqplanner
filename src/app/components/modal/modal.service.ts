@@ -25,7 +25,11 @@ export class ModalService {
   }
 
   public showConfirmationModal(title: string, text: string, yesAction: () => void): void {
-    const yesButton: ModalButton = new ModalButton('Yes', '#7fb3ee', yesAction);
+    const yesButton: ModalButton = new ModalButton('Yes', '#7fb3ee', () => {
+      yesAction();
+      this.closeModal();
+    });
+
     const noButton: ModalButton = new ModalButton('No', '#ed6164', () => this.closeModal());
 
     this.showModal(new ModalSettings(title, text, [yesButton, noButton]));
