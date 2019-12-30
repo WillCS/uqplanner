@@ -49,6 +49,6 @@
     (titleChange)='this.handleTitleChanged($event)'
     (timetableClick)='this.handleTimetableChangeRequest($event)'
     (saveClick)='this.saveData()'
-    (deleteClick)='this.deleteTimetable()'
+    (deleteClick)='this.deleteTimetable(this.getName())'
 >
 </app-timetable>

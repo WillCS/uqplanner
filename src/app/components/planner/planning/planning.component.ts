@@ -57,8 +57,8 @@ export class PlanningComponent implements OnInit {
     return this.name;
   }
 
-  public deleteTimetable(): void {
-    this.storage.deleteCalendar(this.getName());
+  public deleteTimetable(name: string): void {
+    this.storage.deleteCalendar(name);
   }
 
   public saveData(): void {

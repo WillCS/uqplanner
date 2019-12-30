@@ -9,12 +9,19 @@
 <div class='topMenu'>
     <div class='timetableList'>
         <button
-            class='timetableButton'
+            class='timetableBtn'
             *ngFor='let timetable of this.calendarNames'
             (click)='this.handleTimetableClicked(timetable)'
         >
             {{timetable}}
         </button>
+        <button
+            class='timetableBtn addCalBtn'
+            (click)='this.newTimetable()'
+        >
+            <fa-icon [icon]='faPlus'></fa-icon>
+        </button>
+
     </div>
     <div class='controls'>
         <button
@@ -30,12 +37,12 @@
             D
         </button>
     </div>
+    <app-calendar-export-button
+        [selections]='this.selections'
+        [classList]='this.classList'
+        [name]='this.name'
+    ></app-calendar-export-button>
 </div>
-<app-calendar-export-button
-    [selections]='this.selections'
-    [classList]='this.classList'
-    [name]='this.name'
-></app-calendar-export-button>
   
 <div class='calendarColumnContainer'>
     <div *ngFor='let day of this.weekdayIndices' class='calendarColumn'>

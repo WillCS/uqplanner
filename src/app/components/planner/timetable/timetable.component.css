@@ -21,6 +21,32 @@
     opacity: 0.5;
 }
 
+.topMenu {
+    margin: 15px 0px;
+}
+
+.timetableBtn {
+    border: 0px;
+    height: 28px;
+    border-radius: 28px;
+    line-height: 28px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #643d6e;
+    margin-right: 5px;
+    padding: 0px 12px;
+    color: white;
+    transition: filter 0.1s;
+}
+
+.timetableBtn:hover {
+    filter: brightness(0.9);
+}
+
+.addCalBtn {
+    background-color: #712e81;
+}
+
 app-calendar-export-button {
     float: right;
 }

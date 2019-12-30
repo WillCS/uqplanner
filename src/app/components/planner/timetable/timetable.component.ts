@@ -4,6 +4,7 @@ import {
   TimetableSession, ClassStream, ClassType, ClassSession
 } from 'src/app/calendar/calendar';
 import { StorageService } from 'src/app/calendar/storage.service';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-timetable',
@@ -47,6 +48,8 @@ export class TimetableComponent implements OnInit {
 
   @Input()
   public selections: Map<string, Map<string, number>>;
+
+  faPlus = faPlus;
 
   constructor(public storage: StorageService) {
 

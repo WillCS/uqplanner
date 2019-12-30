@@ -18,6 +18,11 @@ input.classSearchField {
     right: 10px;
     line-height: 40px;
     color: #b09fb6;
+    transition: color 0.2s;
+}
+
+.searchButton:hover {
+    color: #715c79;
 }
 
 .classList {
