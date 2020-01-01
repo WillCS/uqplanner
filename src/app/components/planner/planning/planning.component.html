@@ -1,9 +1,9 @@
 <div class='title'>
     <input 
         type='text' 
-        placeholder='Semester Timetable'
+        placeholder='{{this.plannerService.defaultPlanName()}}'
         value='{{this.plan.name}}'
-        (change)='this.handleTitleChanged($event)'
+        (keyup)='this.handleTitleChanged($event)'
     />
 </div>
 

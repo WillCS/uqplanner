@@ -25,7 +25,8 @@ export class PlannerService {
       this.currentPlan = new BehaviorSubject<Plan>(this.cleanPlan());
     } else {
       // TODO: get last edited plan
-      this.currentPlan = new BehaviorSubject<Plan>(this.plans.value[planIds[0]]);
+      const temp = Object.assign({}, this.plans.value[planIds[0]]);
+      this.currentPlan = new BehaviorSubject<Plan>(temp);
     }
   }
 
@@ -34,13 +35,20 @@ export class PlannerService {
   }
 
   public savePlan() {
+    console.log('saving');
     const plan = this.currentPlan.value;
+    if (!plan.name) {
+      plan.name = this.defaultPlanName();
+    }
+
+    plan.isDirty = false;
+
     this.plans.next(
       {
         ...this.plans.value,
         [plan.id]: {
           ...plan,
-          lastEdited: Date.now()
+          lastEdited: Date.now(),
         }
       }
     );
@@ -76,7 +84,7 @@ export class PlannerService {
     }
 
     this.currentPlan.next(
-      this.plans.value[planId]
+      JSON.parse(JSON.stringify(this.plans.value[planId]))
     );
   }
 
@@ -121,8 +129,35 @@ export class PlannerService {
 
   public changeName(name: string) {
     const plan = this.currentPlan.value;
-    plan.name = name;
-    plan.isDirty = true;
+    if (!!name) {
+      plan.name = name;
+    } else {
+      plan.name = this.defaultPlanName();
+    }
+
+    this.plans.next(
+      {
+        ...this.plans.value,
+        [plan.id]: {
+          ...this.plans.value[plan.id],
+          lastEdited: Date.now(),
+        }
+      }
+    );
+    this.storageService.save(this.plans.value);
+  }
+
+  public defaultPlanName(): string {
+    const alreadyUsed = Object.values(this.plans.value).map(p => p.name);
+    const pre = 'Semester Timetable';
+    let count = 2;
+
+    let name = pre;
+    while (alreadyUsed.indexOf(name) !== -1) {
+      name = `${pre} ${count++}`;
+    }
+
+    return name;
   }
 
   private cleanPlan(): Plan {

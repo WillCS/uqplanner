@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   WEEKDAYS, WEEKDAY_INDICES, TIMETABLE_HOURS, ClassListing,
   TimetableSession, ClassStream, ClassType, ClassSession
 } from 'src/app/calendar/calendar';
-import { StorageService } from 'src/app/calendar/storage.service';
 import { ExportService } from 'src/app/calendar/export.service';
 import { faDownload, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Plan, PlanSummary } from '../../../calendar/calendar';
@@ -98,19 +97,6 @@ export class TimetableComponent implements OnInit, OnDestroy {
     });
 
     return sessions;
-  }
-
-  public setSelection(className: string, classType: string, selection: number): void {
-    if (this.plan.selections.has(className) && this.plan.selections[className].has(classType)) {
-        this.plan.selections[className][classType] = selection;
-    }
-    this.plan.isDirty = true;
-  }
-
-  public getSelection(className: string, classType: string): number {
-    if(this.plan.selections.has(className) && this.plan.selections[className].has(classType)) {
-        return this.plan.selections[className][classType];
-    }
   }
 
   public handleSessionClicked(session: TimetableSession): void {

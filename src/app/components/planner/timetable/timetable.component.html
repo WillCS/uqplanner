@@ -8,14 +8,14 @@
             {{plan.name}}
         </button>
         <button class='timetableBtn addCalBtn' title='Create timetable'
-            (click)='this.newTimetableHandler()' [class.active]='this.plan.isDirty'>
+            (click)='this.newTimetableHandler()' [class.active]='this.plan.classes.length > 0'>
             <fa-icon [icon]='faPlus'></fa-icon>
         </button>
 
     </div>
     <div class='controls'>
         <button class='controlBtn saveBtn' title='Save timetable'
-            (click)='this.handleSaveClicked()' [class.active]='this.plan.classes.length > 0'>
+            (click)='this.handleSaveClicked()' [class.active]='this.plan.isDirty'>
             <fa-icon [icon]='faSave'></fa-icon>
         </button>
 
