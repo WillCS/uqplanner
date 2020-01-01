@@ -18,7 +18,7 @@
     opacity: 0.6;
 }
 
-.timetableBtn:hover {
+.timetableBtn.planBtn:hover {
     opacity: 0.8;
 }
 

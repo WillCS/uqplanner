@@ -42,7 +42,6 @@ export class PlannerService {
 
   public savePlan() {
     const plan = this.currentPlan.value;
-    console.log(plan);
     if (!plan.name) {
       plan.name = this.defaultPlanName();
     }

@@ -12,7 +12,6 @@ export class ExportService {
 
   public exportCalendar(plan: Plan): void {
     console.log(`Exporting ${name} as iCal`);
-    console.log(plan);
 
     const cal = ics();
     plan.selections.forEach((streams: Map<string, number>, subjectName: string) => {

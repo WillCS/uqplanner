@@ -1,7 +1,7 @@
 <div class='topMenu'>
     <div class='timetableList'>
         <button
-            class='timetableBtn active'
+            class='timetableBtn planBtn'
             *ngFor='let p of this.plans'
             (click)='this.handleTimetableClicked(p.id)'
             [class.active]='p.id == this.plan.id'
@@ -25,7 +25,7 @@
             <fa-icon [icon]='faDownload'></fa-icon>
         </button>
         <button class='controlBtn deleteBtn' title='Delete this timetable'
-            (click)='this.handleDeleteClicked()' [class.active]='true'>
+            (click)='this.handleDeleteClicked()' [class.active]='this.plans.length > 1 || this.plan.classes.length > 0'>
             <fa-icon [icon]='faTrash'></fa-icon>
         </button>
     </div>
