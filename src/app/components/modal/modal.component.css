@@ -9,45 +9,56 @@ div.modalShade {
 }
 
 div.modalShade.isActive {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 div.modalBox {
     box-sizing: border-box;
-    padding: 20px;
+    padding: 10px 25px;
     position: relative;
-    max-width: 450px;
+    max-width: 350px;
     left: 50%;
-    top: 50%;
+    top: 40%;
     transform: translate(-50%, -50%);
-    background-color: aliceblue;
-    border-radius: 25px;
-    color: black;
+    border-radius: 5px;
+    border: 1px solid #5d595e;
+    background-color: #29142f;
+    color: white;
+    font-family: 'Lato', Arial, sans-serif;
 }
 
 p.modalHeading {
-    font-size: 25px;
+    font-size: 16px;
     font-weight: 500;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
+.modalText {
+    font-size: 12px;
+}
+
 div.modalButtonContainer {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     margin-bottom: 10px;
 }
 
 button.modalButton,
         button.closeButton:active,
         button.closeButton:focus {
-    max-width: 100px;
-    height: 40px;
-    border-radius: 20px;
-    flex-grow: 1;
     cursor: pointer;
-    font-weight: 500;
-    font-size: 25px;
-    border: 0px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    background: transparent;
     outline: none;
+    font-family: 'Lato', Arial, sans-serif;
+    color: white;
+    margin-left: 5px;
+    transition: filter 0.4s;
+}
+
+button.modalButton:hover {
+    filter: brightness(0.7);
 }
