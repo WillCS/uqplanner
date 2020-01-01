@@ -8,6 +8,7 @@ import { faDownload, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg
 import { Plan, PlanSummary } from '../../../calendar/calendar';
 import { Subscription } from 'rxjs';
 import { PlannerService } from '../../../calendar/planner.service';
+import { ModalService } from '../../modal/modal.service';
 
 @Component({
   selector: 'app-timetable',
@@ -39,7 +40,8 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
   constructor(
     public plannerService: PlannerService,
-    public exportService: ExportService) {
+    public exportService: ExportService,
+    public modalService: ModalService) {
       this.planSub = this.plannerService.currentPlan.asObservable().subscribe(
         (plan: Plan) => {
           this.plan = plan;
@@ -116,11 +118,24 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleDeleteClicked(): void {
-    this.plannerService.deletePlan();
+    this.modalService.showConfirmationModal(
+      'Confirm Delete',
+      'This plan will not be recoverable after you have deleted it. A' +
+      're you sure you want to delete?',
+      () => this.plannerService.deletePlan() );
   }
 
   public handleTimetableClicked(id: string): void {
-    this.plannerService.setCurrentPlan(id);
+    if (this.plan.isDirty) {
+      this.modalService.showConfirmationModal(
+        'Unsaved Changes',
+        'You have made changes to your current timetable that ' +
+        'have not been saved. Are you sure you want to load ' +
+        'another timetable?',
+        () => this.plannerService.setCurrentPlan(id));
+    } else {
+      this.plannerService.setCurrentPlan(id);
+    }
   }
 
   public newTimetableHandler(): void {

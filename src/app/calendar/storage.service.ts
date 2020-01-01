@@ -18,59 +18,6 @@ export class StorageService {
     return localStorage.hasOwnProperty(StorageService.TIMETABLE_STORAGE_IDENTIFIER);
   }
 
-  public deletePlan(name: string): void {
-    const timetables = this.loadData();
-
-    if (!timetables) {
-      return;
-    }
-
-    timetables.delete(name);
-    const dataString = JSON.stringify(timetables, this.replacer);
-    localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
-  }
-
-  public getPlanNames(): string[] {
-    if (this.storeExists()) {
-      const keys = this.loadData().keys() as Iterator<string>;
-      const names: string[] = [];
-
-      while(true) {
-        const name = keys.next();
-        if(name.done) {
-          break;
-        } else {
-          names.push(name.value);
-        }
-      }
-
-      return names;
-    }
-
-    return [];
-  }
-
-  public getPlan(name: string) {
-    if (this.storeExists()) {
-      const timetables = this.loadData();
-      return timetables.get(name);
-    }
-
-    return undefined;
-  }
-
-  public savePlan(name: string, calendarData): void {
-    let timetables = this.loadData();
-
-    if (!timetables) {
-      timetables = new Map<string, any>();
-    }
-
-    timetables.set(name, calendarData);
-    const dataString = JSON.stringify(timetables, this.replacer);
-    localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
-  }
-
   public save(plans: Plans): void {
     const dataString = JSON.stringify(plans, this.replacer);
     localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);

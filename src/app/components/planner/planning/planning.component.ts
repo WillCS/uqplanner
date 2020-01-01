@@ -24,6 +24,13 @@ export class PlanningComponent implements OnInit, OnDestroy {
       (plan: Plan) => {
         this.plan = plan;
     });
+
+    window.onbeforeunload = (e) => {
+      if (this.plan.isDirty) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave the app?'
+      }
+    };
   }
 
   ngOnInit() { }
