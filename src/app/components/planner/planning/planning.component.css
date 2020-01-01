@@ -66,7 +66,7 @@ input.classSearchField {
     margin: 0;
     padding: 0;
     max-height: 600px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 div.classObject {

@@ -1,6 +1,6 @@
 <div class='title'>
     <input 
-        type='text' 
+        type='text' maxlength='60'
         placeholder='{{this.plannerService.defaultPlanName()}}'
         value='{{this.plan.name}}'
         (keyup)='this.handleTitleChanged($event)'
