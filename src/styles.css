@@ -2,6 +2,7 @@
 :root {
     --bg-light: #2f033d;
     --bg-dark: #2a0237;
+    --search-border-color: transparent;
     --search-bar-color: white;
     --search-button-color: #b09fb6;
     --title-color: white;
@@ -20,6 +21,8 @@
     --control-button-color: white;
     --timetable-button-bg: #643d6e;
     --timetable-button-color: white;
+    --timetable-stripes-light: rgba(255, 255, 255, 0.13);
+    --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
     --add-timetable-button-bg: #712e81;
     --add-timetable-button-color: white; 
 }

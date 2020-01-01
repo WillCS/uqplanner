@@ -12,8 +12,8 @@ div.sessionBlock {
         -45deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.1) 2px,
-        rgba(255, 255, 255, 0.1) 4px
+        var(--timetable-stripes-dark) 2px,
+        var(--timetable-stripes-dark) 4px
     );
     position: absolute;
     width: 100%;
@@ -24,8 +24,8 @@ div.sessionBlock:nth-child(even) {
         -45deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.13) 2px,
-        rgba(255, 255, 255, 0.13) 4px
+        var(--timetable-stripes-light) 2px,
+        var(--timetable-stripes-light) 4px
     );
 }
 
@@ -55,7 +55,7 @@ div.scheduledClass.editing,
 }
 
 div.editing:hover {
-    background-color: var(--session-block-highlight);
+    background-color: var(--session-block-hover);
 }
 
 div.scheduledClass.clashing {
