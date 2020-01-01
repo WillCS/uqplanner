@@ -36,6 +36,7 @@ export class PlannerService {
 
   public savePlan() {
     const plan = this.currentPlan.value;
+    console.log(plan);
     if (!plan.name) {
       plan.name = this.defaultPlanName();
     }
@@ -129,6 +130,7 @@ export class PlannerService {
   public changeName(name: string) {
     const plan = this.currentPlan.value;
 
+    console.log(name);
     if (!name) {
       plan.name = this.defaultPlanName();
     }
@@ -142,6 +144,12 @@ export class PlannerService {
         }
       }
     );
+
+    this.currentPlan.next({
+      ...plan,
+      name
+    });
+
     this.storageService.save(this.plans.value);
   }
 
