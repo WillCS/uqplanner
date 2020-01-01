@@ -61,7 +61,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public exportCalendar(): void {
-    this.exportService.exportCalendar(this.name);
+    this.exportService.exportCalendar(this.plan.name);
   }
 
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
@@ -98,6 +98,19 @@ export class TimetableComponent implements OnInit, OnDestroy {
     });
 
     return sessions;
+  }
+
+  public setSelection(className: string, classType: string, selection: number): void {
+    if (this.plan.selections.has(className) && this.plan.selections[className].has(classType)) {
+        this.plan.selections[className][classType] = selection;
+    }
+    this.plan.isDirty = true;
+  }
+
+  public getSelection(className: string, classType: string): number {
+    if(this.plan.selections.has(className) && this.plan.selections[className].has(classType)) {
+        return this.plan.selections[className][classType];
+    }
   }
 
   public handleSessionClicked(session: TimetableSession): void {
