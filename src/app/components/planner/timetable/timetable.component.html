@@ -1,25 +1,30 @@
 <div class='topMenu'>
     <div class='timetableList'>
         <button
-            class='timetableBtn'
+            class='timetableBtn active'
             *ngFor='let plan of this.plans'
             (click)='this.handleTimetableClicked(plan.id)'
         >
             {{plan.name}}
         </button>
-        <button class='timetableBtn addCalBtn' (click)='this.newTimetableHandler()' title='Create timetable'>
+        <button class='timetableBtn addCalBtn' title='Create timetable'
+            (click)='this.newTimetableHandler()' [class.active]='this.plan.isDirty'>
             <fa-icon [icon]='faPlus'></fa-icon>
         </button>
 
     </div>
     <div class='controls'>
-        <button class='controlBtn saveBtn' (click)='this.handleSaveClicked()' title='Save timetable'>
+        <button class='controlBtn saveBtn' title='Save timetable'
+            (click)='this.handleSaveClicked()' [class.active]='this.plan.classes.length > 0'>
             <fa-icon [icon]='faSave'></fa-icon>
         </button>
-        <button class='controlBtn exportBtn' (click)='this.exportCalendar()' title='Export as iCal'>
+
+        <button class='controlBtn exportBtn' title='Export as iCal'
+        (click)='this.exportCalendar()' [class.active]='this.plan.classes.length > 0'>
             <fa-icon [icon]='faDownload'></fa-icon>
         </button>
-        <button class='controlBtn deleteBtn' (click)='this.handleDeleteClicked()' title='Delete this timetable'>
+        <button class='controlBtn deleteBtn' title='Delete this timetable'
+            (click)='this.handleDeleteClicked()' [class.active]='this.plan.classes.length > 0'>
             <fa-icon [icon]='faTrash'></fa-icon>
         </button>
     </div>

@@ -17,9 +17,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
 
-  // public year: number;
-  // public semester: number;
-
   constructor(
       public plannerService: PlannerService,
       public modalService: ModalService) {

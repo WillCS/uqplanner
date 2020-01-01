@@ -25,7 +25,7 @@ export class PlannerService {
       this.currentPlan = new BehaviorSubject<Plan>(this.cleanPlan());
     } else {
       // TODO: get last edited plan
-      this.setCurrentPlan(planIds[0]);
+      this.currentPlan = new BehaviorSubject<Plan>(this.plans.value[planIds[0]]);
     }
   }
 
@@ -48,17 +48,25 @@ export class PlannerService {
   }
 
   public deletePlan() {
-    // switch to previous plan
-    this.currentPlan.next(this.plans.value[0]);
-
     // delete the plan
+    const planId = this.currentPlan.value.id;
     const newPlans = {
       ...this.plans.value
     };
 
-    delete newPlans[this.currentPlan.value.id];
+    delete newPlans[planId];
 
     this.plans.next(newPlans);
+
+    // switch to previous plan
+    const keys = Object.keys(this.plans.value);
+    if (keys.length > 0) {
+      this.setCurrentPlan(keys[0]);
+    } else {
+      this.newPlan();
+    }
+
+    // save
     this.storageService.save(this.plans.value);
   }
 

@@ -16,12 +16,17 @@
     transition: filter 0.1s;
 }
 
-.timetableBtn:hover {
+.timetableBtn.active:hover {
     filter: brightness(0.9);
 }
 
 .addCalBtn {
     background-color: #712e81;
+    opacity: 0.4;
+}
+
+.addCalBtn.active {
+    opacity: 1;
 }
 
 .controls {
@@ -37,10 +42,15 @@
     border: none;
     transition: background-color 0.2s;
     margin-left: 5px;
+    opacity: 0.4;
 }
 
-.controlBtn:hover {
+.controlBtn.active:hover {
     background-color: #bc9fc5;
+}
+
+.controlBtn.active {
+    opacity: 1;
 }
 
 .controlBtn > fa-icon {
