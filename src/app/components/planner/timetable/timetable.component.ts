@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
 import {
   WEEKDAYS, WEEKDAY_INDICES, TIMETABLE_HOURS, ClassListing,
   TimetableSession, ClassStream, ClassType, ClassSession
@@ -6,18 +6,16 @@ import {
 import { StorageService } from 'src/app/calendar/storage.service';
 import { ExportService } from 'src/app/calendar/export.service';
 import { faDownload, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Plan, PlanSummary } from '../../../calendar/calendar';
+import { Subscription } from 'rxjs';
+import { PlannerService } from '../../../calendar/planner.service';
 
 @Component({
   selector: 'app-timetable',
   templateUrl: './timetable.component.html',
   styleUrls: ['./timetable.component.css']
 })
-export class TimetableComponent implements OnInit {
-  @Input()
-  public name: string;
-
-  @Input()
-  public classList: ClassListing[] = [];
+export class TimetableComponent implements OnInit, OnDestroy {
   public weekdays: string[] = WEEKDAYS;
   public weekdayIndices: number[] = WEEKDAY_INDICES;
   public timetableHours: number[] = TIMETABLE_HOURS;
@@ -25,41 +23,41 @@ export class TimetableComponent implements OnInit {
   public calendarNames: string[];
   public deletable = false;
 
-  @Output()
-  public sessionClick: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
-
-  @Output()
-  public saveClick: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  @Output()
-  public timetableClick: EventEmitter<string> = new EventEmitter<string>();
-
-  @Output()
-  public deleteClick: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  @Input()
   public editing: boolean;
-  @Input()
   public editingClassName: string;
-  @Input()
   public editingClassType: string;
-
-  @Input()
-  public selections: Map<string, Map<string, number>>;
 
   faPlus = faPlus;
   faTrash = faTrash;
   faDownload = faDownload;
   faSave = faSave;
 
-  constructor(public storageService: StorageService, public exportService: ExportService) {
+  public plan: Plan;
+  public plans: PlanSummary[];
 
+  public planSub: Subscription;
+  public nameSub: Subscription;
+
+  constructor(
+    public plannerService: PlannerService,
+    public exportService: ExportService) {
+      this.planSub = this.plannerService.currentPlan.asObservable().subscribe(
+        (plan: Plan) => {
+          this.plan = plan;
+        }
+      );
+      this.nameSub = this.plannerService.getPlans().subscribe(
+        (summaries: PlanSummary[]) => {
+          this.plans = summaries;
+        }
+      );
   }
 
-  ngOnInit() {
-    if (this.storageService.storeExists()) {
-      this.updateSavedList();
-    }
+  ngOnInit() { }
+
+  ngOnDestroy() {
+    this.planSub.unsubscribe();
+    this.nameSub.unsubscribe();
   }
 
   public exportCalendar(): void {
@@ -69,8 +67,8 @@ export class TimetableComponent implements OnInit {
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
     const sessions: TimetableSession[] = [];
 
-    this.classList.forEach((classListing: ClassListing) => {
-      const selectionsForClass = this.selections.get(classListing.name);
+    this.plan.classes.forEach((classListing: ClassListing) => {
+      const selectionsForClass = this.plan.selections.get(classListing.name);
 
       classListing.classes.forEach((classType: ClassType) => {
         const selectionForType = selectionsForClass.get(classType.name);
@@ -102,21 +100,31 @@ export class TimetableComponent implements OnInit {
     return sessions;
   }
 
+  public handleSessionClicked(session: TimetableSession): void {
+    if(this.editing) {
+      this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
+    } else {
+      this.editingClassName = session.className;
+      this.editingClassType = session.classType;
+    }
+
+    this.editing = !this.editing;
+    this.plan.isDirty = true;
+  }
+
   public handleSaveClicked(): void {
-    this.saveClick.emit();
-    this.updateSavedList();
+    this.plannerService.savePlan();
   }
 
   public handleDeleteClicked(): void {
-    this.deleteClick.emit();
-    this.updateSavedList();
+    this.plannerService.deletePlan();
   }
 
-  public handleTimetableClicked(name: string): void {
-    this.timetableClick.emit(name);
+  public handleTimetableClicked(id: string): void {
+    this.plannerService.setCurrentPlan(id);
   }
 
-  private updateSavedList(): void {
-    this.calendarNames = this.storageService.getPlanNames();
+  public newTimetableHandler(): void {
+    this.plannerService.newPlan();
   }
 }

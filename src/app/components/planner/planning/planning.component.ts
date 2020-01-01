@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
 import { ApiService } from 'src/app/api.service';
-import { StorageService } from 'src/app/calendar/storage.service';
 import { ModalService } from '../../modal/modal.service';
 import { faTimesCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { PlannerService } from '../../../calendar/planner.service';
+import { Plan } from '../../../calendar/calendar';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-planning',
   templateUrl: './planning.component.html',
   styleUrls: ['./planning.component.css']
 })
-export class PlanningComponent implements OnInit {
+export class PlanningComponent implements OnInit, OnDestroy {
+  public subscription: Subscription;
+  public plan: Plan;
   public name: string;
   public year: number;
   public semester: number;
@@ -30,29 +34,22 @@ export class PlanningComponent implements OnInit {
 
   constructor(
       public api: ApiService,
-      public storageService: StorageService,
+      public plannerService: PlannerService,
       public modalService: ModalService) {
     this.selections = new Map<string, Map<string, number>>();
+
+    this.subscription = plannerService.currentPlan.asObservable().subscribe( plan => {
+      this.plan = plan;
+    });
   }
 
-  ngOnInit() {
-    if (this.storageService.storeExists()) {
-      if (this.storageService.getPlanNames().length > 0) {
-        this.loadTimetable(this.storageService.getPlanNames()[0]);
-      }
-    }
+  ngOnInit() { }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
-  public loadTimetable(name: string): void {
-    const timetable = this.storageService.getPlan(name);
-
-    if (timetable) {
-      this.name = timetable.name;
-      this.classList = timetable.classList;
-      this.selections = timetable.selections;
-      this.isDirty = false;
-    }
-  }
+  public loadTimetable(name: string): void { }
 
   public getName(): string {
     if (this.name === '' || this.name === undefined || this.name === null) {
@@ -60,32 +57,6 @@ export class PlanningComponent implements OnInit {
     }
 
     return this.name;
-  }
-
-  public deleteTimetable(name: string): void {
-    this.storageService.deletePlan(name);
-  }
-
-  public saveData(): void {
-    const data = {
-      name: this.getName(),
-      classList: this.classList,
-      selections: this.selections
-    };
-
-    this.storageService.savePlan(this.getName(), data);
-  }
-
-  public handleSessionClicked(session: TimetableSession): void {
-    if(this.editing) {
-      this.selections.get(this.editingClassName).set(session.classType, session.classStream);
-    } else {
-      this.editingClassName = session.className;
-      this.editingClassType = session.classType;
-    }
-
-    this.editing = !this.editing;
-    this.isDirty = true;
   }
 
   public handleTitleChanged(event: Event): void {
@@ -103,18 +74,18 @@ export class PlanningComponent implements OnInit {
 
   public addClass(newClass: ClassListing): void {
 
-    if(!this.classList.some(c => c.name === newClass.name)) {
-      this.classList.push(newClass);
+    if(!this.plan.classes.some(c => c.name === newClass.name)) {
+      this.plan.classes.push(newClass);
 
-      if(!this.selections.has(newClass.name)) {
+      if(!this.plan.selections.has(newClass.name)) {
           const classMap: Map<string, number> = new Map<string, number>();
           newClass.classes.forEach((classType: ClassType) => {
               classMap.set(classType.name, 0);
           });
-          this.selections.set(newClass.name, classMap);
+          this.plan.selections.set(newClass.name, classMap);
       }
     }
-    this.isDirty = true;
+    this.plan.isDirty = true;
   }
 
   public removeClass(className: string): void {

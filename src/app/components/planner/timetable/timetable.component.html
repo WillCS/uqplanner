@@ -2,12 +2,12 @@
     <div class='timetableList'>
         <button
             class='timetableBtn'
-            *ngFor='let timetable of this.calendarNames'
-            (click)='this.handleTimetableClicked(timetable)'
+            *ngFor='let plan of this.plans'
+            (click)='this.handleTimetableClicked(plan.id)'
         >
-            {{timetable}}
+            {{plan.name}}
         </button>
-        <button class='timetableBtn addCalBtn' (click)='this.newTimetable()' title='Create timetable'>
+        <button class='timetableBtn addCalBtn' (click)='this.newTimetableHandler()' title='Create timetable'>
             <fa-icon [icon]='faPlus'></fa-icon>
         </button>
 
@@ -40,8 +40,8 @@
             [editing]='this.editing'
             [editingClassName]='this.editingClassName'
             [editingClassType]='this.editingClassType'
-            [selections]='this.selections'
-            (sessionClick)='this.sessionClick.emit($event)'
+            [selections]='this.plan.selections'
+            (sessionClick)='this.handleSessionClicked($event)'
         >
         </app-timetable-day>
     </div>

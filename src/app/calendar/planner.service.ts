@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Plan, PlanMap, Plans, ClassListing } from './calendar';
+import { Plan, Plans, ClassListing, PlanSummary } from './calendar';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
 import { map } from 'rxjs/operators';
@@ -45,12 +45,16 @@ export class PlannerService {
     this.storageService.save(this.plans.value);
   }
 
-  public deletePlan(planId: string) {
+  public deletePlan() {
+    // switch to previous plan
+    this.currentPlan.next(this.plans.value[0]);
+
+    // delete the plan
     const newPlans = {
       ...this.plans.value
     };
 
-    delete newPlans[planId];
+    delete newPlans[this.currentPlan.value.id];
 
     this.plans.next(newPlans);
     this.storageService.save(this.plans.value);
@@ -66,9 +70,12 @@ export class PlannerService {
     );
   }
 
-  public getPlanNames(): Observable<string[]> {
+  public getPlans(): Observable<PlanSummary[]> {
     return this.plans.pipe(
-      map(p => Object.keys(p).map(k => p[k].name))
+      map(p => Object.keys(p).map(k => ({
+        id: p[k].id,
+        name: p[k].name,
+      })))
     );
   }
 

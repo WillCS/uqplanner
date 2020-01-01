@@ -28,6 +28,11 @@ export interface Plan {
     isDirty: boolean;
 }
 
+export interface PlanSummary {
+    id: string;
+    name: string;
+}
+
 export interface Plans {
     [key: string]: Plan;
 }

@@ -2,7 +2,7 @@
     <input 
         type='text' 
         placeholder='Semester Timetable'
-        value='{{this.name}}'
+        value='{{this.plan.name}}'
         (change)='this.handleTitleChanged($event)'
     />
 </div>
@@ -23,10 +23,10 @@
         ></fa-icon>
     </div>
     <p>Courses</p>
-    <div class='classObject placeholder' *ngIf='!(this.classList?.length > 0)'>
+    <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
         <p><b>Your courses go here</b></p>
     </div>
-    <div class='classObject normal' *ngFor='let class of this.classList'>
+    <div class='classObject normal' *ngFor='let class of this.plan.classes'>
         <p><b>{{class.name}}</b></p>
         <p><b>{{class.description | uppercase}}</b></p>
         
@@ -39,15 +39,4 @@
 </div>
 
 <!-- Timetable -->
-<app-timetable
-    [name]='this.name'
-    [classList]='this.classList'
-    [editing]='this.editing'
-    [editingClassName]='this.editingClassName'
-    [editingClassType]='this.editingClassType'
-    [selections]='this.selections'
-    (sessionClick)='this.handleSessionClicked($event)'
-    (timetableClick)='this.handleTimetableChangeRequest($event)'
-    (saveClick)='this.saveData()'
-    (deleteClick)='this.deleteTimetable(this.getName())'
-></app-timetable>
+<app-timetable></app-timetable>

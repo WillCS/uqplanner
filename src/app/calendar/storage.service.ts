@@ -10,7 +10,7 @@ export class StorageService {
   constructor() {
     // create an empty store if nothing exists
     if (!this.storeExists()) {
-
+      this.save({});
     }
   }
 
