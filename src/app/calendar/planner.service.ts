@@ -5,6 +5,7 @@ import { StorageService } from './storage.service';
 import { map } from 'rxjs/operators';
 import * as uuid from "uuid";
 import { ApiService } from '../api.service';
+import * as _ from "lodash";
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,7 @@ export class PlannerService {
       this.currentPlan = new BehaviorSubject<Plan>(this.cleanPlan());
     } else {
       // TODO: get last edited plan
-      const temp = Object.assign({}, this.plans.value[planIds[0]]);
-      this.currentPlan = new BehaviorSubject<Plan>(temp);
+      this.currentPlan = new BehaviorSubject<Plan>( _.cloneDeep(this.plans.value[planIds[0]]));
     }
   }
 
@@ -35,7 +35,6 @@ export class PlannerService {
   }
 
   public savePlan() {
-    console.log('saving');
     const plan = this.currentPlan.value;
     if (!plan.name) {
       plan.name = this.defaultPlanName();
@@ -84,7 +83,7 @@ export class PlannerService {
     }
 
     this.currentPlan.next(
-      JSON.parse(JSON.stringify(this.plans.value[planId]))
+      _.cloneDeep(this.plans.value[planId])
     );
   }
 
@@ -129,9 +128,8 @@ export class PlannerService {
 
   public changeName(name: string) {
     const plan = this.currentPlan.value;
-    if (!!name) {
-      plan.name = name;
-    } else {
+
+    if (!name) {
       plan.name = this.defaultPlanName();
     }
 
@@ -140,7 +138,7 @@ export class PlannerService {
         ...this.plans.value,
         [plan.id]: {
           ...this.plans.value[plan.id],
-          lastEdited: Date.now(),
+          name
         }
       }
     );
