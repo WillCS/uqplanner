@@ -11,22 +11,28 @@
     font-weight: bold;
     background-color: #643d6e;
     margin-right: 5px;
+    margin-bottom: 7px;
     padding: 0px 12px;
     color: white;
-    transition: filter 0.1s;
+    transition: filter 0.1s, opacity 0.2s;
+    opacity: 0.6;
+}
+
+.timetableBtn:hover {
+    opacity: 0.8;
 }
 
 .timetableBtn.active:hover {
     filter: brightness(0.9);
 }
 
+.timetableBtn.active {
+    opacity: 1
+}
+
 .addCalBtn {
     background-color: #712e81;
     opacity: 0.4;
-}
-
-.addCalBtn.active {
-    opacity: 1;
 }
 
 .controls {

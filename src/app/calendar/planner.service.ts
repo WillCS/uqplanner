@@ -31,7 +31,13 @@ export class PlannerService {
   }
 
   public newPlan() {
-    this.currentPlan.next(this.cleanPlan());
+    const cleanPlan: Plan = this.cleanPlan();
+    this.currentPlan.next(cleanPlan);
+
+    this.plans.next({
+      ...this.plans.value,
+      [cleanPlan.id]: cleanPlan
+    });
   }
 
   public savePlan() {
@@ -130,27 +136,15 @@ export class PlannerService {
   public changeName(name: string) {
     const plan = this.currentPlan.value;
 
-    console.log(name);
     if (!name) {
       plan.name = this.defaultPlanName();
     }
 
-    this.plans.next(
-      {
-        ...this.plans.value,
-        [plan.id]: {
-          ...this.plans.value[plan.id],
-          name
-        }
-      }
-    );
-
     this.currentPlan.next({
       ...plan,
+      isDirty: true,
       name
     });
-
-    this.storageService.save(this.plans.value);
   }
 
   public defaultPlanName(): string {
@@ -169,7 +163,7 @@ export class PlannerService {
   private cleanPlan(): Plan {
     return {
       id: uuid.v4(),
-      name: '',
+      name: this.defaultPlanName(),
       classes: new Array<ClassListing>(),
       selections: new Map<string, Map<string, number>>(),
       lastEdited: Date.now(),

@@ -118,11 +118,15 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleDeleteClicked(): void {
-    this.modalService.showConfirmationModal(
-      'Confirm Delete',
-      'This plan will not be recoverable after you have deleted it. A' +
-      're you sure you want to delete?',
-      () => this.plannerService.deletePlan() );
+    if (this.plan.classes.length > 0) {
+      this.modalService.showConfirmationModal(
+        'Confirm Delete',
+        'This plan will not be recoverable after you have deleted it. A' +
+        're you sure you want to delete?',
+        () => this.plannerService.deletePlan() );
+    } else {
+      this.plannerService.deletePlan()
+    }
   }
 
   public handleTimetableClicked(id: string): void {
@@ -138,13 +142,8 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public canMakeNewPlan(): boolean {
-    const planIds = this.plans.map(p => p.id);
-    return planIds.indexOf(this.plan.id) !== -1;
-  }
-
   public newTimetableHandler(): void {
-    if (!this.canMakeNewPlan()) {
+    if (this.plan.classes.length === 0) {
       return;
     }
 
@@ -158,5 +157,21 @@ export class TimetableComponent implements OnInit, OnDestroy {
     } else {
       this.plannerService.newPlan();
     }
+  }
+
+  public planSaved(): boolean {
+    const planIds = this.plans.map(p => p.id);
+    return planIds.indexOf(this.plan.id) !== -1;
+  }
+
+  public getPlanName(planId: string): string {
+    let name: string;
+    if (planId === this.plan.id) {
+      name = this.plan.name;
+    } else {
+      name = this.plans.find(p => p.id === planId).name;
+    }
+
+    return name;
   }
 }

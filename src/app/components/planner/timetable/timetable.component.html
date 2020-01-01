@@ -2,13 +2,14 @@
     <div class='timetableList'>
         <button
             class='timetableBtn active'
-            *ngFor='let plan of this.plans'
-            (click)='this.handleTimetableClicked(plan.id)'
+            *ngFor='let p of this.plans'
+            (click)='this.handleTimetableClicked(p.id)'
+            [class.active]='p.id == this.plan.id'
         >
-            {{plan.name}}
+            {{this.getPlanName(p.id)}}
         </button>
         <button class='timetableBtn addCalBtn' title='Create timetable'
-            (click)='this.newTimetableHandler()' [class.active]='this.canMakeNewPlan()'>
+            (click)='this.newTimetableHandler()' [class.active]='this.plan.classes.length > 0'>
             <fa-icon [icon]='faPlus'></fa-icon>
         </button>
 
@@ -24,7 +25,7 @@
             <fa-icon [icon]='faDownload'></fa-icon>
         </button>
         <button class='controlBtn deleteBtn' title='Delete this timetable'
-            (click)='this.handleDeleteClicked()' [class.active]='this.plan.classes.length > 0'>
+            (click)='this.handleDeleteClicked()' [class.active]='true'>
             <fa-icon [icon]='faTrash'></fa-icon>
         </button>
     </div>
