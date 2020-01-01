@@ -8,7 +8,7 @@
             {{plan.name}}
         </button>
         <button class='timetableBtn addCalBtn' title='Create timetable'
-            (click)='this.newTimetableHandler()' [class.active]='this.plan.classes.length > 0'>
+            (click)='this.newTimetableHandler()' [class.active]='this.canMakeNewPlan()'>
             <fa-icon [icon]='faPlus'></fa-icon>
         </button>
 

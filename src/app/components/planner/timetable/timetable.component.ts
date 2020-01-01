@@ -138,7 +138,25 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
   }
 
+  public canMakeNewPlan(): boolean {
+    const planIds = this.plans.map(p => p.id);
+    return planIds.indexOf(this.plan.id) !== -1;
+  }
+
   public newTimetableHandler(): void {
-    this.plannerService.newPlan();
+    if (!this.canMakeNewPlan()) {
+      return;
+    }
+
+    if (this.plan.isDirty) {
+      this.modalService.showConfirmationModal(
+        'Unsaved Changes',
+        'You have made changes to your current timetable that ' +
+        'have not been saved. Are you sure you want to load ' +
+        'another timetable?',
+        () => this.plannerService.newPlan());
+    } else {
+      this.plannerService.newPlan();
+    }
   }
 }
