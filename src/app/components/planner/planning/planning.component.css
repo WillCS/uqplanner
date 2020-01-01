@@ -67,7 +67,25 @@ input.classSearchField {
     padding: 0;
     max-height: 600px;
     overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #90A4AE #CFD8DC00;
 }
+
+.classWrapper::-webkit-scrollbar {
+    width: 11px;
+}
+
+.classWrapper::-webkit-scrollbar-track {
+    background: #CFD8DC00;
+}
+
+.classWrapper::-webkit-scrollbar-thumb {
+    background-color: #90A4AE;
+    border-radius: 6px;
+    border: 3px solid #CFD8DC00;
+}
+  
+  
 
 div.classObject {
     width: 175px;
