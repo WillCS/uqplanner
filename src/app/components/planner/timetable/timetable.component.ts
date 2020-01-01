@@ -62,7 +62,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public exportCalendar(): void {
-    this.exportService.exportCalendar(this.plan.name);
+    this.exportService.exportCalendar(this.plan);
   }
 
   public getSessionsOnDay(dayIndex: number): TimetableSession[] {
