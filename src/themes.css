@@ -1,0 +1,24 @@
+.monotone {
+  --bg-light: #2f033d;
+  --bg-dark: #2a0237;
+  --search-bar-color: white;
+  --search-button-color: #b09fb6;
+  --title-color: white;
+  --title-accent-color: #918694;
+  --footer-color: #a092a5;
+  --session-block: #4eace2;
+  --session-block-hover: #7fb3ee;
+  --session-clash: #d80209;
+  --session-editing: #e0c4decc;
+  --calendar-label: white;
+  --block-text: white;
+  --accent-color: #715678;
+  --class-list-bg: #381343;
+  --class-list-color: white;
+  --bg-label: #bbbbbb;
+  --control-button-color: white;
+  --timetable-button-bg: #643d6e;
+  --timetable-button-color: white;
+  --add-timetable-button-bg: #712e81;
+  --add-timetable-button-color: white; 
+}
