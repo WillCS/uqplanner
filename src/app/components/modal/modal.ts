@@ -15,9 +15,9 @@ export class ModalButton {
     public colour: string;
     public action: () => void;
 
-    constructor(text: string, colour: string, action: () => void) {
+    constructor(text: string, action: () => void, colour?: string) {
         this.text = text;
-        this.colour = colour;
+        this.colour = colour ? colour : 'transparent';
         this.action = action;
     }
 }
