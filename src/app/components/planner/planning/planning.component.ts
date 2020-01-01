@@ -36,15 +36,15 @@ export class PlanningComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.storageService.doTimetablesExist()) {
-      if (this.storageService.getSavedCalendarNames().length > 0) {
-        this.loadTimetable(this.storageService.getSavedCalendarNames()[0]);
+    if (this.storageService.storeExists()) {
+      if (this.storageService.getPlanNames().length > 0) {
+        this.loadTimetable(this.storageService.getPlanNames()[0]);
       }
     }
   }
 
   public loadTimetable(name: string): void {
-    const timetable = this.storageService.getCalendarByName(name);
+    const timetable = this.storageService.getPlan(name);
 
     if (timetable) {
       this.name = timetable.name;
@@ -63,7 +63,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public deleteTimetable(name: string): void {
-    this.storageService.deleteCalendar(name);
+    this.storageService.deletePlan(name);
   }
 
   public saveData(): void {
@@ -73,7 +73,7 @@ export class PlanningComponent implements OnInit {
       selections: this.selections
     };
 
-    this.storageService.saveCalendar(this.getName(), data);
+    this.storageService.savePlan(this.getName(), data);
   }
 
   public handleSessionClicked(session: TimetableSession): void {
@@ -102,7 +102,7 @@ export class PlanningComponent implements OnInit {
   }
 
   public addClass(newClass: ClassListing): void {
-    
+
     if(!this.classList.some(c => c.name === newClass.name)) {
       this.classList.push(newClass);
 

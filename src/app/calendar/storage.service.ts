@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Plans } from './calendar';
 
 @Injectable({
   providedIn: 'root'
@@ -6,13 +7,18 @@ import { Injectable } from '@angular/core';
 export class StorageService {
   public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = 'timetableData';
 
-  constructor() { }
+  constructor() {
+    // create an empty store if nothing exists
+    if (!this.storeExists()) {
 
-  public doTimetablesExist(): boolean {
+    }
+  }
+
+  public storeExists(): boolean {
     return localStorage.hasOwnProperty(StorageService.TIMETABLE_STORAGE_IDENTIFIER);
   }
 
-  public deleteCalendar(name: string): void {
+  public deletePlan(name: string): void {
     const timetables = this.loadData();
 
     if (!timetables) {
@@ -24,8 +30,8 @@ export class StorageService {
     localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
   }
 
-  public getSavedCalendarNames(): string[] {
-    if (this.doTimetablesExist()) {
+  public getPlanNames(): string[] {
+    if (this.storeExists()) {
       const keys = this.loadData().keys() as Iterator<string>;
       const names: string[] = [];
 
@@ -44,8 +50,8 @@ export class StorageService {
     return [];
   }
 
-  public getCalendarByName(name: string) {
-    if (this.doTimetablesExist()) {
+  public getPlan(name: string) {
+    if (this.storeExists()) {
       const timetables = this.loadData();
       return timetables.get(name);
     }
@@ -53,7 +59,7 @@ export class StorageService {
     return undefined;
   }
 
-  public saveCalendar(name: string, calendarData): void {
+  public savePlan(name: string, calendarData): void {
     let timetables = this.loadData();
 
     if (!timetables) {
@@ -63,6 +69,15 @@ export class StorageService {
     timetables.set(name, calendarData);
     const dataString = JSON.stringify(timetables, this.replacer);
     localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
+  }
+
+  public save(plans: Plans): void {
+    const dataString = JSON.stringify(plans, this.replacer);
+    localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
+  }
+
+  public get(): Plans {
+    return this.loadData();
   }
 
   private replacer(key, value) {

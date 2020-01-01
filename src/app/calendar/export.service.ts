@@ -14,7 +14,7 @@ export class ExportService {
 
   public exportCalendar(name: string): void {
     console.log(`Exporting ${name} as iCal`);
-    const calData = this.storage.getCalendarByName(name);
+    const calData = this.storage.getPlan(name);
     console.log(calData);
 
     const cal = ics();

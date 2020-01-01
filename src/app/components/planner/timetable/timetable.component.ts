@@ -57,7 +57,7 @@ export class TimetableComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.storageService.doTimetablesExist()) {
+    if (this.storageService.storeExists()) {
       this.updateSavedList();
     }
   }
@@ -117,6 +117,6 @@ export class TimetableComponent implements OnInit {
   }
 
   private updateSavedList(): void {
-    this.calendarNames = this.storageService.getSavedCalendarNames();
+    this.calendarNames = this.storageService.getPlanNames();
   }
 }

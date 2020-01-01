@@ -19,7 +19,7 @@
         <fa-icon
             class='searchButton'
             [icon]='faSearch'
-            (click)='this.onSearched(courseCode.value)'
+            (click)='courseCode.value = this.onSearched(courseCode.value)'
         ></fa-icon>
     </div>
     <p>Courses</p>
@@ -50,5 +50,4 @@
     (timetableClick)='this.handleTimetableChangeRequest($event)'
     (saveClick)='this.saveData()'
     (deleteClick)='this.deleteTimetable(this.getName())'
->
-</app-timetable>
+></app-timetable>
