@@ -31,7 +31,7 @@ div.sessionBlock:nth-child(even) {
 
 div.scheduledClass {
     position: absolute;
-    background-color: #4eace2;
+    background-color: var(--session-block);
     width: 100%;
     box-sizing: border-box;
     cursor: pointer;
@@ -39,6 +39,7 @@ div.scheduledClass {
     padding-left: 8px;
     overflow: hidden;
     white-space: nowrap;
+    color: var(--block-text);
 }
 
 div.scheduledClass > p {
@@ -50,15 +51,15 @@ div.scheduledClass > p {
 
 div.scheduledClass.editing,
         div.scheduledClass.clashing.editing {
-    background-color: #e0c4decc;
+    background-color: var(--session-editing);
 }
 
 div.editing:hover {
-    background-color: #7fb3ee;
+    background-color: var(--session-block-highlight);
 }
 
 div.scheduledClass.clashing {
-    background-color: #d80209;
+    background-color: var(--session-clash);
 }
 
 div.scheduledClass.notEditing:hover {

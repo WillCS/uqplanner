@@ -15,5 +15,5 @@ footer {
 
 .footerText {
     margin-right: 5px;
-    color: #a092a5;
+    color: var(--footer-color);
 }
