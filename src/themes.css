@@ -13,10 +13,10 @@
   --session-editing: #c4cfe0cc;
   --calendar-label: black;
   --block-text: white;
-  --accent-color: #ffffff;
-  --class-list-bg: #393939;
+  --accent-color: transparent;
+  --class-list-bg: #525252;
   --class-list-color: white;
-  --bg-label: #3b3b3b;
+  --bg-label: #000000;
   --control-button-color: black;
   --timetable-button-bg: #000000;
   --timetable-button-color: white;
@@ -24,4 +24,60 @@
   --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
   --add-timetable-button-bg: #000000;
   --add-timetable-button-color: white;
+}
+
+.black-and-white {
+  --bg-light: #ffffff;
+  --bg-dark: #ffffff;
+  --search-border-color: black;
+  --search-bar-color: white;
+  --search-button-color: #545454;
+  --title-color: black;
+  --title-accent-color: #000000;
+  --footer-color: #141414;
+  --session-block: #000000;
+  --session-block-hover: #525252e3;
+  --session-clash: #ff3300;
+  --session-editing: #c4cfe0cc;
+  --calendar-label: black;
+  --block-text: white;
+  --accent-color: transparent;
+  --class-list-bg: #525252;
+  --class-list-color: white;
+  --bg-label: #000000;
+  --control-button-color: black;
+  --timetable-button-bg: #000000;
+  --timetable-button-color: white;
+  --timetable-stripes-light: rgba(0, 0, 0, 0.13);
+  --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
+  --add-timetable-button-bg: #000000;
+  --add-timetable-button-color: white;
+}
+
+.dark {
+  --bg-light: #3a3a3a;
+    --bg-dark: #2d2d2d;
+    --search-border-color: transparent;
+    --search-bar-color: white;
+    --search-button-color: #545454;
+    --title-color: #ffffff;
+    --title-accent-color: #ffffff;
+    --footer-color: #9e9e9e;
+    --session-block: #52cc74;
+    --session-block-hover: #89cea0;
+    --session-clash: #252524;
+    --session-editing: #ffffff57;
+    --calendar-label: #e8e8e8;
+    --block-text: white;
+    --accent-color: #ffffff;
+    --class-list-bg: #52525000;
+    --class-list-color: #e8e8e8;
+    --bg-label: #949494;
+    --control-button-color: gainsboro;
+    --timetable-button-bg: #ffffff;
+    --timetable-button-color: black;
+    --timetable-stripes-light: rgba(255, 255, 255, 0.13);
+    --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
+    --add-timetable-button-bg: #7b7b7b;
+    --add-timetable-button-color: white;
 }
