@@ -7,9 +7,7 @@ import { Component, Renderer2 } from '@angular/core';
 })
 export class AppComponent {
   title = 'UQ Timetable Planner';
-  public theme = 'light';
 
   constructor(private renderer: Renderer2) {
-    this.renderer.addClass(document.body, this.theme);
    }
 }

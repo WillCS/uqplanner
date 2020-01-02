@@ -1,0 +1,4 @@
+<select #themeSelector (change)='this.setTheme(themeSelector.value)'>
+  <option *ngFor='let theme of this.themes' 
+    [value]='theme.className' [selected]='this.currentTheme == theme.className'>{{theme.name}}</option>
+</select>

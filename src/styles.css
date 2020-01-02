@@ -24,7 +24,8 @@
     --timetable-stripes-light: rgba(255, 255, 255, 0.13);
     --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
     --add-timetable-button-bg: #712e81;
-    --add-timetable-button-color: white; 
+    --add-timetable-button-color: white;
+    --global-transitions: none;
 }
 
 html {
@@ -44,6 +45,10 @@ body {
         var(--bg-dark)
     );
     position: relative;
+}
+
+* {
+    transition: var(--global-transitions);
 }
 
 input:focus {
