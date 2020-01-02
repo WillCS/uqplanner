@@ -1,3 +1,7 @@
+.transition {
+  --global-transitions: all 0.65s;
+}
+
 .light {
   --bg-light: #ffffff;
   --bg-dark: #ffffff;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-theme',
@@ -6,6 +6,9 @@ import { Component, OnInit, Renderer2, OnDestroy, ElementRef } from '@angular/co
   styleUrls: ['./theme.component.css']
 })
 export class ThemeComponent implements OnInit, OnDestroy {
+
+  private TRANSITION_CLASSNAME = 'transition';
+  private DEFAULT_THEME = 'Classic';
 
   public themes = [
     { name: 'Classic', className: 'classic'},
@@ -18,10 +21,10 @@ export class ThemeComponent implements OnInit, OnDestroy {
 
   constructor(
     private renderer: Renderer2,
-    private elementRef: ElementRef
   ) {
-    this.currentTheme = 'classic';
-    this.renderer.addClass(document.body, this.currentTheme);
+    const defaultTheme = this.themes.find(t => t.name === this.DEFAULT_THEME);
+    this.currentTheme = defaultTheme.className;
+    this.renderer.addClass(document.body, defaultTheme.className);
   }
 
   ngOnInit() {
@@ -32,19 +35,23 @@ export class ThemeComponent implements OnInit, OnDestroy {
   }
 
 
-  public setTheme(className: string) {
+  public setTheme(event: Event) {
+    const target = event.target as HTMLInputElement;
+    target.blur();
+
+    const className = target.value;
     const classList = this.themes.map(t => t.className);
     if (classList.indexOf(className) === -1) {
       return;
     }
 
     this.renderer.removeClass(document.body, this.currentTheme);
-    this.elementRef.nativeElement.style.setProperty('--global-transitions', 'color 0.6s, background-color 0.6s');
+    this.renderer.addClass(document.body, this.TRANSITION_CLASSNAME);
     this.renderer.addClass(document.body, className);
     this.currentTheme = className;
 
     setTimeout(() => {
-      this.elementRef.nativeElement.style.setProperty('--global-transitions', 'none');
+      this.renderer.removeClass(document.body, this.TRANSITION_CLASSNAME);
     }, 1000);
   }
 

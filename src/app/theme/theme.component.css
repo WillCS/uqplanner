@@ -1,12 +1,7 @@
 :host {
   position: fixed;
   bottom: 10px;
-  left: 10px;  opacity: 0.4;
-  transition: opacity 0.3s;
-}
-
-:host:hover, :host:focus {
-  opacity: 1;
+  left: 10px;
 }
 
 select, select:focus, select:active {
@@ -26,6 +21,7 @@ select {
   appearance: none;
   background-color: var(--class-list-bg);
   font-size: 10px;
+  opacity: 0.3;
 }
 
 select::-ms-expand {
