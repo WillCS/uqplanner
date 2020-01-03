@@ -30,3 +30,12 @@ span.footerText.button {
     text-decoration: underline;
     cursor: pointer;
 }
+
+textarea.feebackTextarea {
+    resize: vertical;
+    min-height: 20px;
+    max-height: 300px;
+    width: 100%;
+    margin-bottom: 10px;
+    display: block;
+}

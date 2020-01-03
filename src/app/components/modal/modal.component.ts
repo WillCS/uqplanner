@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Observer } from 'rxjs';
 import { ModalSettings } from './modal';
@@ -11,6 +11,9 @@ import { ModalSettings } from './modal';
 export class ModalComponent implements OnInit {
   public isActive = false;
   public modalSettings: ModalSettings;
+
+  @ViewChild('contentContainer', { read: ElementRef, static: false})
+  private contentContainer: ElementRef<any>;
 
   public modalDisplayObserver: Observer<ModalSettings> = {
     closed: false,
