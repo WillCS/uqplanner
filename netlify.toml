@@ -1,0 +1,7 @@
+[build]
+  base    = './'
+  publish = './dist/webapp/'
+  command = 'ng build'
+
+[context.production]
+  command = 'ng build --prod'
