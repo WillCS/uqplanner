@@ -7,30 +7,27 @@
         <p class='modalHeading'>{{ this.modalSettings.title }}</p>
         <p class='modalText'>{{ this.modalSettings.text }}</p>
 
-        <form class='modalForm' name='feedback' id='feedbackForm' netlify
-            *ngIf='this.modalSettings.userdata && this.modalSettings.userdata.includes("form")'
-        >
+        <form class='modalForm' name='feedback' netlify>
             <textarea class='modalText' rows='4'>
-
             </textarea>
-        </form>
 
-        <div class='modalButtonContainer'>
-            <button 
-                *ngFor='let button of this.modalSettings.buttons' 
-                class='modalButton'
-                [style.background-color]='button.colour'
-                (click)='button.action()'
-            >
-                {{ button.text }}
-            </button>
+            <div class='modalButtonContainer'>
+                <button 
+                    *ngFor='let button of this.modalSettings.buttons' 
+                    class='modalButton'
+                    [style.background-color]='button.colour'
+                    (click)='button.action()'
+                >
+                    {{ button.text }}
+                </button>
 
-            <button type='submit' class='modalButton' form='feedbackForm'
-                (click)='this.closeModal()'
-                *ngIf='this.modalSettings.userdata && this.modalSettings.userdata.includes("form")'
-            >
-                Submit
-            </button>
+                <button type='submit' class='modalButton'
+                    (click)='this.closeModal()'
+                    *ngIf='this.modalSettings.userdata && this.modalSettings.userdata.includes("form")'
+                >
+                    Submit
+                </button>
         </div>
+        </form>
     </div>
 </div>
