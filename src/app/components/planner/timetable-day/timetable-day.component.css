@@ -47,6 +47,8 @@ div.scheduledClass > p {
     margin: 0px;
     font-size: 11px;
     line-height: 14px;
+    word-break: break-all;
+    white-space: normal;
 }
 
 div.scheduledClass.editing,

@@ -29,18 +29,14 @@
 }
 
 html {
-    min-height: 100%;
-    background: linear-gradient(
-        -45deg,
-        var(--bg-light),
-        var(--bg-dark)
-    );
+    height: 100%;
 }
 
 body {
     margin: 0px;
     font-family: 'Lato', Arial, sans-serif;
     color: white;
+    background: var(--bg-light);
     position: relative;
 }
 
@@ -54,4 +50,70 @@ input:focus {
 
 button:focus {
     outline: none;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+    .contentContainer {
+        width: 100vw !important;
+    }
+
+    app-planning {
+        display: flex;
+        flex-direction: column;
+    }
+  
+    app-planning > * {
+        width: 90vw !important;
+        padding-left: 5vw;
+    }
+
+    app-planning .classObject.placeholder {
+        height: 60px !important;
+        padding: 15px !important;
+    }
+    
+    .topMenu {
+        margin-top: 20px !important;
+    }
+
+    .timetableList {
+        width: auto !important;
+    }
+
+    app-timetable {
+        padding-left: 12px !important;
+        width: 95vw !important;
+    }
+
+    .timeLabels {
+        left: -12px !important;
+    }
+
+    .dayHeader {
+        font-size: 12px !important;
+    }
+
+    .timestamp {
+        font-size: 9px !important;
+    }
+
+    .scheduledClass {
+        padding-top: 4px !important;
+        padding-left: 4px !important;
+    }
+
+    .scheduledClass > p {
+        font-size: 11px !important;
+        line-height: 13px !important;
+    }
+
+    app-theme {
+        bottom: 30px !important;
+    }
+
+    footer {
+        margin-top: 20px !important;
+    }
+    
 }
