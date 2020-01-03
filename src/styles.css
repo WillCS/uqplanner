@@ -33,8 +33,6 @@ html {
 }
 
 body {
-    height: 100vw;
-    overflow: hidden;
     margin: 0px;
     height: 100%;
     font-family: 'Lato', Arial, sans-serif;

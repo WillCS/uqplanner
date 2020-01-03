@@ -1,9 +1,10 @@
 .title {
-    padding-bottom: 25px;
+    padding-top: 25px;
+    padding-bottom: 20px;
 }
 
 .title > input {
-    font-size: 36px;
+    font-size: 30px;
     border: none;
     background: transparent;
     padding: 0;
@@ -11,7 +12,7 @@
     color: var(--title-color);
     font-family: 'Lato', Arial;
     width: 100%;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     border-bottom: 0.5px solid var(--title-accent-color);
 }
 
@@ -51,6 +52,7 @@ input.classSearchField {
 .classList {
     padding-top: 0px;
     float: left;
+    width: 160px;
 }
 
 .classList > p {
@@ -69,6 +71,7 @@ input.classSearchField {
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: rgb(168, 168, 168) rgba(223, 223, 223, 0);
+    width: 100%;
 }
 
 .classWrapper::-webkit-scrollbar {
@@ -86,8 +89,8 @@ input.classSearchField {
 }
 
 div.classObject {
-    width: 175px;
-    padding: 15px 40px 15px 15px;
+    width: 100%;
+    padding: 13px 35px 13px 13px;
     margin-bottom: 10px;
     color: var(--class-list-color);
     box-sizing: border-box;
@@ -141,7 +144,7 @@ div.classObject > p {
 
 app-timetable {
     float: right;
-    width: 750px;
+    width: 700px;
 }
 
 app-class-search {
