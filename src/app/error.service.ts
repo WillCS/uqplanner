@@ -1,4 +1,4 @@
-import { Injectable, ErrorHandler } from '@angular/core';
+import { Injectable, ErrorHandler, Injector } from '@angular/core';
 import { ModalService } from './components/modal/modal.service';
 import { ModalButton, ModalSettings } from './components/modal/modal';
 
@@ -7,11 +7,14 @@ import { ModalButton, ModalSettings } from './components/modal/modal';
 })
 export class ErrorService implements ErrorHandler {
 
+  public modalService: ModalService;
+
   constructor(
-    public modalService: ModalService
+    private injector: Injector
   ) { }
 
   handleError(error: Error) {
+    console.log(error);
     const title = 'Whoops!';
     const text = 'It looks like we\'ve run into a problem. This ' +
       'might be solved by refreshing the page, or by resetting the app. ' +
@@ -26,8 +29,13 @@ export class ErrorService implements ErrorHandler {
       window.location.reload();
     });
 
-    this.modalService.showModal(
-      new ModalSettings(title, text, [reloadButton, resetButton])
-      );
+    this.modalService = this.injector.get(ModalService);
+    // this.modalService.showModal(
+    //   new ModalSettings(title, text, [reloadButton, resetButton])
+    //   );
+
+    this.modalService.showConfirmationModal('a', 'b', () => {});
+
+    console.log('a');
   }
 }

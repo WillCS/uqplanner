@@ -36,8 +36,10 @@ export class ModalComponent implements OnInit {
   }
 
   private displayModal(modal: ModalSettings): void {
+    console.log('c');
     this.isActive = true;
     this.modalSettings = modal;
+    console.log(this.isActive);
   }
 
   private closeModal(): void {
