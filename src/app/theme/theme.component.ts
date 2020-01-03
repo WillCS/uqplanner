@@ -12,10 +12,10 @@ export class ThemeComponent implements OnInit, OnDestroy {
   private DEFAULT_THEME = 'classic';
 
   public themes = [
+    { name: 'Black & White', className: 'black-and-white'},
     { name: 'Classic', className: 'classic'},
-    { name: 'Light', className: 'light'},
     { name: 'Dark', className: 'dark'},
-    { name: 'Black & White', className: 'black-and-white'}
+    { name: 'Light', className: 'light'}
   ];
 
   public currentTheme: string;
