@@ -29,19 +29,18 @@
 }
 
 html {
-    height: 100%;
-}
-
-body {
-    margin: 0px;
-    height: 100%;
-    font-family: 'Lato', Arial, sans-serif;
-    color: white;
+    min-height: 100%;
     background: linear-gradient(
         -45deg,
         var(--bg-light),
         var(--bg-dark)
     );
+}
+
+body {
+    margin: 0px;
+    font-family: 'Lato', Arial, sans-serif;
+    color: white;
     position: relative;
 }
 
