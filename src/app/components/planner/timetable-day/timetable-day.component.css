@@ -12,8 +12,8 @@ div.sessionBlock {
         -45deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.1) 2px,
-        rgba(255, 255, 255, 0.1) 4px
+        var(--timetable-stripes-dark) 2px,
+        var(--timetable-stripes-dark) 4px
     );
     position: absolute;
     width: 100%;
@@ -24,14 +24,14 @@ div.sessionBlock:nth-child(even) {
         -45deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.13) 2px,
-        rgba(255, 255, 255, 0.13) 4px
+        var(--timetable-stripes-light) 2px,
+        var(--timetable-stripes-light) 4px
     );
 }
 
 div.scheduledClass {
     position: absolute;
-    background-color: #4eace2;
+    background-color: var(--session-block);
     width: 100%;
     box-sizing: border-box;
     cursor: pointer;
@@ -39,6 +39,7 @@ div.scheduledClass {
     padding-left: 8px;
     overflow: hidden;
     white-space: nowrap;
+    color: var(--block-text);
 }
 
 div.scheduledClass > p {
@@ -46,19 +47,21 @@ div.scheduledClass > p {
     margin: 0px;
     font-size: 11px;
     line-height: 14px;
+    word-break: break-all;
+    white-space: normal;
 }
 
 div.scheduledClass.editing,
         div.scheduledClass.clashing.editing {
-    background-color: #e0c4decc;
+    background-color: var(--session-editing);
 }
 
 div.editing:hover {
-    background-color: #7fb3ee;
+    background-color: var(--session-block-hover);
 }
 
 div.scheduledClass.clashing {
-    background-color: #d80209;
+    background-color: var(--session-clash);
 }
 
 div.scheduledClass.notEditing:hover {

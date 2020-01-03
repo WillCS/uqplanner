@@ -6,11 +6,13 @@ import { Plans } from './calendar';
 })
 export class StorageService {
   public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = 'timetableData';
+  public static readonly THEME_STORAGE_IDENTIFIER: string= 'themeName';
 
   constructor() {
     // create an empty store if nothing exists
     if (!this.storeExists()) {
       this.save({});
+      this.saveTheme('classic');
     }
   }
 
@@ -25,6 +27,18 @@ export class StorageService {
 
   public get(): Plans {
     return this.loadData();
+  }
+
+  public saveTheme(name: string): void {
+    localStorage.setItem(StorageService.THEME_STORAGE_IDENTIFIER, name);
+  }
+
+  public getTheme(): string {
+    if (!localStorage.hasOwnProperty(StorageService.THEME_STORAGE_IDENTIFIER)) {
+      return '';
+    }
+
+    return localStorage.getItem(StorageService.THEME_STORAGE_IDENTIFIER);
   }
 
   private replacer(key, value) {
