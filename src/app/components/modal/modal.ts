@@ -2,11 +2,13 @@ export class ModalSettings {
     public title: string;
     public text: string;
     public buttons: ModalButton[];
+    public userdata!: any[];
 
-    constructor(title: string, text: string, buttons: ModalButton[]) {
+    constructor(title: string, text: string, buttons: ModalButton[], userdata: any[] = null) {
         this.title = title;
         this.text = text;
         this.buttons = buttons;
+        this.userdata = userdata;
     }
 }
 

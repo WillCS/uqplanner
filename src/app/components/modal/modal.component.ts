@@ -40,7 +40,7 @@ export class ModalComponent implements OnInit {
     this.modalSettings = modal;
   }
 
-  private closeModal(): void {
+  public closeModal(): void {
     this.isActive = false;
     this.modalSettings = null;
   }

@@ -25,3 +25,8 @@ footer > .textWrap {
     margin-right: 5px;
     color: var(--footer-color);
 }
+
+span.footerText.button {
+    text-decoration: underline;
+    cursor: pointer;
+}
