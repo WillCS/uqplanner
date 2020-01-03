@@ -1,4 +1,5 @@
 import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { StorageService } from '../calendar/storage.service';
 
 @Component({
   selector: 'app-theme',
@@ -8,7 +9,7 @@ import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
 export class ThemeComponent implements OnInit, OnDestroy {
 
   private TRANSITION_CLASSNAME = 'transition';
-  private DEFAULT_THEME = 'Classic';
+  private DEFAULT_THEME = 'classic';
 
   public themes = [
     { name: 'Classic', className: 'classic'},
@@ -21,10 +22,16 @@ export class ThemeComponent implements OnInit, OnDestroy {
 
   constructor(
     private renderer: Renderer2,
+    private storageService: StorageService
   ) {
-    const defaultTheme = this.themes.find(t => t.name === this.DEFAULT_THEME);
-    this.currentTheme = defaultTheme.className;
-    this.renderer.addClass(document.body, defaultTheme.className);
+    let initThemeClass = storageService.getTheme();
+    if (!initThemeClass) {
+      initThemeClass = this.DEFAULT_THEME;
+    }
+
+    const initTheme = this.themes.find(t => t.className === initThemeClass);
+    this.currentTheme = initTheme.className;
+    this.renderer.addClass(document.body, initTheme.className);
   }
 
   ngOnInit() {
@@ -44,6 +51,8 @@ export class ThemeComponent implements OnInit, OnDestroy {
     if (classList.indexOf(className) === -1) {
       return;
     }
+
+    this.storageService.saveTheme(className);
 
     this.renderer.removeClass(document.body, this.currentTheme);
     this.renderer.addClass(document.body, this.TRANSITION_CLASSNAME);
