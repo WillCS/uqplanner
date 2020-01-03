@@ -13,7 +13,7 @@ export class ModalComponent implements OnInit {
   public modalSettings: ModalSettings;
 
   @ViewChild('contentContainer', { read: ElementRef, static: false})
-  private contentContainer: ElementRef<any>;
+  public contentContainer: ElementRef<any>;
 
   public modalDisplayObserver: Observer<ModalSettings> = {
     closed: false,
