@@ -131,11 +131,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
   public handleTimetableClicked(id: string): void {
     if (this.plan.isDirty) {
-      this.modalService.showConfirmationModal(
-        'Unsaved Changes',
-        'You have made changes to your current timetable that ' +
-        'have not been saved. Are you sure you want to load ' +
-        'another timetable?',
+      this.showDiscardModal(
         () => this.plannerService.setCurrentPlan(id));
     } else {
       this.plannerService.setCurrentPlan(id);
@@ -148,11 +144,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     if (this.plan.isDirty) {
-      this.modalService.showConfirmationModal(
-        'Unsaved Changes',
-        'You have made changes to your current timetable that ' +
-        'have not been saved. Are you sure you want to load ' +
-        'another timetable?',
+      this.showDiscardModal(
         () => this.plannerService.newPlan());
     } else {
       this.plannerService.newPlan();
@@ -173,5 +165,14 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     return name;
+  }
+
+  private showDiscardModal(andThen: () => void): void {
+    this.modalService.showConfirmationModal(
+      'Unsaved Changes',
+      'You have made changes to your current timetable that ' +
+      'have not been saved. Are you sure you want to load ' +
+      'another timetable?',
+      andThen);
   }
 }
