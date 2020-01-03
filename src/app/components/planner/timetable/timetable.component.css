@@ -1,5 +1,5 @@
 .topMenu {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .timetableBtn {
@@ -9,19 +9,34 @@
     line-height: 28px;
     text-align: center;
     font-weight: bold;
-    background-color: #643d6e;
+    background-color: var(--timetable-button-bg);
     margin-right: 5px;
+    margin-bottom: 7px;
     padding: 0px 12px;
-    color: white;
-    transition: filter 0.1s;
+    color: var(--timetable-button-color);
+    transition: filter 0.1s, opacity 0.2s;
+    opacity: 0.6;
 }
 
-.timetableBtn:hover {
+.timetableBtn.planBtn:hover {
+    opacity: 0.8;
+}
+
+.timetableBtn.active:hover {
     filter: brightness(0.9);
 }
 
+.timetableBtn.active {
+    opacity: 1
+}
+
 .addCalBtn {
-    background-color: #712e81;
+    background-color: var(--add-timetable-button-bg);
+    opacity: 0.4;
+}
+
+.addCalBtn > fa-icon {
+    color: var(--add-timetable-button-color);
 }
 
 .controls {
@@ -29,23 +44,28 @@
 }
 
 .controlBtn {
-    background-color: white;
-    color: black;
+    background-color: var(--control-button-color);
+    color: var(--bg-dark);
     width: 28px;
     height: 28px;
     border-radius: 28px;
     border: none;
-    transition: background-color 0.2s;
+    transition: opacity 0.2s;
     margin-left: 5px;
+    opacity: 0.4;
 }
 
-.controlBtn:hover {
-    background-color: #bc9fc5;
+.controlBtn.active:hover {
+    opacity: 0.4;
+}
+
+.controlBtn.active {
+    opacity: 1;
 }
 
 .controlBtn > fa-icon {
-color: #2f033d;
-font-size: 11px;
+    color: var(--bg-dark);
+    font-size: 11px;
 }
 
 div.timeLabels {
@@ -66,6 +86,7 @@ p.timestamp {
     box-sizing: border-box;
     font-size: 12px;
     font-weight: bold;
+    color: var(--calendar-label);
 }
 
 div.calendarColumnContainer {
@@ -89,6 +110,7 @@ div.calendarColumn {
 div.calendarColumn > .dayHeader {
     font-size: 10px;
     font-weight: bold;
+    color: var(--calendar-label);
 }
 
 div.calendarColumn > p {

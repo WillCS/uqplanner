@@ -1,68 +1,44 @@
 import { Injectable } from '@angular/core';
+import { Plans } from './calendar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
   public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = 'timetableData';
+  public static readonly THEME_STORAGE_IDENTIFIER: string= 'themeName';
 
-  constructor() { }
+  constructor() {
+    // create an empty store if nothing exists
+    if (!this.storeExists()) {
+      this.save({});
+      this.saveTheme('classic');
+    }
+  }
 
-  public doTimetablesExist(): boolean {
+  public storeExists(): boolean {
     return localStorage.hasOwnProperty(StorageService.TIMETABLE_STORAGE_IDENTIFIER);
   }
 
-  public deleteCalendar(name: string): void {
-    const timetables = this.loadData();
-
-    if (!timetables) {
-      return;
-    }
-
-    timetables.delete(name);
-    const dataString = JSON.stringify(timetables, this.replacer);
+  public save(plans: Plans): void {
+    const dataString = JSON.stringify(plans, this.replacer);
     localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
   }
 
-  public getSavedCalendarNames(): string[] {
-    if (this.doTimetablesExist()) {
-      const keys = this.loadData().keys() as Iterator<string>;
-      const names: string[] = [];
-
-      while(true) {
-        const name = keys.next();
-        if(name.done) {
-          break;
-        } else {
-          names.push(name.value);
-        }
-      }
-
-      return names;
-    }
-
-    return [];
+  public get(): Plans {
+    return this.loadData();
   }
 
-  public getCalendarByName(name: string) {
-    if (this.doTimetablesExist()) {
-      const timetables = this.loadData();
-      return timetables.get(name);
-    }
-
-    return undefined;
+  public saveTheme(name: string): void {
+    localStorage.setItem(StorageService.THEME_STORAGE_IDENTIFIER, name);
   }
 
-  public saveCalendar(name: string, calendarData): void {
-    let timetables = this.loadData();
-
-    if (!timetables) {
-      timetables = new Map<string, any>();
+  public getTheme(): string {
+    if (!localStorage.hasOwnProperty(StorageService.THEME_STORAGE_IDENTIFIER)) {
+      return '';
     }
 
-    timetables.set(name, calendarData);
-    const dataString = JSON.stringify(timetables, this.replacer);
-    localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
+    return localStorage.getItem(StorageService.THEME_STORAGE_IDENTIFIER);
   }
 
   private replacer(key, value) {

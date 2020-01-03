@@ -1,21 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --bg-light: #ffffff;
+    --bg-dark: #ffffff;
+    --search-border-color: black;
+    --search-bar-color: white;
+    --search-button-color: #545454;
+    --title-color: black;
+    --title-accent-color: #000000;
+    --footer-color: #141414;
+    --session-block: #000000;
+    --session-block-hover: #525252e3;
+    --session-clash: #ff3300;
+    --session-editing: #c4cfe0cc;
+    --calendar-label: black;
+    --block-text: white;
+    --accent-color: transparent;
+    --class-list-bg: #525252;
+    --class-list-color: white;
+    --bg-label: #000000;
+    --control-button-color: black;
+    --timetable-button-bg: #000000;
+    --timetable-button-color: white;
+    --timetable-stripes-light: rgba(0, 0, 0, 0.13);
+    --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
+    --add-timetable-button-bg: #000000;
+    --add-timetable-button-color: white;
+}
+
 html {
     height: 100%;
 }
 
 body {
-    height: 100vw;
-    overflow: hidden;
     margin: 0px;
-    height: 100%;
-    font-family: 'Lato', Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Lato', Arial, sans-serif;
     color: white;
-    background: linear-gradient(
-        -45deg,
-        #2f033d,
-        #2a0237
-    );
+    background: var(--bg-light);
     position: relative;
+}
+
+* {
+    transition: var(--global-transitions);
 }
 
 input:focus {
@@ -24,4 +49,74 @@ input:focus {
 
 button:focus {
     outline: none;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+    .contentContainer {
+        width: 100vw !important;
+    }
+
+    .title {
+        padding-top: 20px !important;
+    }
+
+    app-planning {
+        display: flex;
+        flex-direction: column;
+    }
+  
+    app-planning > * {
+        width: 90vw !important;
+        padding-left: 5vw;
+    }
+
+    app-planning .classObject.placeholder {
+        height: 60px !important;
+        padding: 15px !important;
+    }
+    
+    .topMenu {
+        margin-top: 20px !important;
+    }
+
+    .timetableList {
+        width: auto !important;
+    }
+
+    app-timetable {
+        padding-left: 12px !important;
+        width: 95vw !important;
+    }
+
+    .timeLabels {
+        left: -12px !important;
+    }
+
+    .dayHeader {
+        font-size: 12px !important;
+    }
+
+    .timestamp {
+        font-size: 9px !important;
+    }
+
+    .scheduledClass {
+        padding-top: 4px !important;
+        padding-left: 4px !important;
+    }
+
+    .scheduledClass > p {
+        font-size: 11px !important;
+        line-height: 13px !important;
+    }
+
+    app-theme {
+        bottom: 30px !important;
+    }
+
+    footer {
+        margin-top: 20px !important;
+    }
+    
 }

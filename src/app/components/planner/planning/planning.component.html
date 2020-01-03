@@ -1,9 +1,9 @@
 <div class='title'>
     <input 
-        type='text' 
-        placeholder='Semester Timetable'
-        value='{{this.name}}'
-        (change)='this.handleTitleChanged($event)'
+        type='text' maxlength='60'
+        placeholder='{{this.plannerService.defaultPlanName()}}'
+        value='{{this.plan.name}}'
+        (keyup)='this.handleTitleChanged($event)'
     />
 </div>
 
@@ -19,36 +19,26 @@
         <fa-icon
             class='searchButton'
             [icon]='faSearch'
-            (click)='this.onSearched(courseCode.value)'
+            (click)='courseCode.value = this.onSearched(courseCode.value)'
         ></fa-icon>
     </div>
     <p>Courses</p>
-    <div class='classObject placeholder' *ngIf='!(this.classList?.length > 0)'>
-        <p><b>Your courses go here</b></p>
-    </div>
-    <div class='classObject normal' *ngFor='let class of this.classList'>
-        <p><b>{{class.name}}</b></p>
-        <p><b>{{class.description | uppercase}}</b></p>
-        
-        <fa-icon 
-            class='closeButton' 
-            [icon]='faTimesCircle' 
-            (click)='this.onClassCloseClicked(class.name)'
-        ></fa-icon>
+    <div class='classWrapper'>
+        <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
+            <p><b>Your courses go here</b></p>
+        </div>
+        <div class='classObject normal' *ngFor='let class of this.plan.classes'>
+            <p><b>{{class.name}}</b></p>
+            <p><b>{{class.description | uppercase}}</b></p>
+            
+            <fa-icon 
+                class='closeButton' 
+                [icon]='faTimesCircle' 
+                (click)='this.onClassCloseClicked(class.name)'
+            ></fa-icon>
+        </div>
     </div>
 </div>
 
 <!-- Timetable -->
-<app-timetable
-    [name]='this.name'
-    [classList]='this.classList'
-    [editing]='this.editing'
-    [editingClassName]='this.editingClassName'
-    [editingClassType]='this.editingClassType'
-    [selections]='this.selections'
-    (sessionClick)='this.handleSessionClicked($event)'
-    (timetableClick)='this.handleTimetableChangeRequest($event)'
-    (saveClick)='this.saveData()'
-    (deleteClick)='this.deleteTimetable(this.getName())'
->
-</app-timetable>
+<app-timetable></app-timetable>

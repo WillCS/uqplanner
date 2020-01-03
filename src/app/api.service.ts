@@ -15,18 +15,20 @@ export class ApiService {
 
   }
 
-  public getClass(courseCode: string, year: number, semester: number): Observable<ClassListing> {
+  public getClass(courseCode: string, year?: number, semester?: number): Observable<ClassListing> {
     const endpoint: string = this.endpoint('subjects');
 
     return this.http.post<string>(
       endpoint,
-      `search-term=${courseCode}&semester=ALL&campus=ALL&faculty=ALL&type=ALL&days=1&days=2&days=3&days=4&days=5&days=6&days=0&start-time=00%3A00&end-time=23%3A00`,
+      `search-term=${courseCode}&semester=ALL&campus=ALL&faculty=ALL&type=ALL` +
+      '&days=1&days=2&days=3&days=4&days=5&days=6&days=0&' +
+      'start-time=00%3A00&end-time=23%3A00',
       {
         headers: {
-          "accept": "application/json, text/javascript, */*; q=0.01",
-          "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-          "x-requested-with": "XMLHttpRequest",
+          accept: 'application/json, text/javascript, */*; q=0.01',
+          'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'x-requested-with': 'XMLHttpRequest',
         }
       }).pipe(
         map( (classObj: any) => this.reformatClass(courseCode, classObj))
@@ -46,9 +48,9 @@ export class ApiService {
   private reformatClass(courseCode: string, obj: JSON): ClassListing {
     console.log(obj)
     let name = Object.keys(obj)
-      .filter(key => !key.includes("_EX"))
+      .filter(key => !key.includes('_EX'))
       .find(key => key.split('_')[0] == courseCode.toUpperCase());
-    
+
     let activities = Object.values(obj[name].activities).reduce((acc: Object, val: Object) => {
       acc.hasOwnProperty(val['activity_group_code']) 
         ? acc[val['activity_group_code']].push(val) 
@@ -83,7 +85,7 @@ export class ApiService {
     });
 
     let classList = {
-      name: name.split("_")[0],
+      name: name.split('_')[0],
       description: obj[name]['description'],
       classes: classes
     };

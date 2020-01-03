@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
-import { ClassListing, ClassType, ClassSession } from './calendar';
+import { ClassListing, ClassType, ClassSession, Plan } from './calendar';
 declare const ics: any;
 
 @Injectable({
@@ -8,19 +8,15 @@ declare const ics: any;
 })
 export class ExportService {
 
-  constructor(
-    public storage: StorageService
-  ) { }
+  constructor() { }
 
-  public exportCalendar(name: string): void {
+  public exportCalendar(plan: Plan): void {
     console.log(`Exporting ${name} as iCal`);
-    const calData = this.storage.getCalendarByName(name);
-    console.log(calData);
 
     const cal = ics();
-    calData.selections.forEach((streams: Map<string, number>, subjectName: string) => {
+    plan.selections.forEach((streams: Map<string, number>, subjectName: string) => {
       streams.forEach((id: number, streamName: string) => {
-        const subject: ClassListing = calData.classList.find(c => c.name === subjectName);
+        const subject: ClassListing = plan.classes.find(c => c.name === subjectName);
         const stream: ClassType = subject.classes.find(s => s.name === streamName);
         const session: ClassSession = stream.streams[id].classes[0];
 
@@ -54,6 +50,6 @@ export class ExportService {
       });
     });
 
-    cal.download(calData.name ? calData.name : 'timetable');
+    cal.download(plan.name ? plan.name : 'timetable');
   }
 }

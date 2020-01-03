@@ -19,10 +19,22 @@ export const TIMETABLE_HOURS: number[] = [
     8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 ];
 
-export interface Timetable {
+export interface Plan {
+    id: string;
     name: string;
     classes: ClassListing[];
     selections: Map<string, Map<string, number>>;
+    lastEdited: number;
+    isDirty: boolean;
+}
+
+export interface PlanSummary {
+    id: string;
+    name: string;
+}
+
+export interface Plans {
+    [key: string]: Plan;
 }
 
 export const NULL_SESSION: TimetableSession = {
