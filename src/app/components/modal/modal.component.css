@@ -21,9 +21,9 @@ div.modalBox {
     top: 40%;
     transform: translate(-50%, -50%);
     border-radius: 5px;
-    border: 1px solid #5d595e;
-    background-color: #29142f;
-    color: white;
+    border: 1px solid var(--accent-color);
+    background-color: var(--modal-bg);
+    color: var(--class-list-color);
     font-family: 'Lato', Arial, sans-serif;
 }
 
@@ -54,7 +54,7 @@ button.modalButton,
     background: transparent;
     outline: none;
     font-family: 'Lato', Arial, sans-serif;
-    color: white;
+    color: var(--class-list-color);
     margin-left: 5px;
     transition: filter 0.4s;
 }

@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ContainerComponent } from './components/container/container.component';
+import { ErrorService } from './error.service';
 import { PlanningComponent } from './components/planner/planning/planning.component';
 import { TimetableComponent } from './components/planner/timetable/timetable.component';
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
@@ -17,6 +18,7 @@ import { SemesterPipe } from './calendar/semester.pipe';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ThemeComponent } from './theme/theme.component';
+
 
 @NgModule({
   declarations: [
@@ -39,7 +41,7 @@ import { ThemeComponent } from './theme/theme.component';
     FormsModule,
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [{provide: ErrorHandler, useClass: ErrorService}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

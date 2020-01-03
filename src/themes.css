@@ -28,7 +28,7 @@
   --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
   --add-timetable-button-bg: #712e81;
   --add-timetable-button-color: white;
-  --global-transitions: none;
+  --modal-bg: #2a0237;
 }
 
 .light {
@@ -57,6 +57,7 @@
   --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
   --add-timetable-button-bg: #000000;
   --add-timetable-button-color: white;
+  --modal-bg: #525252;
 }
 
 .black-and-white {
@@ -85,6 +86,7 @@
   --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
   --add-timetable-button-bg: #000000;
   --add-timetable-button-color: white;
+  --modal-bg: #525252;
 }
 
 .dark {
@@ -113,4 +115,5 @@
     --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
     --add-timetable-button-bg: #7b7b7b;
     --add-timetable-button-color: white;
+    --modal-bg: #1d1d1d;
 }
