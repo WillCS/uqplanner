@@ -57,6 +57,10 @@ button:focus {
         width: 100vw !important;
     }
 
+    .title {
+        padding-top: 20px !important;
+    }
+
     app-planning {
         display: flex;
         flex-direction: column;
