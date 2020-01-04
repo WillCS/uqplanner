@@ -11,9 +11,19 @@
 </footer>
 
 <ng-template #feedback>
-    <form name='feedbackAndBugs' id='feedbackForm' class='feedbackForm' method='POST' netlify>
+    <form 
+        name='feedbackAndBugs'
+        id='feedbackForm'
+        class='feedbackForm'
+        method='POST'
+        enctype='application/x-www-form-urlencoded'
+        action='./'
+        netlify-honeypot='extra'
+        data-netlify='true'
+    >
         <textarea name='content' class='feebackTextarea'>
             
         </textarea>
+        <input name='extra' class='feedbackExtra' />
     </form>
 </ng-template>

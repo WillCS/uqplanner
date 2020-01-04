@@ -39,3 +39,7 @@ textarea.feebackTextarea {
     margin-bottom: 10px;
     display: block;
 }
+
+input.feedbackExtra {
+    display: none;
+}
