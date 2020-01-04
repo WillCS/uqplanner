@@ -22,10 +22,13 @@ export const TIMETABLE_HOURS: number[] = [
 export interface Plan {
     id: string;
     name: string;
+    year: number;
+    semester: 1 | 2 | 3; // 3 for summer/trimester
     classes: ClassListing[];
     selections: Map<string, Map<string, number>>;
     lastEdited: number;
     isDirty: boolean;
+    schemaVersion: number;
 }
 
 export interface PlanSummary {

@@ -182,10 +182,13 @@ export class PlannerService {
     return {
       id: uuid.v4(),
       name: this.defaultPlanName(),
+      year: 2019,
+      semester: 1,
       classes: new Array<ClassListing>(),
       selections: new Map<string, Map<string, number>>(),
       lastEdited: Date.now(),
-      isDirty: false
+      isDirty: false,
+      schemaVersion: 1
     };
   }
 }
