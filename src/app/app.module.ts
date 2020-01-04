@@ -17,6 +17,8 @@ import { SemesterPipe } from './calendar/semester.pipe';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ThemeComponent } from './theme/theme.component';
+import { WeeksComponent } from './components/planner/timetable/weeks/weeks.component';
+import { DatePipe } from './calendar/date.pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { ThemeComponent } from './theme/theme.component';
     ControlsComponent,
     ModalComponent,
     SemesterPipe,
-    ThemeComponent
+    ThemeComponent,
+    WeeksComponent,
+    DatePipe
   ],
   imports: [
     BrowserModule,
