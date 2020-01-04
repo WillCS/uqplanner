@@ -18,6 +18,7 @@
         method='POST'
         enctype='application/x-www-form-urlencoded'
         action='./'
+        form-name='feedbackAndBugs'
     >
         <textarea name='content' class='feebackTextarea'>
             
@@ -25,13 +26,3 @@
         <input name='extra' class='feedbackExtra' />
     </form>
 </ng-template>
-
-<form 
-    name='feedbackAndBugs'
-    netlify-honeypot='extra'
-    data-netlify='true'
-    hidden
->
-    <textarea name='content'></textarea>
-    <input name='extra'/>
-</form>
