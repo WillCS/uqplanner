@@ -25,7 +25,8 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/themes.css"
+              "src/themes.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
               "src/assets/ics.min.js",

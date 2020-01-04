@@ -4,6 +4,7 @@ import { faTimesCircle, faSearch, faCircleNotch } from '@fortawesome/free-solid-
 import { PlannerService } from '../../../calendar/planner.service';
 import { Plan } from '../../../calendar/calendar';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-planning',
@@ -15,13 +16,17 @@ export class PlanningComponent implements OnInit, OnDestroy {
   public plan: Plan;
   public searching = false;
 
+  public searches = [];
+  // Observable.forkJoin()
+
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
   faCircleNotch = faCircleNotch;
 
   constructor(
       public plannerService: PlannerService,
-      public modalService: ModalService) {
+      public modalService: ModalService,
+      public toaster: ToastrService) {
     this.subscription = plannerService.currentPlan.asObservable().subscribe(
       (plan: Plan) => {
         this.plan = plan;
@@ -57,6 +62,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
   }
 
   public onSearched(searchTerm: string): string {
+    this.toaster.success('asdsf', 'adfad');
     if (this.searching) {
       return searchTerm;
     }
