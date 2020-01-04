@@ -6,6 +6,7 @@ div.weeksContainer {
     justify-content: center;
     align-items: flex-start;
     align-content: flex-start;
+    min-height: 30px;
 }
 
 button.weekButton {
@@ -18,6 +19,7 @@ button.weekButton {
     font-size: 12px;
     font-weight: bold;
     color: var(--week-color);
+    height: 30px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 15px;

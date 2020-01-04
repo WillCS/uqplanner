@@ -35,6 +35,8 @@ export class WeeksComponent implements OnInit {
           this.weeks = [...Array(this.lastWeek - this.firstWeek).keys()].map((v, i, a) => i);
           this.weekContents = this.getWeekContents(plan);
           this.weekNames = this.getWeekNames();
+        } else {
+          this.startDate = undefined;
         }
       }
     );
@@ -80,7 +82,7 @@ export class WeeksComponent implements OnInit {
           type.streams.forEach(stream => {
             stream.classes.forEach(session => {
               if(session.weekPattern) {
-                let first = session.weekPattern.indexOf((1 as unknown) as boolean);
+                let first = session.weekPattern.indexOf(true);
                 earliestWeek = first < earliestWeek ? first : earliestWeek;
               }
             })
@@ -103,7 +105,7 @@ export class WeeksComponent implements OnInit {
           type.streams.forEach(stream => {
             stream.classes.forEach(session => {
               if(session.weekPattern) {
-                let last = session.weekPattern.lastIndexOf((1 as unknown) as boolean);
+                let last = session.weekPattern.lastIndexOf(true);
                 latestWeek = last > latestWeek ? last : latestWeek;
               }
             })
