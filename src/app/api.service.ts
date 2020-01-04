@@ -96,7 +96,7 @@ export class ApiService {
               s['start_date'].split('/')[1] - 1, 
               s['start_date'].split('/')[0]
               ),
-            weekPattern: s['week_pattern'].split('').map(parseInt)
+            weekPattern: s['week_pattern'].split('').map((i: any) => (parseInt(i) === 1))
           }]
         }))
       }

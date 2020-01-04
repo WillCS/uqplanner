@@ -17,6 +17,8 @@ import { SemesterPipe } from './calendar/semester.pipe';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ThemeComponent } from './theme/theme.component';
+import { WeeksComponent } from './components/planner/timetable/weeks/weeks.component';
+import { DatePipe } from './calendar/date.pipe';
 
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -35,7 +37,9 @@ import { ToastrModule } from 'ngx-toastr';
     ControlsComponent,
     ModalComponent,
     SemesterPipe,
-    ThemeComponent
+    ThemeComponent,
+    WeeksComponent,
+    DatePipe
   ],
   imports: [
     BrowserModule,

@@ -103,7 +103,7 @@ export class PlannerService {
   }
 
   public addClass(searchTerm: string): Observable<string> {
-    const plan = this.currentPlan.value;
+    const plan = _.cloneDeep(this.currentPlan.value);
     return new Observable(subscriber => {
       subscriber.next('In progress...');
 
@@ -121,6 +121,7 @@ export class PlannerService {
               }
             }
             plan.isDirty = true;
+            this.currentPlan.next(plan);
             subscriber.complete();
           } catch (error) {
             console.log('error addign class');
@@ -135,7 +136,7 @@ export class PlannerService {
   }
 
   public removeClass(className: string) {
-    const plan = this.currentPlan.value;
+    const plan = _.cloneDeep(this.currentPlan.value);
     plan.classes = plan.classes.filter(c => className !== c.name);
 
     if (plan.selections.has(className)) {
@@ -143,6 +144,7 @@ export class PlannerService {
     }
 
     plan.isDirty = true;
+    this.currentPlan.next(plan);
   }
 
   public changeName(name: string) {

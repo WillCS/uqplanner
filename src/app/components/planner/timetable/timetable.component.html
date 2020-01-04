@@ -46,8 +46,12 @@
             [editingClassName]='this.editingClassName'
             [editingClassType]='this.editingClassType'
             [selections]='this.plan.selections'
+            [week]='this.week'
             (sessionClick)='this.handleSessionClicked($event)'
         >
         </app-timetable-day>
     </div>
 </div>
+<app-weeks
+    (weekChanged)='this.setWeek($event)'
+></app-weeks>

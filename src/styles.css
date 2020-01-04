@@ -51,6 +51,10 @@ button:focus {
     outline: none;
 }
 
+button {
+    font-family: 'Lato', Arial, sans-serif;
+}
+
 .errorToast {
     width: 200px !important;
     box-shadow: none !important;
