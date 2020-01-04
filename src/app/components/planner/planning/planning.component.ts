@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalService } from '../../modal/modal.service';
-import { faTimesCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faSearch, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { PlannerService } from '../../../calendar/planner.service';
 import { Plan } from '../../../calendar/calendar';
 import { Subscription } from 'rxjs';
@@ -13,9 +13,11 @@ import { Subscription } from 'rxjs';
 export class PlanningComponent implements OnInit, OnDestroy {
   public subscription: Subscription;
   public plan: Plan;
+  public searching = false;
 
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
+  faCircleNotch = faCircleNotch;
 
   constructor(
       public plannerService: PlannerService,
@@ -55,6 +57,11 @@ export class PlanningComponent implements OnInit, OnDestroy {
   }
 
   public onSearched(searchTerm: string): string {
+    if (this.searching) {
+      return searchTerm;
+    }
+
+    this.searching = true;
     this.plannerService.addClass(searchTerm);
     return '';
   }
