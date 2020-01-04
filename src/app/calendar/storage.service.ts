@@ -42,6 +42,8 @@ export class StorageService {
       });
     });
 
+    console.log(data);
+
     return data;
   }
 

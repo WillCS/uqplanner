@@ -59,7 +59,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
   }
 
   public onSearched(searchTerm: string): string {
-    searchTerm = searchTerm.toUpperCase();
+    searchTerm = searchTerm.replace(' ', '').toUpperCase();
     const status = this.plannerService.addClass(searchTerm);
     this.searches.push(status);
 

@@ -78,7 +78,7 @@ export class ApiService {
 
     let classes = Object.values(activities).map((act: any): ClassType => {
       return {
-        name: act[0]['activity_group_code'].substring(0, 3),
+        name: act[0]['activity_group_code'],
         streams: act.map((s: Object): ClassStream => ({
           classes:[{
             day: WEEKDAYS.findIndex(d => d.startsWith(s['day_of_week'].toUpperCase())),
