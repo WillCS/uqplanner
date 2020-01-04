@@ -18,7 +18,7 @@
                 *ngFor='let button of this.modalSettings.buttons' 
                 class='modalButton'
                 [style.background-color]='button.colour'
-                (click)='button.action(this.contentContainer.nativeElement.nextElementSibling)'
+                (click)='button.action(this.getContent())'
             >
                 {{ button.text }}
             </button>
