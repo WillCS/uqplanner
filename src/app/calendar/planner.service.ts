@@ -102,23 +102,28 @@ export class PlannerService {
     );
   }
 
-  public addClass(searchTerm: string): void {
+  public addClass(searchTerm: string): Observable<string> {
     const plan = this.currentPlan.value;
-    this.apiService.getClass(searchTerm).subscribe(
-      (newClass: ClassListing) => {
-        if (!plan.classes.some(c => c.name === newClass.name)) {
-          plan.classes.push(newClass);
-
-          if(!plan.selections.has(newClass.name)) {
-              const classMap: Map<string, number> = new Map<string, number>();
-              newClass.classes.forEach((classType: ClassType) => {
-                  classMap.set(classType.name, 0);
-              });
-              plan.selections.set(newClass.name, classMap);
+    return new Observable(subscriber => {
+      this.apiService.getClass(searchTerm).subscribe(
+        (newClass: ClassListing) => {
+          if (!plan.classes.some(c => c.name === newClass.name)) {
+            plan.classes.push(newClass);
+            if(!plan.selections.has(newClass.name)) {
+                const classMap: Map<string, number> = new Map<string, number>();
+                newClass.classes.forEach((classType: ClassType) => {
+                    classMap.set(classType.name, 0);
+                });
+                plan.selections.set(newClass.name, classMap);
+            }
           }
-        }
-        plan.isDirty = true;
+          plan.isDirty = true;
+          subscriber.complete();
+        },
+      (error: Error) => {
+        subscriber.error();
       });
+    });
   }
 
   public removeClass(className: string) {
