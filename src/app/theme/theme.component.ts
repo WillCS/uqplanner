@@ -1,5 +1,6 @@
-import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { Component, OnInit, Renderer2, OnDestroy, ElementRef } from '@angular/core';
 import { StorageService } from '../calendar/storage.service';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-theme',
@@ -22,7 +23,9 @@ export class ThemeComponent implements OnInit, OnDestroy {
 
   constructor(
     private renderer: Renderer2,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private metaService: Meta,
+    private elRef: ElementRef
   ) {
     let initThemeClass = storageService.getTheme();
     if (!initThemeClass) {
@@ -53,6 +56,9 @@ export class ThemeComponent implements OnInit, OnDestroy {
     }
 
     this.storageService.saveTheme(className);
+
+    const color = getComputedStyle(this.elRef.nativeElement).getPropertyValue('--bg-dark');
+    this.metaService.updateTag({ content: color }, 'name=theme-color');
 
     this.renderer.removeClass(document.body, this.currentTheme);
     this.renderer.addClass(document.body, this.TRANSITION_CLASSNAME);
