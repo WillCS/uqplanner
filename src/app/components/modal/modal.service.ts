@@ -22,7 +22,6 @@ export class ModalService {
 
   public showModal(modal: ModalSettings): void {
     this.modalDisplaySource.next(modal);
-    console.log('b');
   }
 
   public showConfirmationModal(title: string, text: string, yesAction: () => void): void {

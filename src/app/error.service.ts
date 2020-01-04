@@ -30,12 +30,8 @@ export class ErrorService implements ErrorHandler {
     });
 
     this.modalService = this.injector.get(ModalService);
-    // this.modalService.showModal(
-    //   new ModalSettings(title, text, [reloadButton, resetButton])
-    //   );
-
-    this.modalService.showConfirmationModal('a', 'b', () => {});
-
-    console.log('a');
+    this.modalService.showModal(
+      new ModalSettings(title, text, [reloadButton, resetButton])
+      );
   }
 }
