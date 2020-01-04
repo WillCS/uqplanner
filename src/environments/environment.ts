@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  proxyAddress: 'https://lingering-bush-c27d.late-night.workers.dev',
+  apiAddress: 'https://timetable.my.uq.edu.au/even/rest/timetable',
+  googleAnalyticsKey: ''
 };
 
 /*
