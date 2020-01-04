@@ -35,14 +35,14 @@ export class ApiService {
       }).pipe(
         map( (classObj: any) => {
           if (Object.keys(classObj).length === 0) {
-            return new Error('No matching courses found');
+            throw new Error('No matching courses found');
           }
 
           let classListing: ClassListing;
           try {
             classListing = this.reformatClass(courseCode, classObj);
           } catch(error) {
-            return new Error('');
+            throw new Error(error.message);
           }
           return classListing;
         })
@@ -64,6 +64,10 @@ export class ApiService {
     let name = Object.keys(obj)
       .filter(key => !key.includes('_EX'))
       .find(key => key.split('_')[0] == courseCode.toUpperCase());
+    
+    if (!name) {
+      throw new Error('Course not found');
+    }
 
     let activities = Object.values(obj[name].activities).reduce((acc: Object, val: Object) => {
       acc.hasOwnProperty(val['activity_group_code'])

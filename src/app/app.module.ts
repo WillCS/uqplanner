@@ -45,7 +45,9 @@ import { ToastrModule } from 'ngx-toastr';
     HttpClientModule,
     FormsModule,
     FontAwesomeModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({
+      autoDismiss: false
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

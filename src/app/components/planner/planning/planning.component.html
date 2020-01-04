@@ -19,8 +19,8 @@
         >
         <fa-icon
             class='searchButton'
-            [icon]='this.searching ? faCircleNotch : faSearch'
-            [class.spin]='this.searching'
+            [icon]='this.searching() ? faCircleNotch : faSearch'
+            [class.spin]='this.searching()'
             (click)='courseCode.value = this.onSearched(courseCode.value)'
         ></fa-icon>
     </div>
