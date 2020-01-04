@@ -17,12 +17,13 @@
         class='feedbackForm'
         method='POST'
         enctype='application/x-www-form-urlencoded'
-        action='./'
+        action='/'
         form-name='feedbackAndBugs'
     >
         <textarea name='content' class='feebackTextarea'>
             
         </textarea>
         <input name='extra' class='feedbackExtra' />
+        <input name='form-name' value='feedbackAndBugs' hidden />
     </form>
 </ng-template>
