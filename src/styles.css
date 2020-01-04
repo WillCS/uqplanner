@@ -57,18 +57,23 @@ button:focus {
         width: 100vw !important;
     }
 
-    .title {
-        padding-top: 20px !important;
-    }
-
     app-planning {
         display: flex;
         flex-direction: column;
     }
-  
+    
     app-planning > * {
         width: 90vw !important;
         padding-left: 5vw;
+    }
+    
+    .title {
+        padding-top: 20px !important;
+        order: 1;
+    }
+
+    .classList {
+        order: 3;
     }
 
     app-planning .classObject.placeholder {
@@ -77,7 +82,8 @@ button:focus {
     }
     
     .topMenu {
-        margin-top: 20px !important;
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
     }
 
     .timetableList {
@@ -87,6 +93,11 @@ button:focus {
     app-timetable {
         padding-left: 12px !important;
         width: 95vw !important;
+        order: 2;
+    }
+
+    .calendarColumnContainer {
+        margin-top: 5px !important;
     }
 
     .timeLabels {
@@ -116,7 +127,7 @@ button:focus {
     }
 
     footer {
-        margin-top: 20px !important;
+        margin-top: 50px !important;
     }
     
 }

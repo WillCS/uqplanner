@@ -125,7 +125,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
         're you sure you want to delete?',
         () => this.plannerService.deletePlan() );
     } else {
-      this.plannerService.deletePlan()
+      this.plannerService.deletePlan();
     }
   }
 
