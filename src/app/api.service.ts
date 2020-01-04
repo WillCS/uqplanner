@@ -10,13 +10,14 @@ import { environment } from '../environments/environment';
 })
 export class ApiService {
   private proxy = environment.proxyAddress;
-  private url = 'https://timetable.my.uq.edu.au/even/rest/timetable';
+  private url = environment.apiAddress;
 
   constructor(private http: HttpClient) {
-
+    console.log(this.proxy);
+    console.log(this.url);
   }
 
-  public getClass(courseCode: string, year?: number, semester?: number): Observable<ClassListing> {
+  public getClass(courseCode: string, year?: number, semester?: number): Observable<ClassListing | Error> {
     const endpoint: string = this.endpoint('subjects');
 
     return this.http.post<string>(
@@ -32,7 +33,19 @@ export class ApiService {
           'x-requested-with': 'XMLHttpRequest',
         }
       }).pipe(
-        map( (classObj: any) => this.reformatClass(courseCode, classObj))
+        map( (classObj: any) => {
+          if (Object.keys(classObj).length === 0) {
+            throw new Error('No matching courses found');
+          }
+
+          let classListing: ClassListing;
+          try {
+            classListing = this.reformatClass(courseCode, classObj);
+          } catch(error) {
+            throw new Error(error.message);
+          }
+          return classListing;
+        })
       );
   }
 
@@ -51,10 +64,14 @@ export class ApiService {
     let name = Object.keys(obj)
       .filter(key => !key.includes('_EX'))
       .find(key => key.split('_')[0] == courseCode.toUpperCase());
+    
+    if (!name) {
+      throw new Error('Course not found');
+    }
 
     let activities = Object.values(obj[name].activities).reduce((acc: Object, val: Object) => {
-      acc.hasOwnProperty(val['activity_group_code']) 
-        ? acc[val['activity_group_code']].push(val) 
+      acc.hasOwnProperty(val['activity_group_code'])
+        ? acc[val['activity_group_code']].push(val)
         : acc[val['activity_group_code']] = [val];
       return acc;
     }, {});

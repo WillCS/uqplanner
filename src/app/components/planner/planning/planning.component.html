@@ -14,11 +14,13 @@
             type='text'
             placeholder='Add a course'
             class='classSearchField'
+            maxlength='9'
             (keyup.enter)='courseCode.value = this.onSearched(courseCode.value)'
         >
         <fa-icon
             class='searchButton'
-            [icon]='faSearch'
+            [icon]='this.searching() ? faCircleNotch : faSearch'
+            [class.spin]='this.searching()'
             (click)='courseCode.value = this.onSearched(courseCode.value)'
         ></fa-icon>
     </div>

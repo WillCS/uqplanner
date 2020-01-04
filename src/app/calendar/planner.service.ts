@@ -26,7 +26,7 @@ export class PlannerService {
       this.currentPlan = new BehaviorSubject<Plan>(this.cleanPlan());
     } else {
       // TODO: get last edited plan
-      this.currentPlan = new BehaviorSubject<Plan>( _.cloneDeep(this.plans.value[planIds[0]]));
+      this.currentPlan = new BehaviorSubject<Plan>(_.cloneDeep(this.plans.value[planIds[0]]));
     }
   }
 
@@ -102,24 +102,37 @@ export class PlannerService {
     );
   }
 
-  public addClass(searchTerm: string): void {
+  public addClass(searchTerm: string): Observable<string> {
     const plan = _.cloneDeep(this.currentPlan.value);
-    this.apiService.getClass(searchTerm).subscribe(
-      (newClass: ClassListing) => {
-        if (!plan.classes.some(c => c.name === newClass.name)) {
-          plan.classes.push(newClass);
+    return new Observable(subscriber => {
+      subscriber.next('In progress...');
 
-          if(!plan.selections.has(newClass.name)) {
-              const classMap: Map<string, number> = new Map<string, number>();
-              newClass.classes.forEach((classType: ClassType) => {
+      this.apiService.getClass(searchTerm).subscribe(
+        (newClass: ClassListing) => {
+          try {
+            if (!plan.classes.some(c => c.name === newClass.name)) {
+              plan.classes.push(newClass);
+              if (!plan.selections.has(newClass.name)) {
+                const classMap: Map<string, number> = new Map<string, number>();
+                newClass.classes.forEach((classType: ClassType) => {
                   classMap.set(classType.name, 0);
-              });
-              plan.selections.set(newClass.name, classMap);
+                });
+                plan.selections.set(newClass.name, classMap);
+              }
+            }
+            plan.isDirty = true;
+            this.currentPlan.next(plan);
+            subscriber.complete();
+          } catch (error) {
+            console.log('error addign class');
+            subscriber.error(error.message);
           }
+        },
+        (error: Error) => {
+          subscriber.error(error.message);
         }
-        plan.isDirty = true;
-        this.currentPlan.next(plan);
-      });
+      );
+    });
   }
 
   public removeClass(className: string) {
