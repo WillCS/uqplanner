@@ -9,7 +9,7 @@ import { StorageService } from '../calendar/storage.service';
 export class ThemeComponent implements OnInit, OnDestroy {
 
   private TRANSITION_CLASSNAME = 'transition';
-  private DEFAULT_THEME = 'dark';
+  private DEFAULT_THEME = 'classic';
 
   public themes = [
     { name: 'Black & White', className: 'black-and-white'},

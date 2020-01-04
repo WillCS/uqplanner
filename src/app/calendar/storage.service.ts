@@ -26,7 +26,23 @@ export class StorageService {
   }
 
   public get(): Plans {
-    return this.loadData();
+    const data = this.loadData();
+
+    Object.keys(data).forEach(key => {
+      if (!this.uuidValidate(key)) {
+        throw new Error('Invalid schema');
+      }
+
+      const classProperties = Object.keys(data[key]);
+      const requiredClassProperties = ['id', 'classes', 'selections', 'lastEdited'];
+      requiredClassProperties.forEach(p => {
+        if (classProperties.indexOf(p) === -1) {
+          throw new Error('Invalid schema');
+        }
+      });
+    });
+
+    return data;
   }
 
   public saveTheme(name: string): void {
@@ -69,5 +85,9 @@ export class StorageService {
 
   private loadData() {
     return JSON.parse(this.loadDataString(), this.reviver);
+  }
+
+  private uuidValidate(uuid: string) {
+    return uuid.match(/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
   }
 }

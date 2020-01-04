@@ -28,6 +28,7 @@
   --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
   --add-timetable-button-bg: #712e81;
   --add-timetable-button-color: white;
+  --modal-bg: #2a0237;
   --global-transitions: none;
   --week-color: #e6e6e6;
   --selected-week-color: #ee3036;
@@ -43,14 +44,14 @@
   --title-color: black;
   --title-accent-color: #000000;
   --footer-color: #141414;
-  --session-block: #534ee2;
-  --session-block-hover: #4b61cbe3;
+  --session-block: #ff9f20;
+  --session-block-hover: #ffb85ae3;
   --session-clash: #ea4b23;
   --session-editing: #c4cfe0cc;
   --calendar-label: black;
   --block-text: white;
-  --accent-color: transparent;
-  --class-list-bg: #525252;
+  --accent-color: #ffffff00;
+  --class-list-bg: #927240;
   --class-list-color: white;
   --bg-label: #000000;
   --control-button-color: black;
@@ -60,6 +61,7 @@
   --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
   --add-timetable-button-bg: #000000;
   --add-timetable-button-color: white;
+  --modal-bg: #525252;
   --week-color: #525252;
   --selected-week-color: #000000;
   --week-accent-color: #eeeeee;
@@ -91,6 +93,7 @@
   --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
   --add-timetable-button-bg: #000000;
   --add-timetable-button-color: white;
+  --modal-bg: #525252;
   --week-color: #525252;
   --selected-week-color: #000000;
   --week-accent-color: #eeeeee;
@@ -122,6 +125,7 @@
   --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
   --add-timetable-button-bg: #7b7b7b;
   --add-timetable-button-color: white;
+  --modal-bg: #1d1d1d;
   --week-color: white;
   --selected-week-color: #52cc74;
   --week-accent-color: #555555;
