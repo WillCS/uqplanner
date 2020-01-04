@@ -11,14 +11,14 @@ div.weeksContainer {
 }
 
 button.weekButton {
-    border-bottom: 1px solid var(--week-color);
+    border-bottom: 1.5px solid var(--week-accent-color);
     border-left: none;
     border-right: none;
     border-top: none;
     outline: none;
     background: none;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: lighter;
     color: var(--week-color);
     height: 30px;
     padding-left: 15px;
@@ -27,9 +27,14 @@ button.weekButton {
     cursor: pointer;
     transition: border-bottom 0.1s, color 0.1s;
     margin-bottom: 10px;
+    transition: color 0.3s, border-bottom 0.3s, filter 0.2s;
+}
+
+button.weekButton:hover {
+    filter: brightness(1.2);
 }
 
 button.weekButton.selected {
     color: var(--selected-week-color) !important;
-    border-bottom: 1px solid var(--selected-week-color) !important;
+    border-bottom: 1.5px solid var(--selected-week-color) !important;
 }

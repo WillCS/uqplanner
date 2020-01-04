@@ -51,6 +51,10 @@ button:focus {
     outline: none;
 }
 
+button {
+    font-family: 'Lato', Arial, sans-serif;
+}
+
 @media (min-width: 320px) and (max-width: 480px) {
 
     .contentContainer {
