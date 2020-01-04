@@ -34,17 +34,23 @@ export class ModalComponent implements OnInit {
     this.modalService.modalCloseEvent.subscribe(this.modalCloseObserver);
   }
 
-  ngOnInit() {
+  ngOnInit() {}
 
-  }
+  public getContent(): any {
+    if(this.modalSettings.content) {
+      return this.contentContainer.nativeElement.nextElementSibling;
+    }
 
-  private displayModal(modal: ModalSettings): void {
-    this.isActive = true;
-    this.modalSettings = modal;
+    return null;
   }
 
   public closeModal(): void {
     this.isActive = false;
     this.modalSettings = null;
+  }
+
+  private displayModal(modal: ModalSettings): void {
+    this.isActive = true;
+    this.modalSettings = modal;
   }
 }

@@ -3,18 +3,14 @@ import { ClassListing, ClassType, ClassStream, ClassSession, Semester, WEEKDAYS 
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-<<<<<<< Updated upstream
-  private proxy = 'https://lingering-bush-c27d.late-night.workers.dev';
-  private url = 'https://timetable.my.uq.edu.au/even/rest/timetable';
-=======
   private proxy = environment.proxyAddress;
   private url = environment.apiAddress;
->>>>>>> Stashed changes
 
   constructor(private http: HttpClient) {
 

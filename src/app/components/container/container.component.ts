@@ -26,7 +26,7 @@ export class ContainerComponent implements OnInit {
   public showFeedbackModal() {
     const settings = new ModalSettings(
       'Report a problem or submit feedback',
-      'If you\'ve found a bug with the planner, try and ' +
+      'If you\'ve run into a problem with the planner, try and ' +
       'be as precise as you can when describing it. Thanks!',
       [ 
         new ModalButton('Cancel', () => this.modalService.closeModal()),

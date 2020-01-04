@@ -33,11 +33,14 @@ span.footerText.button {
 
 textarea.feebackTextarea {
     resize: vertical;
-    min-height: 20px;
+    min-height: 40px;
     max-height: 300px;
     width: 100%;
     margin-bottom: 10px;
     display: block;
+    border: none;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 input.feedbackExtra {
