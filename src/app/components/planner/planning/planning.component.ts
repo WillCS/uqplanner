@@ -73,7 +73,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
           closeButton: false
         });
       },
-      (complete) => {
+      () => {
         this.searches.splice(this.searches.find(s => s === status));
       }
     );
