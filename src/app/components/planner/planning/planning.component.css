@@ -26,6 +26,10 @@
     position: relative;
 }
 
+.spin {
+    animation: fa-spin 1s infinite ease-in-out;
+}
+
 input.classSearchField {
     height: 40px;
     border-radius: 6px;

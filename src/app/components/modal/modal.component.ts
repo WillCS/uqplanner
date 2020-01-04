@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Observer } from 'rxjs';
 import { ModalSettings } from './modal';
@@ -11,6 +11,9 @@ import { ModalSettings } from './modal';
 export class ModalComponent implements OnInit {
   public isActive = false;
   public modalSettings: ModalSettings;
+
+  @ViewChild('contentContainer', { read: ElementRef, static: false})
+  public contentContainer: ElementRef<any>;
 
   public modalDisplayObserver: Observer<ModalSettings> = {
     closed: false,
@@ -31,17 +34,23 @@ export class ModalComponent implements OnInit {
     this.modalService.modalCloseEvent.subscribe(this.modalCloseObserver);
   }
 
-  ngOnInit() {
+  ngOnInit() {}
 
+  public getContent(): any {
+    if(this.modalSettings.content) {
+      return this.contentContainer.nativeElement.nextElementSibling;
+    }
+
+    return null;
+  }
+
+  public closeModal(): void {
+    this.isActive = false;
+    this.modalSettings = null;
   }
 
   private displayModal(modal: ModalSettings): void {
     this.isActive = true;
     this.modalSettings = modal;
-  }
-
-  private closeModal(): void {
-    this.isActive = false;
-    this.modalSettings = null;
   }
 }

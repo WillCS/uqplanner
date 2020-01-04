@@ -18,6 +18,13 @@ import { SemesterPipe } from './calendar/semester.pipe';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ThemeComponent } from './theme/theme.component';
+import { WeeksComponent } from './components/planner/timetable/weeks/weeks.component';
+import { DatePipe } from './calendar/date.pipe';
+
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
 
 
 @NgModule({
@@ -32,14 +39,21 @@ import { ThemeComponent } from './theme/theme.component';
     ControlsComponent,
     ModalComponent,
     SemesterPipe,
-    ThemeComponent
+    ThemeComponent,
+    WeeksComponent,
+    DatePipe
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    CommonModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ToastrModule.forRoot({
+      autoDismiss: false
+    })
   ],
   providers: [{provide: ErrorHandler, useClass: ErrorService}],
   bootstrap: [AppComponent]

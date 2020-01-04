@@ -27,6 +27,8 @@ export class TimetableComponent implements OnInit, OnDestroy {
   public editingClassName: string;
   public editingClassType: string;
 
+  public week: number | undefined;
+
   faPlus = faPlus;
   faTrash = faTrash;
   faDownload = faDownload;
@@ -79,18 +81,21 @@ export class TimetableComponent implements OnInit, OnDestroy {
           if((this.editing && classType.name === this.editingClassType && classListing.name === this.editingClassName)
               || (streamIndex === selectionForType)) {
             classStream.classes.forEach((session: ClassSession, sessionIndex: number) => {
-              const day: number = session instanceof Date
-                ? (session as Date).getDay()
-                : session.day as number;
 
-              if(day === dayIndex) {
-                sessions.push({
-                  className: classListing.name,
-                  classType: classType.name,
-                  classStream: streamIndex,
-                  classSessionIndex: sessionIndex,
-                  classSession: session
-                });
+              if(isNaN(this.week) || this.week === undefined || session.weekPattern[this.week]) {
+                const day: number = session instanceof Date
+                  ? (session as Date).getDay()
+                  : session.day as number;
+
+                if(day === dayIndex) {
+                  sessions.push({
+                    className: classListing.name,
+                    classType: classType.name,
+                    classStream: streamIndex,
+                    classSessionIndex: sessionIndex,
+                    classSession: session
+                  });
+                }
               }
             });
           }
@@ -131,11 +136,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
   public handleTimetableClicked(id: string): void {
     if (this.plan.isDirty) {
-      this.modalService.showConfirmationModal(
-        'Unsaved Changes',
-        'You have made changes to your current timetable that ' +
-        'have not been saved. Are you sure you want to load ' +
-        'another timetable?',
+      this.showDiscardModal(
         () => this.plannerService.setCurrentPlan(id));
     } else {
       this.plannerService.setCurrentPlan(id);
@@ -148,11 +149,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     if (this.plan.isDirty) {
-      this.modalService.showConfirmationModal(
-        'Unsaved Changes',
-        'You have made changes to your current timetable that ' +
-        'have not been saved. Are you sure you want to load ' +
-        'another timetable?',
+      this.showDiscardModal(
         () => this.plannerService.newPlan());
     } else {
       this.plannerService.newPlan();
@@ -173,5 +170,18 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     return name;
+  }
+
+  public setWeek(week: number | undefined): void {
+    this.week = week;
+  }
+
+  private showDiscardModal(andThen: () => void): void {
+    this.modalService.showConfirmationModal(
+      'Unsaved Changes',
+      'You have made changes to your current timetable that ' +
+      'have not been saved. Are you sure you want to load ' +
+      'another timetable?',
+      andThen);
   }
 }

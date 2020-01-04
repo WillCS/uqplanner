@@ -6,6 +6,23 @@
     <div class='textWrap'>
         <span class='footerText'>Not affiliated with UQ. Always check the official course timetable.</span>
         <a class='footerText' href='https://github.com/WillCS/timetable-planner-sequel'>Github</a>
-        <a class='footerText' href='about:blank'>Report a problem</a>
+        <span class='footerText button' (click)='this.showFeedbackModal()'>Report a problem</span>
+        <a class='footerText donate' [href]='this.donateLink'>Tip Us</a>
     </div>
 </footer>
+
+<ng-template #feedback>
+    <form 
+        name='feedbackAndBugs'
+        id='feedbackForm'
+        class='feedbackForm'
+        method='POST'
+        enctype='application/x-www-form-urlencoded'
+        action='/'
+        form-name='feedbackAndBugs'
+    >
+        <textarea name='content' class='feebackTextarea' placeholder='Enter your submission here'></textarea>
+        <input name='extra' class='feedbackExtra' />
+        <input name='form-name' value='feedbackAndBugs' hidden />
+    </form>
+</ng-template>

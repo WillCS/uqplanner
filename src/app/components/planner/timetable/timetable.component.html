@@ -12,7 +12,6 @@
             (click)='this.newTimetableHandler()' [class.active]='this.plan.classes.length > 0'>
             <fa-icon [icon]='faPlus'></fa-icon>
         </button>
-
     </div>
     <div class='controls'>
         <button class='controlBtn saveBtn' title='Save timetable'
@@ -47,8 +46,12 @@
             [editingClassName]='this.editingClassName'
             [editingClassType]='this.editingClassType'
             [selections]='this.plan.selections'
+            [week]='this.week'
             (sessionClick)='this.handleSessionClicked($event)'
         >
         </app-timetable-day>
     </div>
 </div>
+<app-weeks
+    (weekChanged)='this.setWeek($event)'
+></app-weeks>

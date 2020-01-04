@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
   ClassSession, TimetableSession, DAY_START_TIME, ClassStream,
   DAY_LENGTH_MINUTES, TIMETABLE_HOURS, DAY_LENGTH_HOURS, getEarlierSession,
-  doSessionsClash, startTimeToMinutes, endTimeToMinutes
+  doSessionsClash, startTimeToMinutes, endTimeToMinutes, doSessionsOverlap
 } from 'src/app/calendar/calendar';
 
 @Component({
@@ -29,6 +29,8 @@ export class TimetableDayComponent implements OnInit {
   public editingClassType: string;
   @Input()
   public selections: Map<string, Map<string, ClassStream>>;
+  @Input()
+  public week: number | undefined;
 
   public sessionBlockHeight = 100 * (55 / DAY_LENGTH_MINUTES);
   public sessionMarginHeight = 100 * (10 / DAY_LENGTH_MINUTES);
@@ -48,12 +50,20 @@ export class TimetableDayComponent implements OnInit {
     );
   }
 
-  public isSessionClashing(session: TimetableSession): boolean {
-    return this.getClashChain(session).length > 1;
+  public getApparentOverlaps(session: TimetableSession): TimetableSession[] {
+    return this.sessionList.filter(
+      (sessionFromList: TimetableSession) => doSessionsOverlap(session, sessionFromList)
+    );
   }
 
-  public getClashChain(session: TimetableSession): TimetableSession[] {
-    const clashes = this.getClashes(session);
+  public isSessionClashing(session: TimetableSession): boolean {
+    return this.getClashChain(session, false).length > 1;
+  }
+
+  public getClashChain(session: TimetableSession, apparent: boolean = false): TimetableSession[] {
+    const clashes = apparent
+         ? this.getApparentOverlaps(session)
+         : this.getClashes(session);
 
     if(clashes.length === 1) {
       return clashes;
@@ -63,7 +73,9 @@ export class TimetableDayComponent implements OnInit {
 
     clashes.forEach(
       (clashingSession: TimetableSession) => {
-        const metaClashes = this.getClashes(clashingSession);
+        const metaClashes = apparent
+         ? this.getApparentOverlaps(clashingSession)
+         : this.getClashes(clashingSession);
 
         if(metaClashes.length === 1) {
           return;
@@ -81,7 +93,7 @@ export class TimetableDayComponent implements OnInit {
   }
 
   public getSessionClashStyling(session: TimetableSession): {} {
-    const clashes = this.getClashChain(session);
+    const clashes = this.getClashChain(session, true);
 
     if(clashes.length === 1) {
       return {};
@@ -137,5 +149,9 @@ export class TimetableDayComponent implements OnInit {
     const length: number = (session.endTime.hours * 60 + session.endTime.minutes)
       - (session.startTime.hours * 60 + session.startTime.minutes);
     return 100 * (length / DAY_LENGTH_MINUTES) - 8 * (60 / DAY_LENGTH_MINUTES);
+  }
+
+  public isAllWeeksView() {
+    return isNaN(this.week) || this.week === undefined;
   }
 }

@@ -96,6 +96,22 @@ export function lengthToMinutes(session: TimetableSession): number {
 }
 
 export function doSessionsClash(s1: TimetableSession, s2: TimetableSession): boolean {
+    let weeksInCommon = 0;
+
+    s1.classSession.weekPattern.forEach((v, i, a) => {
+        if(v && s2.classSession.weekPattern[i]) {
+            weeksInCommon++;
+        }
+    });
+
+    if(weeksInCommon === 0) {
+        return false;
+    }
+
+    return doSessionsOverlap(s1, s2);
+}
+
+export function doSessionsOverlap(s1: TimetableSession, s2: TimetableSession): boolean {
     const s1Start = startTimeToMinutes(s1);
     const s2Start = startTimeToMinutes(s2);
     const s1End = endTimeToMinutes(s1);
