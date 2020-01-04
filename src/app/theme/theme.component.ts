@@ -57,13 +57,13 @@ export class ThemeComponent implements OnInit, OnDestroy {
 
     this.storageService.saveTheme(className);
 
-    const color = getComputedStyle(this.elRef.nativeElement).getPropertyValue('--bg-dark');
-    this.metaService.updateTag({ content: color }, 'name=theme-color');
-
     this.renderer.removeClass(document.body, this.currentTheme);
     this.renderer.addClass(document.body, this.TRANSITION_CLASSNAME);
     this.renderer.addClass(document.body, className);
     this.currentTheme = className;
+
+    const color = getComputedStyle(this.elRef.nativeElement).getPropertyValue('--bg-dark');
+    this.metaService.updateTag({ content: color }, 'name=theme-color');
 
     setTimeout(() => {
       this.renderer.removeClass(document.body, this.TRANSITION_CLASSNAME);
