@@ -12,7 +12,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155089237-1"></script>
   <script type="text/javascript">
     let address = document.location.hostname;
-    if (address.search('uqplanner.app') !== -1 && address.search('dev') == -1) {
+    if (address.search('uqplanner.app') !== -1) {
       // only enable google analytics in prod
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
