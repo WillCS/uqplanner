@@ -56,7 +56,8 @@ div.scheduledClass.editing,
     background-color: var(--session-editing);
 }
 
-div.editing:hover {
+div.editing:hover, 
+    div.editing.clashing:hover {
     background-color: var(--session-block-hover);
 }
 
