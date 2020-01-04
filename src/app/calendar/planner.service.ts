@@ -24,6 +24,10 @@ export class PlannerService {
     const planIds = Object.keys(this.plans.value);
     if (planIds.length === 0) {
       this.currentPlan = new BehaviorSubject<Plan>(this.cleanPlan());
+
+      this.plans.next({
+        [this.currentPlan.value.id]: this.currentPlan.value
+      });
     } else {
       // TODO: get last edited plan
       this.currentPlan = new BehaviorSubject<Plan>(_.cloneDeep(this.plans.value[planIds[0]]));
