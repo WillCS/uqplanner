@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalService } from '../../modal/modal.service';
-import { faTimesCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faSearch, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { PlannerService } from '../../../calendar/planner.service';
 import { Plan } from '../../../calendar/calendar';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-planning',
@@ -13,13 +14,16 @@ import { Subscription } from 'rxjs';
 export class PlanningComponent implements OnInit, OnDestroy {
   public subscription: Subscription;
   public plan: Plan;
+  public searches = [];
 
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
+  faCircleNotch = faCircleNotch;
 
   constructor(
       public plannerService: PlannerService,
-      public modalService: ModalService) {
+      public modalService: ModalService,
+      public toaster: ToastrService) {
     this.subscription = plannerService.currentPlan.asObservable().subscribe(
       (plan: Plan) => {
         this.plan = plan;
@@ -28,7 +32,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
     window.onbeforeunload = (e) => {
       if (this.plan.isDirty) {
         e.preventDefault();
-        e.returnValue = 'You have unsaved changes. Are you sure you want to leave the app?'
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave the app?';
       }
     };
   }
@@ -55,12 +59,34 @@ export class PlanningComponent implements OnInit, OnDestroy {
   }
 
   public onSearched(searchTerm: string): string {
-    this.plannerService.addClass(searchTerm);
+    searchTerm = searchTerm.toUpperCase();
+    const status = this.plannerService.addClass(searchTerm);
+    this.searches.push(status);
+
+    status.subscribe(
+      (next) => {},
+      (error) => {
+        this.searches.splice(this.searches.find(s => s === status));
+        this.toaster.error(`Couldn't find ${searchTerm}`, '', {
+          positionClass: 'toast-bottom-center',
+          toastClass: 'errorToast ngx-toastr',
+          closeButton: false
+        });
+      },
+      (complete) => {
+        this.searches.splice(this.searches.find(s => s === status));
+      }
+    );
+
     return '';
   }
 
   public onClassCloseClicked(className: string): void {
     this.removeClass(className);
     this.plan.isDirty = true;
+  }
+
+  public searching(): boolean {
+    return this.searches.length !== 0;
   }
 }
