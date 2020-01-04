@@ -25,27 +25,30 @@ export class WeeksComponent implements OnInit {
   public planSub: Subscription;
 
   public constructor(private plannerService: PlannerService) {
-    this.planSub = this.plannerService.currentPlan.asObservable().subscribe(
-      (plan: Plan) => {
-        if(plan && plan.classes.length > 0) {
-          this.startDate = new Date(this.getStartDate(plan));
-          this.lastWeek  = this.getLastWeek(plan);
-          this.firstWeek = this.getFirstWeek(plan);
-
-          this.weeks = [...Array(this.lastWeek - this.firstWeek).keys()].map((v, i, a) => i);
-          this.weekContents = this.getWeekContents(plan);
-          this.weekNames = this.getWeekNames();
-        } else {
-          this.startDate = undefined;
-        }
-      }
-    );
+    this.handlePlanChanged = this.handlePlanChanged.bind(this);
+    this.planSub = this.plannerService.currentPlan.asObservable().subscribe(this.handlePlanChanged);
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    this.handlePlanChanged(this.plannerService.currentPlan.getValue());
+  }
 
   public ngOnDestroy() {
     this.planSub.unsubscribe();
+  }
+
+  public handlePlanChanged(plan: Plan): void {
+    if(plan && plan.classes.length > 0) {
+      this.startDate = new Date(this.getStartDate(plan));
+      this.lastWeek  = this.getLastWeek(plan);
+      this.firstWeek = this.getFirstWeek(plan);
+
+      this.weeks = [...Array(this.lastWeek - this.firstWeek).keys()].map((v, i, a) => i);
+      this.weekContents = this.getWeekContents(plan);
+      this.weekNames = this.getWeekNames();
+    } else {
+      this.startDate = undefined;
+    }
   }
 
   public selectWeek(week: number | undefined): void {
