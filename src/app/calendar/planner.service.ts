@@ -103,7 +103,7 @@ export class PlannerService {
   }
 
   public addClass(searchTerm: string): void {
-    const plan = this.currentPlan.value;
+    const plan = _.cloneDeep(this.currentPlan.value);
     this.apiService.getClass(searchTerm).subscribe(
       (newClass: ClassListing) => {
         if (!plan.classes.some(c => c.name === newClass.name)) {
@@ -118,11 +118,12 @@ export class PlannerService {
           }
         }
         plan.isDirty = true;
+        this.currentPlan.next(plan);
       });
   }
 
   public removeClass(className: string) {
-    const plan = this.currentPlan.value;
+    const plan = _.cloneDeep(this.currentPlan.value);
     plan.classes = plan.classes.filter(c => className !== c.name);
 
     if (plan.selections.has(className)) {
@@ -130,6 +131,7 @@ export class PlannerService {
     }
 
     plan.isDirty = true;
+    this.currentPlan.next(plan);
   }
 
   public changeName(name: string) {
