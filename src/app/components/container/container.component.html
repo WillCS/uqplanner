@@ -6,6 +6,24 @@
     <div class='textWrap'>
         <span class='footerText'>Not affiliated with UQ. Always check the official course timetable.</span>
         <a class='footerText' href='https://github.com/WillCS/timetable-planner-sequel'>Github</a>
-        <a class='footerText' href='about:blank'>Report a problem</a>
+        <span class='footerText button' (click)='this.showFeedbackModal()'>Report a problem</span>
     </div>
 </footer>
+
+<ng-template #feedback>
+    <form 
+        name='feedbackAndBugs'
+        id='feedbackForm'
+        class='feedbackForm'
+        method='POST'
+        enctype='application/x-www-form-urlencoded'
+        action='./'
+        netlify-honeypot='extra'
+        data-netlify='true'
+    >
+        <textarea name='content' class='feebackTextarea'>
+            
+        </textarea>
+        <input name='extra' class='feedbackExtra' />
+    </form>
+</ng-template>

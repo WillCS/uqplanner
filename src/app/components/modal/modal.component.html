@@ -7,14 +7,20 @@
         <p class='modalHeading'>{{ this.modalSettings.title }}</p>
         <p class='modalText'>{{ this.modalSettings.text }}</p>
 
+        <ng-container #contentContainer
+            *ngIf='this.modalSettings.content' 
+            [ngTemplateOutlet]='this.modalSettings.content'>
+
+        </ng-container>
+
         <div class='modalButtonContainer'>
             <button 
                 *ngFor='let button of this.modalSettings.buttons' 
                 class='modalButton'
                 [style.background-color]='button.colour'
-                (click)='button.action()'
+                (click)='button.action(this.contentContainer.nativeElement.nextElementSibling)'
             >
-            {{ button.text }}
+                {{ button.text }}
             </button>
         </div>
     </div>
