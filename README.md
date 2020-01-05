@@ -8,8 +8,8 @@ See it in action at [uqplanner.app](http://www.uqplanner.app).
 
 ## Authors
 
- * [@WillCS](https://github.com/willCS) *
- * [@dr2n](https://github.com/Dr2n) *
+ * [@WillCS](https://github.com/willCS)
+ * [@dr2n](https://github.com/Dr2n)
 
 Contact us at [devs@uqplanner.app](mailto:devs@uqplanner.app).
 
