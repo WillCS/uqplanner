@@ -1,18 +1,21 @@
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/45c47ad8-d45f-475f-bea9-3ecec6bff030/deploy-status)](https://uqplanner.app)
-
 # Timetable Planner is Dead, Long Live UQ Planner!
 A UQ timetable planner built with Angular, inspired by the original UQ Timetable Planner.
 
 See it in action at [uqplanner.app](http://www.uqplanner.app).
 
-# Contact
+*System Status:* [![Netlify Status](https://api.netlify.com/api/v1/badges/45c47ad8-d45f-475f-bea9-3ecec6bff030/deploy-status)](https://uqplanner.app)
+
+## Authors
+
+ * [@WillCS](https://github.com/willCS) *
+ * [@dr2n](https://github.com/Dr2n) *
 
 Contact us at [devs@uqplanner.app](mailto:devs@uqplanner.app).
 
 If UQ Planner has made your life easier, feel free to also [buy us a coffee](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=devs%40uqplanner.app&currency_code=AUD&source=url).
 
-# Usage
+## Usage
 
 To serve this app you must have Node.js and npm installed first. See instructions [here](https://www.npmjs.com/get-npm).
 
