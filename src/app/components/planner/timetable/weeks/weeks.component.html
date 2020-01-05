@@ -1,4 +1,4 @@
-<div class='weeksContainer' *ngIf='this.startDate'>
+<div class='weeksContainer' [class.isActive]='this.startDate'>
     <button
         class='weekButton'
         [class.selected]='this.isSelected(undefined)'

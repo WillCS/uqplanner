@@ -8,6 +8,12 @@ div.weeksContainer {
     align-content: flex-start;
     min-height: 30px;
     margin-bottom: 25px;
+    opacity: 0.3;
+    transition: opacity 0.1s;
+}
+
+div.weeksContainer.isActive {
+    opacity: 1;
 }
 
 button.weekButton {
@@ -20,7 +26,7 @@ button.weekButton {
     font-size: 12px;
     font-weight: lighter;
     color: var(--week-color);
-    height: 30px;
+    min-height: 40px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 15px;
