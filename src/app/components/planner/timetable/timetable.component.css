@@ -1,22 +1,92 @@
+.topMenu {
+    margin-bottom: 10px;
+}
+
+.timetableBtn {
+    border: 0px;
+    height: 28px;
+    border-radius: 28px;
+    line-height: 28px;
+    text-align: center;
+    font-weight: bold;
+    background-color: var(--timetable-button-bg);
+    margin-right: 5px;
+    margin-bottom: 7px;
+    padding: 0px 12px;
+    color: var(--timetable-button-color);
+    transition: filter 0.1s, opacity 0.2s;
+    opacity: 0.6;
+}
+
+.timetableBtn.planBtn:hover {
+    opacity: 0.8;
+}
+
+.timetableBtn.active:hover {
+    filter: brightness(0.9);
+}
+
+.timetableBtn.active {
+    opacity: 1
+}
+
+.addCalBtn {
+    background-color: var(--add-timetable-button-bg);
+    opacity: 0.4;
+}
+
+.addCalBtn > fa-icon {
+    color: var(--add-timetable-button-color);
+}
+
+.controls {
+    float: right;
+}
+
+.controlBtn {
+    background-color: var(--control-button-color);
+    color: var(--bg-dark);
+    width: 28px;
+    height: 28px;
+    border-radius: 28px;
+    border: none;
+    transition: opacity 0.2s;
+    margin-left: 5px;
+    opacity: 0.4;
+}
+
+.controlBtn.active:hover {
+    opacity: 0.4;
+}
+
+.controlBtn.active {
+    opacity: 1;
+}
+
+.controlBtn > fa-icon {
+    color: var(--bg-dark);
+    font-size: 11px;
+}
+
 div.timeLabels {
     position: absolute;
     height: 620px;
-    width: 50px;
     flex: 0 0 100%;
-    left: 10px;
-    top: 35px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-align: right;
+    top: 25px;
+    left: -18px;
 }
 
 p.timestamp {
     margin: 0px;
     height: 20px;
-    text-align: right;
     box-sizing: border-box;
-    padding-right: 5px;
-    transform: translateY(-15px);
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--calendar-label);
 }
 
 div.calendarColumnContainer {
@@ -27,17 +97,39 @@ div.calendarColumnContainer {
     position: relative;
     width: 100%;
     height: 650px;
+    margin-top: 10px;
 }
 
 div.calendarColumn {
     display: inline-block;
     width: 150px;
     height: 100%;
-    margin-left: 10px;
+    margin-left: 4px;
+}
+
+div.calendarColumn > .dayHeader {
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--calendar-label);
 }
 
 div.calendarColumn > p {
-    text-align: center;
-    height: 25px;
     margin: 5px auto;
+}
+
+div.topMenu {
+    max-width: 770px;
+}
+
+div.timetableList {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    width: 80%;
+}
+
+div.controls {
+    display: inline-block;
 }

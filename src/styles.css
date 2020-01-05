@@ -1,7 +1,150 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --bg-light: #ffffff;
+    --bg-dark: #ffffff;
+    --search-border-color: black;
+    --search-bar-color: white;
+    --search-button-color: #545454;
+    --title-color: black;
+    --title-accent-color: #000000;
+    --footer-color: #141414;
+    --session-block: #000000;
+    --session-block-hover: #525252e3;
+    --session-clash: #ff3300;
+    --session-editing: #c4cfe0cc;
+    --calendar-label: black;
+    --block-text: white;
+    --accent-color: transparent;
+    --class-list-bg: #525252;
+    --class-list-color: white;
+    --bg-label: #000000;
+    --control-button-color: black;
+    --timetable-button-bg: #000000;
+    --timetable-button-color: white;
+    --timetable-stripes-light: rgba(0, 0, 0, 0.13);
+    --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
+    --add-timetable-button-bg: #000000;
+    --add-timetable-button-color: white;
+}
+
+html {
+    height: 100%;
+}
+
 body {
     margin: 0px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background-color: rgb(236, 236, 236);
+    font-family: 'Lato', Arial, sans-serif;
+    color: white;
+    background: var(--bg-light);
     position: relative;
+}
+
+* {
+    transition: var(--global-transitions);
+}
+
+input:focus {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+button {
+    font-family: 'Lato', Arial, sans-serif;
+}
+
+.errorToast {
+    width: 200px !important;
+    box-shadow: none !important;
+    margin-bottom: 12px !important;
+    padding: 10px !important;
+    font-size: 12px !important;
+    background-image: none !important;
+    border-radius: 6px !important;
+    height: 37px !important;
+    text-align: center !important;
+    background-color: #c14343 !important;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+    .contentContainer {
+        width: 100vw !important;
+    }
+
+    app-planning {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    app-planning > * {
+        width: 90vw !important;
+        padding-left: 5vw;
+    }
+    
+    .title {
+        padding-top: 20px !important;
+        order: 1;
+    }
+
+    .classList {
+        order: 3;
+    }
+
+    app-planning .classObject.placeholder {
+        height: 60px !important;
+        padding: 15px !important;
+    }
+    
+    .topMenu {
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
+
+    .timetableList {
+        width: auto !important;
+    }
+
+    app-timetable {
+        padding-left: 12px !important;
+        width: 95vw !important;
+        order: 2;
+    }
+
+    .calendarColumnContainer {
+        margin-top: 5px !important;
+    }
+
+    .timeLabels {
+        left: -12px !important;
+    }
+
+    .dayHeader {
+        font-size: 12px !important;
+    }
+
+    .timestamp {
+        font-size: 9px !important;
+    }
+
+    .scheduledClass {
+        padding-top: 4px !important;
+        padding-left: 4px !important;
+    }
+
+    .scheduledClass > p {
+        font-size: 11px !important;
+        line-height: 13px !important;
+    }
+
+    app-theme {
+        bottom: 30px !important;
+    }
+
+    footer {
+        margin-top: 50px !important;
+    }
+    
 }

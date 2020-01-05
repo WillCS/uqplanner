@@ -19,9 +19,9 @@ export class ControlsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.api.getActiveSemesters().subscribe(
-      (semesters: Semester[]) => this.semesterList = semesters
-    );
+    // this.api.getActiveSemesters().subscribe(
+    //   (semesters: Semester[]) => this.semesterList = semesters
+    // );
 
     // this.semesterList = [{
     //   year: 2019,

@@ -1,94 +1,92 @@
-import { Component, OnInit } from '@angular/core';
-import { ClassListing, TimetableSession, ClassType, NULL_SESSION } from 'src/app/calendar/calendar';
-import { ApiService } from 'src/app/api.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ModalService } from '../../modal/modal.service';
+import { faTimesCircle, faSearch, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { PlannerService } from '../../../calendar/planner.service';
+import { Plan } from '../../../calendar/calendar';
+import { Subscription, combineLatest } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-planning',
   templateUrl: './planning.component.html',
   styleUrls: ['./planning.component.css']
 })
-export class PlanningComponent implements OnInit {
-  public year: number;
-  public semester: number;
+export class PlanningComponent implements OnInit, OnDestroy {
+  public subscription: Subscription;
+  public plan: Plan;
+  public searches = [];
 
-  public classList: ClassListing[] = [];
+  faTimesCircle = faTimesCircle;
+  faSearch = faSearch;
+  faCircleNotch = faCircleNotch;
 
-  public selections: Map<string, Map<string, number>>;
+  constructor(
+      public plannerService: PlannerService,
+      public modalService: ModalService,
+      public toaster: ToastrService) {
+    this.subscription = plannerService.currentPlan.asObservable().subscribe(
+      (plan: Plan) => {
+        this.plan = plan;
+    });
 
-  public editing = false;
-  public editingClassName: string;
-  public editingClassType: string;
-  public focusedSession: TimetableSession;
-
-  constructor(public api: ApiService) {
-    this.selections = new Map<string, Map<string, number>>();
-  }
-
-  ngOnInit() {
-
-  }
-
-  public handleSessionClicked(session: TimetableSession): void {
-    if(this.editing) {
-      this.selections.get(this.editingClassName).set(session.classType, session.classStream);
-    } else {
-      this.editingClassName = session.className;
-      this.editingClassType = session.classType;
-    }
-
-    this.editing = !this.editing;
-  }
-
-  public handleSessionEntered(session: TimetableSession): void {
-    this.focusedSession = session;
-  }
-
-  public handleSessionLeft(): void {
-    this.focusedSession = null;
-  }
-
-  public addClass(newClass: ClassListing): void {
-    if(!this.classList.some(c => c.name === newClass.name)) {
-      this.classList.push(newClass);
-
-      if(!this.selections.has(newClass.name)) {
-          const classMap: Map<string, number> = new Map<string, number>();
-          newClass.classes.forEach((classType: ClassType) => {
-              classMap.set(classType.name, 0);
-          });
-          this.selections.set(newClass.name, classMap);
+    window.onbeforeunload = (e) => {
+      if (this.plan.isDirty) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave the app?';
       }
+    };
+  }
+
+  ngOnInit() { }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  public handleTitleChanged(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const name = target.value;
+
+    if (name === '' || name === undefined || name === null) {
+      return;
     }
+
+    this.plannerService.changeName(name);
   }
 
   public removeClass(className: string): void {
-    this.classList = this.classList.filter(c => className !== c.name);
-
-    if(this.selections.has(className)) {
-      this.selections.delete(className);
-    }
+    this.plannerService.removeClass(className);
   }
 
-  public SetSelection(className: string, classType: string, selection: number): void {
-      if(this.selections.has(className) && this.selections[className].has(classType)) {
-          this.selections[className][classType] = selection;
+  public onSearched(searchTerm: string): string {
+    searchTerm = searchTerm.replace(' ', '').toUpperCase();
+    const status = this.plannerService.addClass(searchTerm);
+    this.searches.push(status);
+
+    status.subscribe(
+      (next) => {},
+      (error) => {
+        this.searches.splice(this.searches.find(s => s === status));
+        this.toaster.error(`Couldn't find ${searchTerm}`, '', {
+          positionClass: 'toast-bottom-center',
+          toastClass: 'errorToast ngx-toastr',
+          closeButton: false
+        });
+      },
+      () => {
+        this.searches.splice(this.searches.find(s => s === status));
       }
-  }
+    );
 
-  public GetSelection(className: string, classType: string): number {
-      if(this.selections.has(className) && this.selections[className].has(classType)) {
-          return this.selections[className][classType];
-      }
-  }
-
-  public onSearched(searchTerm: string): void {
-    this.api.getClass(searchTerm, this.year, this.semester).subscribe(
-      (newClass: ClassListing) => {
-        this.addClass(newClass);
-      });
+    return '';
   }
 
   public onClassCloseClicked(className: string): void {
     this.removeClass(className);
+    this.plan.isDirty = true;
+  }
+
+  public searching(): boolean {
+    return this.searches.length !== 0;
   }
 }

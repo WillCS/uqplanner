@@ -5,7 +5,7 @@ export const WEEKDAY_INDICES: number[] = [
 ];
 
 export const WEEKDAYS: string[] = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
+    'MON', 'TUE', 'WED', 'THU', 'FRI'
 ];
 
 export const DAY_START_TIME: Time = { hours: 8, minutes: 0 };
@@ -18,6 +18,27 @@ export const DAY_LENGTH_MINUTES = DAY_LENGTH_HOURS * 60;
 export const TIMETABLE_HOURS: number[] = [
     8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 ];
+
+export interface Plan {
+    id: string;
+    name: string;
+    year: number;
+    semester: 1 | 2 | 3; // 3 for summer/trimester
+    classes: ClassListing[];
+    selections: Map<string, Map<string, number>>;
+    lastEdited: number;
+    isDirty: boolean;
+    schemaVersion: number;
+}
+
+export interface PlanSummary {
+    id: string;
+    name: string;
+}
+
+export interface Plans {
+    [key: string]: Plan;
+}
 
 export const NULL_SESSION: TimetableSession = {
     className: '',
@@ -42,10 +63,12 @@ export interface ClassStream {
 }
 
 export interface ClassSession {
-    day: number | Date;
+    day: number;
     startTime: Time;
     endTime: Time;
     location: string;
+    weekPattern?: Array<boolean>;
+    startDate?: Date
 }
 
 export interface TimetableSession {
@@ -76,6 +99,22 @@ export function lengthToMinutes(session: TimetableSession): number {
 }
 
 export function doSessionsClash(s1: TimetableSession, s2: TimetableSession): boolean {
+    let weeksInCommon = 0;
+
+    s1.classSession.weekPattern.forEach((v, i, a) => {
+        if(v && s2.classSession.weekPattern[i]) {
+            weeksInCommon++;
+        }
+    });
+
+    if(weeksInCommon === 0) {
+        return false;
+    }
+
+    return doSessionsOverlap(s1, s2);
+}
+
+export function doSessionsOverlap(s1: TimetableSession, s2: TimetableSession): boolean {
     const s1Start = startTimeToMinutes(s1);
     const s2Start = startTimeToMinutes(s2);
     const s1End = endTimeToMinutes(s1);

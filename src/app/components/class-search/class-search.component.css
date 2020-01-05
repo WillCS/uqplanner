@@ -7,22 +7,23 @@ input.classSearchField {
     padding: 0px;
     border: 0px;
     top: -2px;
-    right: 5px;
+    opacity: 0;
     background-color: white;
-    transition: width 0.1s, padding 0.1s, margin 0.1s;
+    transition: width 0.2s, padding 0.2s, margin 0.2s;
+    text-transform: uppercase;
 }
 
 input.classSearchField.expanded {
     width: 150px;
     padding: 3px;
-    padding-left: 10px;
+    padding-left: 50px;
     margin: 7px;
+    opacity: 1;
 }
 
 button.classSearch,
         button.classSearch:active,
-        button.classSearch:focus,
-        button.classSearch::-moz-focus-inner {
+        button.classSearch:focus {
     position: absolute;
     width: 40px;
     height: 40px;
@@ -31,7 +32,6 @@ button.classSearch,
     border: 0px;
     outline: none;
     top: 0px;
-    right: 0px;
     margin: 5px;
 }
 
@@ -43,7 +43,7 @@ button.classSearch > span {
     top: 0;
     left: 0;
     border-radius: 3px;
-    transition: background-color 0.1s, transform 0.1s, height 0.1s;
+    transition: background-color 0.1s, transform 0.2s, height 0.2s;
 }
 
 button.classSearch > span:first-child {

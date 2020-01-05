@@ -26,14 +26,14 @@ export class ClassSearchComponent implements OnInit {
 
   }
 
-  private closeTextInput(): void {
+  public closeTextInput(): void {
     this.isExpanded = false;
     this.input.nativeElement.disabled = true;
     this.input.nativeElement.blur();
     this.isReady = false;
   }
 
-  private openTextInput(): void {
+  public openTextInput(): void {
     this.isExpanded = true;
     this.input.nativeElement.disabled = false;
     this.input.nativeElement.focus();

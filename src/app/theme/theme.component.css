@@ -1,0 +1,37 @@
+:host {
+  position: absolute;
+  bottom: 0px;
+  left: 10px;
+}
+
+select, select:focus, select:active {
+  outline: none;
+}
+
+select {
+  color: var(--class-list-color);
+  padding: 5px 10px;
+  box-sizing: border-box;
+  margin: 0;
+  border: 1px solid var(--accent-color);
+  box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+  border-radius: .5em;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--class-list-bg);
+  font-size: 10px;
+  opacity: 0.3;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select:focus {
+  border-color: #aaa;
+  box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  color: var(--class-list-color); 
+  outline: none;
+}

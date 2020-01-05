@@ -1,0 +1,46 @@
+div.weeksContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: flex-start;
+    min-height: 30px;
+    margin-bottom: 25px;
+    opacity: 0.3;
+    transition: opacity 0.1s;
+}
+
+div.weeksContainer.isActive {
+    opacity: 1;
+}
+
+button.weekButton {
+    border-bottom: 1.5px solid var(--week-accent-color);
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    outline: none;
+    background: none;
+    font-size: 12px;
+    font-weight: lighter;
+    color: var(--week-color);
+    min-height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    cursor: pointer;
+    transition: border-bottom 0.1s, color 0.1s;
+    margin-bottom: 10px;
+    transition: color 0.3s, border-bottom 0.3s, filter 0.2s;
+}
+
+button.weekButton:hover {
+    filter: brightness(1.2);
+}
+
+button.weekButton.selected {
+    color: var(--selected-week-color) !important;
+    border-bottom: 1.5px solid var(--selected-week-color) !important;
+}

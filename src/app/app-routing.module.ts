@@ -1,14 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PlanningComponent } from './components/planner/planning/planning.component'
-import { OptimisingComponent } from './components/optimiser/optimising/optimising.component'
 
 
 const routes: Routes = [
-  { path: 'plan',     component: PlanningComponent },
-  { path: 'optimise', component: OptimisingComponent },
-  { path: 'meet',     component: OptimisingComponent },
-  { path: '', redirectTo: '/plan', pathMatch: 'full' }
+  { path: '',     component: PlanningComponent },
+  { path: '**',   redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({

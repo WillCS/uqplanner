@@ -1,35 +1,48 @@
-nav.navbar {
-    margin: 0px auto;
-    margin-top: 50px;
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.contentContainer {
+    width: 890px;
+    margin: auto auto;
+}
+
+footer {
+    position: relative;
+    width: 100vw;
+    margin-bottom: 10px;
+    user-select: none;
+}
+
+footer > .textWrap {
+    font-size: 9px;
     text-align: center;
-    font-size: 40px;
 }
 
-nav.navbar > a, nav.navbar > a:visited {
-    margin: 0 10px;
-    color: #56407f;
-    transition: font-size 0.1s, color 0.1s;
-    outline: none;
-    font-weight: bold;
-    font-variant-caps: small-caps;
-    text-decoration: none;
+.footerText {
+    margin-right: 5px;
+    color: var(--footer-color);
 }
 
-nav.navbar > a:hover, nav.navbar > a.active {
-    font-size: 50px;
-    color: #7fb3ee;
-    transition: font-size 0.1s, color 0.1s;
+span.footerText.button {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-nav.navbar > :first-of-type:a {
-    margin-left: 0;
+textarea.feebackTextarea {
+    resize: vertical;
+    min-height: 40px;
+    max-height: 300px;
+    width: 100%;
+    margin-bottom: 10px;
+    display: block;
+    border: none;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
-nav.navbar > :last-of-type:a {
-    margin-right: 0;
-}
-
-div.contentContainer {
-    max-width: 900px;
-    margin: 0px auto;
+input.feedbackExtra {
+    display: none;
 }
