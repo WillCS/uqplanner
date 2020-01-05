@@ -33,3 +33,5 @@ Once complete, serve the app by installing depencies and starting the Angular CL
 ```
  > ng serve
 ```
+
+See the hosted app by opening `localhost:4200` from your browser.
