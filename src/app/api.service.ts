@@ -13,8 +13,6 @@ export class ApiService {
   private url = environment.apiAddress;
 
   constructor(private http: HttpClient) {
-    console.log(this.proxy);
-    console.log(this.url);
   }
 
   public getClass(courseCode: string, year?: number, semester?: number): Observable<ClassListing | Error> {
@@ -60,7 +58,6 @@ export class ApiService {
   }
 
   private reformatClass(courseCode: string, obj: JSON): ClassListing {
-    console.log(obj)
     let name = Object.keys(obj)
       .filter(key => !key.includes('_EX'))
       .find(key => key.split('_')[0] == courseCode.toUpperCase());
@@ -107,8 +104,6 @@ export class ApiService {
       description: obj[name]['description'],
       classes: classes
     };
-
-    console.log(classList);
 
     return classList;
   }

@@ -45,6 +45,6 @@ export class ControlsComponent implements OnInit {
     this.modalController.showConfirmationModal(
       'Are you sure you want to change semester?',
       'Changing semester will discard any unsaved changes to the active timetable.',
-      () => console.log('rewarewa'));
+      () => console.log(''));
   }
 }
