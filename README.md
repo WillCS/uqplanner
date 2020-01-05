@@ -1,3 +1,6 @@
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/45c47ad8-d45f-475f-bea9-3ecec6bff030/deploy-status)](https://uqplanner.app)
+
 # Timetable Planner is Dead, Long Live UQ Planner!
 A UQ timetable planner built with Angular, inspired by the original UQ Timetable Planner.
 
