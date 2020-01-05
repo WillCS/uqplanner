@@ -35,6 +35,9 @@ export class ThemeComponent implements OnInit, OnDestroy {
     const initTheme = this.themes.find(t => t.className === initThemeClass);
     this.currentTheme = initTheme.className;
     this.renderer.addClass(document.body, initTheme.className);
+
+    const color = getComputedStyle(this.elRef.nativeElement).getPropertyValue('--bg-dark');
+    this.metaService.updateTag({ content: color }, 'name=theme-color');
   }
 
   ngOnInit() {

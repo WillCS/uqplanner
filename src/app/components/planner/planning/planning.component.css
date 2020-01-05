@@ -39,6 +39,7 @@ input.classSearchField {
     padding: 6px 12px;
     box-sizing: border-box;
     margin-bottom: 12px;
+    font-size: 11px;
 }
 
 .searchButton {
