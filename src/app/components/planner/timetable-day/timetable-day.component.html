@@ -4,6 +4,7 @@
         *ngFor='let block of this.sessionStartTimes'
         [style.height.%]='this.sessionBlockHeight'
         [style.top.%]='this.sessionBlockTopOffset(block)'
+        (click)='this.handleBlockClicked()'
     >
     </div>
     <div 

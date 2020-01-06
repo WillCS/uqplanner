@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import * as uuid from "uuid";
 import { ApiService } from '../api.service';
 import * as _ from "lodash";
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class PlannerService {
   private plans: BehaviorSubject<Plans>;
 
   constructor(
-    public storageService: StorageService,
-    public apiService: ApiService
+    public apiService: ApiService,
+    public storageService: StorageService
   ) {
     this.plans = new BehaviorSubject<Plans>(storageService.get());
 

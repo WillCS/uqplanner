@@ -5,7 +5,9 @@
 }
 
 .contentContainer {
-    width: 890px;
+    width: 66vw;
+    max-width: 1000px;
+    min-width: 700px;
     margin: auto auto;
 }
 
