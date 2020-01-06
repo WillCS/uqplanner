@@ -21,6 +21,9 @@ export class TimetableDayComponent implements OnInit {
   @Output()
   public sessionLeave: EventEmitter<TimetableSession> = new EventEmitter<TimetableSession>();
 
+  @Output()
+  public blockClick: EventEmitter<null> = new EventEmitter<null>();
+
   @Input()
   public editing: boolean;
   @Input()
@@ -124,9 +127,11 @@ export class TimetableDayComponent implements OnInit {
   }
 
   public handleClicked(session: TimetableSession) {
-    if(this.displaySessionAsEditing(session) || !this.editing) {
-      this.sessionClick.emit(session);
-    }
+    this.sessionClick.emit(session);
+  }
+
+  public handleBlockClicked() {
+    this.blockClick.emit();
   }
 
   public displaySessionAsEditing(session: TimetableSession): boolean {

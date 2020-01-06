@@ -109,7 +109,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleSessionClicked(session: TimetableSession): void {
-    if(this.editing) {
+    const isEditingSession = session.className === this.editingClassName
+      && session.classType === this.editingClassType;
+
+    if(this.editing && isEditingSession) {
       this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
     } else {
       this.editingClassName = session.className;
@@ -118,6 +121,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     this.editing = !this.editing;
     this.plan.isDirty = true;
+  }
+
+  public handleBlockClicked(): void {
+    this.editing = false;
   }
 
   public handleSaveClicked(): void {
