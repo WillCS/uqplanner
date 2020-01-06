@@ -108,12 +108,12 @@ export class PlannerService {
   }
 
   public addClass(searchTerm: string): Observable<string> {
-    const plan = _.cloneDeep(this.currentPlan.value);
     return new Observable(subscriber => {
       subscriber.next('In progress...');
 
       this.apiService.getClass(searchTerm).subscribe(
         (newClass: ClassListing) => {
+          const plan = _.cloneDeep(this.currentPlan.value);
           try {
             if (!plan.classes.some(c => c.name === newClass.name)) {
               plan.classes.push(newClass);
