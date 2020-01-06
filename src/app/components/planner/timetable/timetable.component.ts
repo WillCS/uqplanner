@@ -9,6 +9,7 @@ import { Plan, PlanSummary } from '../../../calendar/calendar';
 import { Subscription } from 'rxjs';
 import { PlannerService } from '../../../calendar/planner.service';
 import { ModalService } from '../../modal/modal.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-timetable',
@@ -43,7 +44,8 @@ export class TimetableComponent implements OnInit, OnDestroy {
   constructor(
     public plannerService: PlannerService,
     public exportService: ExportService,
-    public modalService: ModalService) {
+    public modalService: ModalService,
+    public toaster: ToastrService) {
       this.planSub = this.plannerService.currentPlan.asObservable().subscribe(
         (plan: Plan) => {
           this.plan = plan;
@@ -107,7 +109,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleSessionClicked(session: TimetableSession): void {
-    if(this.editing) {
+    const isEditingSession = session.className === this.editingClassName
+      && session.classType === this.editingClassType;
+
+    if(this.editing && isEditingSession) {
       this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
     } else {
       this.editingClassName = session.className;
@@ -118,8 +123,17 @@ export class TimetableComponent implements OnInit, OnDestroy {
     this.plan.isDirty = true;
   }
 
+  public handleBlockClicked(): void {
+    this.editing = false;
+  }
+
   public handleSaveClicked(): void {
     this.plannerService.savePlan();
+    this.toaster.success(`${this.plan.name} saved!`, '', {
+      positionClass: 'toast-bottom-center',
+      toastClass: 'toast successToast ngx-toastr',
+      closeButton: false
+    });
   }
 
   public handleDeleteClicked(): void {

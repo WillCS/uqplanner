@@ -57,7 +57,7 @@ input.classSearchField {
 .classList {
     padding-top: 0px;
     float: left;
-    width: 160px;
+    width: 18%;
 }
 
 .classList > p {
@@ -149,7 +149,7 @@ div.classObject > p {
 
 app-timetable {
     float: right;
-    width: 700px;
+    width: 78%;
 }
 
 app-class-search {
