@@ -81,6 +81,7 @@ button {
 
     .contentContainer {
         width: 100vw !important;
+        min-width: 80vw !important;
     }
 
     app-planning {
