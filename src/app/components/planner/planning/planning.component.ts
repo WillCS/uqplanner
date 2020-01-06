@@ -69,7 +69,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
         this.searches.splice(this.searches.find(s => s === status));
         this.toaster.error(`Couldn't find ${searchTerm}`, '', {
           positionClass: 'toast-bottom-center',
-          toastClass: 'errorToast ngx-toastr',
+          toastClass: 'toast errorToast ngx-toastr',
           closeButton: false
         });
       },

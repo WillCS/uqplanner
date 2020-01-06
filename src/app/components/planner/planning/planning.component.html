@@ -27,7 +27,7 @@
     <p>Courses</p>
     <div class='classWrapper'>
         <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
-            <p><b>Your courses go here</b></p>
+            <p><b>Search to add courses</b></p>
         </div>
         <div class='classObject normal' *ngFor='let class of this.plan.classes'>
             <p><b>{{class.name}}</b></p>

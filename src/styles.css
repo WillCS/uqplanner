@@ -25,6 +25,8 @@
     --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
     --add-timetable-button-bg: #000000;
     --add-timetable-button-color: white;
+    --success-toast-bg: #1a791f;
+    --error-toast-bg: #c14343;
 }
 
 html {
@@ -55,7 +57,7 @@ button {
     font-family: 'Lato', Arial, sans-serif;
 }
 
-.errorToast {
+.toast {
     width: 200px !important;
     box-shadow: none !important;
     margin-bottom: 12px !important;
@@ -65,7 +67,14 @@ button {
     border-radius: 6px !important;
     height: 37px !important;
     text-align: center !important;
-    background-color: #c14343 !important;
+}
+
+.errorToast {
+    background-color: var(--error-toast-bg) !important;
+}
+
+.successToast {
+    background-color: var(--success-toast-bg) !important;
 }
 
 @media (min-width: 320px) and (max-width: 480px) {

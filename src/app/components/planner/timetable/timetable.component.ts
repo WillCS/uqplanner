@@ -9,6 +9,7 @@ import { Plan, PlanSummary } from '../../../calendar/calendar';
 import { Subscription } from 'rxjs';
 import { PlannerService } from '../../../calendar/planner.service';
 import { ModalService } from '../../modal/modal.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-timetable',
@@ -43,7 +44,8 @@ export class TimetableComponent implements OnInit, OnDestroy {
   constructor(
     public plannerService: PlannerService,
     public exportService: ExportService,
-    public modalService: ModalService) {
+    public modalService: ModalService,
+    public toaster: ToastrService) {
       this.planSub = this.plannerService.currentPlan.asObservable().subscribe(
         (plan: Plan) => {
           this.plan = plan;
@@ -120,6 +122,11 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
   public handleSaveClicked(): void {
     this.plannerService.savePlan();
+    this.toaster.success(`${this.plan.name} saved!`, '', {
+      positionClass: 'toast-bottom-center',
+      toastClass: 'toast successToast ngx-toastr',
+      closeButton: false
+    });
   }
 
   public handleDeleteClicked(): void {
