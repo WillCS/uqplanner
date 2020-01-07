@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
+import { ApiService } from '../api.service';
+import { Injectable, isDevMode } from '@angular/core';
 import { Plan, Plans, ClassListing, PlanSummary, ClassType } from './calendar';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
 import { map } from 'rxjs/operators';
 import * as uuid from "uuid";
-import { ApiService } from '../api.service';
 import * as _ from "lodash";
-import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +112,7 @@ export class PlannerService {
 
       this.apiService.getClass(searchTerm).subscribe(
         (newClass: ClassListing) => {
+          isDevMode() && console.log(newClass);
           const plan = _.cloneDeep(this.currentPlan.value);
           try {
             if (!plan.classes.some(c => c.name === newClass.name)) {
