@@ -27,6 +27,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
   public editing: boolean;
   public editingClassName: string;
   public editingClassType: string;
+  public hoverStream: string;
 
   public week: number | undefined;
 
@@ -121,6 +122,14 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     this.editing = !this.editing;
     this.plan.isDirty = true;
+  }
+
+  public handleSessionEnter(session: TimetableSession): void {
+    this.hoverStream = session.classSession.streamId;
+  }
+
+  public handleSessionLeave(session: TimetableSession): void {
+    this.hoverStream = '';
   }
 
   public handleBlockClicked(): void {

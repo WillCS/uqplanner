@@ -119,6 +119,7 @@ export class ApiService {
   private apiActivityToClassSession(apiActivity: APIActivity): ClassSession {
     const s = apiActivity;
     return {
+      streamId: apiActivity.streamId,
       day: WEEKDAYS.findIndex(d => d.startsWith(s.day_of_week.toUpperCase())),
       startTime: {
         hours: parseInt(s.start_time.split(':')[0], 10),

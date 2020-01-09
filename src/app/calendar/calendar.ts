@@ -65,6 +65,7 @@ export interface ClassStream {
 }
 
 export interface ClassSession {
+    streamId?: string;
     day: number;
     startTime: Time;
     endTime: Time;

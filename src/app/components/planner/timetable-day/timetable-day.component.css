@@ -57,8 +57,13 @@ div.scheduledClass.editing,
 }
 
 div.editing:hover, 
-    div.editing.clashing:hover {
+    div.editing.hover {
     background-color: var(--session-block-hover);
+}
+
+div.editing.clashing:hover,
+    div.editing.clashing.hover {
+    background-color: var(--session-clash);
 }
 
 div.scheduledClass.clashing {
