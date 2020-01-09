@@ -45,9 +45,12 @@
             [editing]='this.editing'
             [editingClassName]='this.editingClassName'
             [editingClassType]='this.editingClassType'
+            [hoverStream]='this.hoverStream'
             [selections]='this.plan.selections'
             [week]='this.week'
             (sessionClick)='this.handleSessionClicked($event)'
+            (sessionEnter)='this.handleSessionEnter($event)'
+            (sessionLeave)='this.handleSessionLeave($event)'
             (blockClick)='this.handleBlockClicked()'
         >
         </app-timetable-day>

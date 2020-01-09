@@ -50,6 +50,7 @@ export const NULL_SESSION: TimetableSession = {
 
 export interface ClassListing {
     name: string;
+    description: string;
     classes: ClassType[];
 }
 
@@ -59,10 +60,12 @@ export interface ClassType {
 }
 
 export interface ClassStream {
+    streamId: string;
     classes: ClassSession[];
 }
 
 export interface ClassSession {
+    streamId?: string;
     day: number;
     startTime: Time;
     endTime: Time;

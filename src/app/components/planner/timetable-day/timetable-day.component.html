@@ -9,20 +9,24 @@
     </div>
     <div 
         class='scheduledClass'
-        *ngFor='let session of this.sessionList'
+        *ngFor='let session of this.sessionList; trackBy:trackByIndex'
         [class.editing]='this.displaySessionAsEditing(session)'
         [class.notEditing]='this.displaySessionAsNotEditing(session)'
         [class.clashing]='this.isSessionClashing(session)'
+        [class.hover]='this.hoverStream == session.classSession.streamId'
         [ngStyle]='this.getSessionClashStyling(session)'
         [style.top.%]='this.getSessionTopPercentage(session.classSession)'
         [style.height.%]='this.getSessionHeightPercentage(session.classSession)'
-        (mousedown)='this.handleClicked(session)'
-    >
+        (click)='this.handleClicked(session)'
+        (mouseenter)='this.handleEnter(session)'
+        (mouseleave)='this.handleLeave(session)'
+        >
         <p>
             <b>{{session.className }}</b> 
             {{session.classType|slice:0:1}}{{session.classStream + 1 | number:'2.0'}}
             <br />
             {{session.classSession.location}}
+
         </p>
     </div>
 </div>
