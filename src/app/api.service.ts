@@ -12,7 +12,6 @@ import { APIActivity, APIClass } from './api';
 })
 export class ApiService {
   private proxy = environment.proxyAddress;
-  private url = environment.apiAddress;
 
   constructor(private http: HttpClient) {
   }
@@ -57,7 +56,7 @@ export class ApiService {
   }
 
   private endpoint(name: string): string {
-    return `${this.proxy}?${this.url}/${name}`;
+    return `${this.proxy}?/${name}`;
   }
 
   private reformatClass(courseCode: string, apiObject: object): ClassListing {

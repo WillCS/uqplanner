@@ -5,6 +5,9 @@ import { PlannerService } from '../../../calendar/planner.service';
 import { Plan } from '../../../calendar/calendar';
 import { Subscription, combineLatest } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../environments/environment';
+
+declare let gtag: Function;
 
 @Component({
   selector: 'app-planning',
@@ -75,6 +78,10 @@ export class PlanningComponent implements OnInit, OnDestroy {
       },
       () => {
         this.searches.splice(this.searches.find(s => s === status));
+
+        if (gtag && environment.gaEventParams) {
+          gtag('event', 'addClass', environment.gaEventParams);
+        }
       }
     );
 
