@@ -10,6 +10,9 @@ import { Subscription } from 'rxjs';
 import { PlannerService } from '../../../calendar/planner.service';
 import { ModalService } from '../../modal/modal.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
+
+declare let gtag: Function;
 
 @Component({
   selector: 'app-timetable',
@@ -115,6 +118,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     if(this.editing && isEditingSession) {
       this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
+      gtag('event', 'changePlanSelection', environment.gaEventParams);
     } else {
       this.editingClassName = session.className;
       this.editingClassType = session.classType;
@@ -147,6 +151,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
       toastClass: 'toast successToast ngx-toastr',
       closeButton: false
     });
+    gtag('event', 'savePlan', environment.gaEventParams);
   }
 
   public handleDeleteClicked(): void {
@@ -164,10 +169,15 @@ export class TimetableComponent implements OnInit, OnDestroy {
   public handleTimetableClicked(id: string): void {
     if (this.plan.isDirty) {
       this.showDiscardModal(
-        () => this.plannerService.setCurrentPlan(id));
+        () => this.setPlan(id));
     } else {
-      this.plannerService.setCurrentPlan(id);
+      this.setPlan(id);
     }
+  }
+
+  public setPlan(id: string) {
+    this.plannerService.setCurrentPlan(id);
+    gtag('event', 'changePlan', environment.gaEventParams);
   }
 
   public newTimetableHandler(): void {
