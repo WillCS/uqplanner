@@ -118,7 +118,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     if(this.editing && isEditingSession) {
       this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
-      gtag('event', 'changePlanSelection', environment.gaEventParams);
+
+      if (gtag && environment.gaEventParams) {
+        gtag('event', 'changeSelection', environment.gaEventParams);
+      }
     } else {
       this.editingClassName = session.className;
       this.editingClassType = session.classType;
@@ -151,7 +154,9 @@ export class TimetableComponent implements OnInit, OnDestroy {
       toastClass: 'toast successToast ngx-toastr',
       closeButton: false
     });
-    gtag('event', 'savePlan', environment.gaEventParams);
+    if (gtag && environment.gaEventParams) {
+      gtag('event', 'savePlan', environment.gaEventParams);
+    }
   }
 
   public handleDeleteClicked(): void {
@@ -177,7 +182,9 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
   public setPlan(id: string) {
     this.plannerService.setCurrentPlan(id);
-    gtag('event', 'changePlan', environment.gaEventParams);
+    if (gtag && environment.gaEventParams) {
+      gtag('event', 'changePlan', environment.gaEventParams);
+    }
   }
 
   public newTimetableHandler(): void {

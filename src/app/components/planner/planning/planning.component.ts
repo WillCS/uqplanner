@@ -78,7 +78,10 @@ export class PlanningComponent implements OnInit, OnDestroy {
       },
       () => {
         this.searches.splice(this.searches.find(s => s === status));
-        gtag('event', 'addClass', environment.gaEventParams);
+
+        if (gtag && environment.gaEventParams) {
+          gtag('event', 'addClass', environment.gaEventParams);
+        }
       }
     );
 
