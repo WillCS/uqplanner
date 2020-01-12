@@ -58,10 +58,11 @@ input.classSearchField {
     padding-top: 0px;
     float: left;
     width: 18%;
+    min-width: 140px;
 }
 
 .classList > p {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
     color: var(--bg-label);
     text-transform: uppercase;
@@ -74,6 +75,7 @@ input.classSearchField {
     padding: 0;
     max-height: 600px;
     overflow-y: scroll;
+    overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: rgb(168, 168, 168) rgba(223, 223, 223, 0);
     width: 100%;

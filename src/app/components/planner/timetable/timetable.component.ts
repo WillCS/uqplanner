@@ -10,6 +10,9 @@ import { Subscription } from 'rxjs';
 import { PlannerService } from '../../../calendar/planner.service';
 import { ModalService } from '../../modal/modal.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../environments/environment';
+
+declare let gtag: Function;
 
 @Component({
   selector: 'app-timetable',
@@ -27,6 +30,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
   public editing: boolean;
   public editingClassName: string;
   public editingClassType: string;
+  public hoverStream: string;
 
   public week: number | undefined;
 
@@ -114,6 +118,9 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     if(this.editing && isEditingSession) {
       this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
+      if (gtag && environment.gaEventParams) {
+        gtag('event', 'changeSelection', environment.gaEventParams);
+      }
     } else {
       this.editingClassName = session.className;
       this.editingClassType = session.classType;
@@ -121,6 +128,14 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     this.editing = !this.editing;
     this.plan.isDirty = true;
+  }
+
+  public handleSessionEnter(session: TimetableSession): void {
+    this.hoverStream = session.classSession.streamId;
+  }
+
+  public handleSessionLeave(session: TimetableSession): void {
+    this.hoverStream = '';
   }
 
   public handleBlockClicked(): void {
@@ -134,6 +149,9 @@ export class TimetableComponent implements OnInit, OnDestroy {
       toastClass: 'toast successToast ngx-toastr',
       closeButton: false
     });
+    if (gtag && environment.gaEventParams) {
+      gtag('event', 'savePlan', environment.gaEventParams);
+    }
   }
 
   public handleDeleteClicked(): void {
@@ -154,6 +172,13 @@ export class TimetableComponent implements OnInit, OnDestroy {
         () => this.plannerService.setCurrentPlan(id));
     } else {
       this.plannerService.setCurrentPlan(id);
+    }
+  }
+
+  public setPlan(id: string) {
+    this.plannerService.setCurrentPlan(id);
+    if (gtag && environment.gaEventParams) {
+      gtag('event', 'changePlan', environment.gaEventParams);
     }
   }
 
