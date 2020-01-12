@@ -168,7 +168,7 @@ export class PlannerService {
 
   public defaultPlanName(): string {
     const alreadyUsed = Object.values(this.plans.value).map(p => p.name);
-    const pre = 'Semester Timetable';
+    const pre = 'Semester 1 Timetable';
     let count = 2;
 
     let name = pre;
