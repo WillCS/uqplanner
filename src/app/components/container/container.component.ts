@@ -30,8 +30,9 @@ export class ContainerComponent implements OnInit {
     const settings = new ModalSettings(
       'Report a problem or submit feedback',
       'If you\'ve run into a problem with the planner, try and ' +
-      'be as precise as you can when describing it. Thanks!',
-      [ 
+      'be as precise as you can when describing it. Leave us an ' +
+      'email address if you\'d like us to get back to you. Thanks!',
+      [
         new ModalButton('Cancel', () => this.modalService.closeModal()),
         new ModalButton('Submit', (content?: any) => {
           (content as HTMLFormElement).submit();

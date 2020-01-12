@@ -57,6 +57,10 @@ button {
     font-family: 'Lato', Arial, sans-serif;
 }
 
+textarea:focus {
+    outline: none;
+}
+
 .toast {
     width: 200px !important;
     box-shadow: none !important;
@@ -92,6 +96,10 @@ button {
     app-planning > * {
         width: 90vw !important;
         padding-left: 5vw;
+    }
+
+    div.modalBox {
+        max-width: 98vw;
     }
     
     .title {
