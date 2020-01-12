@@ -43,6 +43,19 @@ textarea.feebackTextarea {
     border: none;
     padding: 10px;
     box-sizing: border-box;
+    font-family: 'Lato', Arial, sans-serif;
+    font-size: 12px;
+}
+
+input.feedbackEmail {
+    resize: none;
+    width: 100%;
+    margin-bottom: 10px;
+    display: block;
+    border: none;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 12px;
 }
 
 input.feedbackExtra {
