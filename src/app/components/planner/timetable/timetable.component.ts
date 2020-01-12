@@ -137,6 +137,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleSaveClicked(): void {
+    if (!this.plan.isDirty) {
+      return;
+    }
+
     this.plannerService.savePlan();
     this.toaster.success(`${this.plan.name} saved!`, '', {
       positionClass: 'toast-bottom-center',
