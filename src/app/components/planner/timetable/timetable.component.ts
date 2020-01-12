@@ -121,6 +121,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
       if (gtag && environment.gaEventParams) {
         gtag('event', 'changeSelection', environment.gaEventParams);
+      } else {
+        console.log(gtag);
+        console.log(environment.gaEventParams);
+
       }
     } else {
       this.editingClassName = session.className;
