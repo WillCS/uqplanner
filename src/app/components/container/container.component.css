@@ -14,18 +14,24 @@
 footer {
     position: relative;
     width: 100vw;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     user-select: none;
 }
 
 footer > .textWrap {
-    font-size: 9px;
+    font-size: 12px;
     text-align: center;
 }
 
 .footerText {
     margin-right: 5px;
     color: var(--footer-color);
+    transition: filter 0.2s;
+}
+
+a.footerText:hover, .button.footerText:hover {
+    filter: brightness(1.4);
 }
 
 span.footerText.button {

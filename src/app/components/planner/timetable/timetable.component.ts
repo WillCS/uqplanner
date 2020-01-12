@@ -149,7 +149,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     this.plannerService.savePlan();
-    this.toaster.success(`${this.plan.name} saved!`, '', {
+    this.toaster.success(`${this.plan.name} saved to device!`, '', {
       positionClass: 'toast-bottom-center',
       toastClass: 'toast successToast ngx-toastr',
       closeButton: false
