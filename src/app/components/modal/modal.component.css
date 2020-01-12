@@ -14,9 +14,9 @@ div.modalShade.isActive {
 
 div.modalBox {
     box-sizing: border-box;
-    padding: 10px 25px;
+    padding: 20px 35px;
     position: relative;
-    max-width: 350px;
+    max-width: 400px;
     left: 50%;
     top: 40%;
     transform: translate(-50%, -50%);
@@ -28,14 +28,14 @@ div.modalBox {
 }
 
 p.modalHeading {
-    font-size: 16px;
+    font-size: 19px;
     font-weight: 500;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
 .modalText {
-    font-size: 12px;
+    font-size: 13px;
 }
 
 div.modalButtonContainer {

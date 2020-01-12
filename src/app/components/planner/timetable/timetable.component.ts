@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 import { PlannerService } from '../../../calendar/planner.service';
 import { ModalService } from '../../modal/modal.service';
 import { ToastrService } from 'ngx-toastr';
-import { environment } from '../../../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 declare let gtag: Function;
 
@@ -118,6 +118,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     if(this.editing && isEditingSession) {
       this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
+
       if (gtag && environment.gaEventParams) {
         gtag('event', 'changeSelection', environment.gaEventParams);
       }
@@ -143,6 +144,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleSaveClicked(): void {
+    if (!this.plan.isDirty) {
+      return;
+    }
+
     this.plannerService.savePlan();
     this.toaster.success(`${this.plan.name} saved!`, '', {
       positionClass: 'toast-bottom-center',
@@ -169,9 +174,9 @@ export class TimetableComponent implements OnInit, OnDestroy {
   public handleTimetableClicked(id: string): void {
     if (this.plan.isDirty) {
       this.showDiscardModal(
-        () => this.plannerService.setCurrentPlan(id));
+        () => this.setPlan(id));
     } else {
-      this.plannerService.setCurrentPlan(id);
+      this.setPlan(id);
     }
   }
 
