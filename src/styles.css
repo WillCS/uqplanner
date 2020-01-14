@@ -25,6 +25,8 @@
     --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
     --add-timetable-button-bg: #000000;
     --add-timetable-button-color: white;
+    --donate-btn-color: rgba(255, 255, 255, 0.65);
+    --donate-btn-hover: rgba(255, 255, 255, 0.8);
     --success-toast-bg: #1a791f;
     --error-toast-bg: #c14343;
 }

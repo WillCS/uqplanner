@@ -34,6 +34,16 @@ a.footerText:hover, .button.footerText:hover {
     filter: brightness(1.4);
 }
 
+.donate {
+    margin-right: 5px;
+    color: var(--donate-btn-color);
+    transition: color 0.2s;
+}
+
+.donate:hover {
+    color: var(--donate-btn-hover);
+}
+
 span.footerText.button {
     text-decoration: underline;
     cursor: pointer;

@@ -28,6 +28,8 @@
   --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
   --add-timetable-button-bg: #712e81;
   --add-timetable-button-color: white;
+  --donate-btn-color: rgba(255, 255, 255, 0.65);
+  --donate-btn-hover: rgba(255, 255, 255, 0.8);
   --modal-bg: #2a0237;
   --week-color: #e6e6e6;
   --selected-week-color: #ee3036;
@@ -50,7 +52,7 @@
   --calendar-label: black;
   --block-text: white;
   --accent-color: #ffffff00;
-  --class-list-bg: #927240;
+  --class-list-bg: #8a8a8a;
   --class-list-color: white;
   --bg-label: #000000;
   --control-button-color: black;
@@ -60,6 +62,8 @@
   --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
   --add-timetable-button-bg: #000000;
   --add-timetable-button-color: white;
+  --donate-btn-color: rgba(0, 0, 0, 0.65);
+  --donate-btn-hover: rgba(0, 0, 0, 0.8);
   --modal-bg: #525252;
   --week-color: #525252;
   --selected-week-color: #000000;
@@ -92,6 +96,8 @@
   --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
   --add-timetable-button-bg: #000000;
   --add-timetable-button-color: white;
+  --donate-btn-color: rgba(0, 0, 0, 0.65);
+  --donate-btn-hover: rgba(0, 0, 0, 0.8);
   --modal-bg: #525252;
   --week-color: #525252;
   --selected-week-color: #000000;
@@ -124,6 +130,8 @@
   --timetable-stripes-dark: rgba(255, 255, 255, 0.1);
   --add-timetable-button-bg: #7b7b7b;
   --add-timetable-button-color: white;
+  --donate-btn-color: rgba(255, 255, 255, 0.65);
+  --donate-btn-hover: rgba(255, 255, 255, 0.8);
   --modal-bg: #1d1d1d;
   --week-color: white;
   --selected-week-color: #52cc74;
