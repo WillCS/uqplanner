@@ -9,6 +9,13 @@
 
 <!-- Sidebar -->
 <div class='classList'>
+    <div class='selectWrap'>
+        <select class='campusSelect labelText' (change)='this.setCampus($event)'>
+            <option *ngFor='let campus of this.campuses' [value]='campus.code' [selected]='this.campus == campus.code'>
+                {{campus.name}}
+            </option>
+        </select>
+    </div>
     <div class='search'>
         <input #courseCode
             type='text'
@@ -24,7 +31,7 @@
             (click)='courseCode.value = this.onSearched(courseCode.value)'
         ></fa-icon>
     </div>
-    <p>Courses (Sem 1 2020)</p>
+    <p class='labelText'>Courses (Sem 1 2020)</p>
     <div class='classWrapper'>
         <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
             <p><b>Search to add courses</b></p>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ClassListing, ClassType, ClassStream, ClassSession, Semester, WEEKDAYS } from './calendar/calendar';
+import { ClassListing, ClassType, ClassStream, ClassSession, Semester, WEEKDAYS, Campus } from './calendar/calendar';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,12 +16,13 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  public getClass(courseCode: string, year?: number, semester?: number): Observable<ClassListing | Error> {
+  public getClass(courseCode: string, campus?: Campus, year?: number, semester?: number): Observable<ClassListing | Error> {
     const endpoint: string = this.endpoint('subjects');
+    const campusCode = campus ? campus.code : 'ALL';
 
     return this.http.post<string>(
       endpoint,
-      `search-term=${courseCode}&semester=ALL&campus=ALL&faculty=ALL&type=ALL` +
+      `search-term=${courseCode}&semester=ALL&campus=${campusCode}&faculty=ALL&type=ALL` +
       '&days=1&days=2&days=3&days=4&days=5&days=6&days=0&' +
       'start-time=00%3A00&end-time=23%3A00',
       {

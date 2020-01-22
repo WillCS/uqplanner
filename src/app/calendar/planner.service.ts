@@ -1,6 +1,6 @@
 import { ApiService } from '../api.service';
 import { Injectable, isDevMode } from '@angular/core';
-import { Plan, Plans, ClassListing, PlanSummary, ClassType } from './calendar';
+import { Plan, Plans, ClassListing, PlanSummary, ClassType, Campus } from './calendar';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
 import { map } from 'rxjs/operators';
@@ -106,11 +106,11 @@ export class PlannerService {
     );
   }
 
-  public addClass(searchTerm: string): Observable<string> {
+  public addClass(searchTerm: string, campus: Campus): Observable<string> {
     return new Observable(subscriber => {
       subscriber.next('In progress...');
 
-      this.apiService.getClass(searchTerm).subscribe(
+      this.apiService.getClass(searchTerm, campus).subscribe(
         (newClass: ClassListing) => {
           isDevMode() && console.log(newClass);
           const plan = _.cloneDeep(this.currentPlan.value);
