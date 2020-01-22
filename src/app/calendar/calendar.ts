@@ -19,6 +19,24 @@ export const TIMETABLE_HOURS: number[] = [
     8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 ];
 
+export interface Campus {
+    name: string;
+    code: string;
+}
+
+export const CAMPUSES: Campus[] = [
+    {
+        name: 'St Lucia',
+        code: 'STLUC'
+    }, {
+        name: 'Gatton',
+        code: 'GATTN'
+    }, {
+        name: 'Herston',
+        code: 'HERST'
+    }
+];
+
 export interface Plan {
     id: string;
     name: string;

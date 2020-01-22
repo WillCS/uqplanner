@@ -30,16 +30,32 @@
     animation: fa-spin 1s infinite ease-in-out;
 }
 
-input.classSearchField {
-    height: 40px;
+.classSearchField {
     border-radius: 6px;
     border: 1px solid var(--search-border-color);
     text-transform: uppercase;
     width: 100%;
-    padding: 6px 12px;
     box-sizing: border-box;
-    margin-bottom: 12px;
     font-size: 11px;
+    height: 40px;
+    padding: 6px 12px;
+    color: black;
+    margin-bottom: 12px;
+}
+
+.campusSelect {
+    position: relative;
+    left: -6px;
+    top: 3px;
+    padding-bottom: 2px;
+    border: none;
+    background-color: transparent;
+    transform: translateX(-3px);
+    font-size: 9px !important;
+}
+
+.campusSelect:focus {
+    outline: none;
 }
 
 .searchButton {
@@ -61,13 +77,14 @@ input.classSearchField {
     min-width: 140px;
 }
 
-.classList > p {
+.labelText {
     font-size: 10px;
     font-weight: bold;
     color: var(--bg-label);
     text-transform: uppercase;
     margin-bottom: 10px;
     max-height: 800px;
+    clear: both;
 }
 
 .classWrapper {

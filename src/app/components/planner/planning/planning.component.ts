@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalService } from '../../modal/modal.service';
 import { faTimesCircle, faSearch, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { PlannerService } from '../../../calendar/planner.service';
-import { Plan } from '../../../calendar/calendar';
+import { Plan, CAMPUSES } from '../../../calendar/calendar';
 import { Subscription, combineLatest } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../environments/environment';
+
 
 declare let gtag: Function;
 
@@ -17,7 +18,9 @@ declare let gtag: Function;
 export class PlanningComponent implements OnInit, OnDestroy {
   public subscription: Subscription;
   public plan: Plan;
+  public campus = 'STLUC';
   public searches = [];
+  public campuses = CAMPUSES;
 
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
@@ -63,7 +66,18 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
   public onSearched(searchTerm: string): string {
     searchTerm = searchTerm.replace(' ', '').toUpperCase();
-    const status = this.plannerService.addClass(searchTerm);
+
+    const campus = CAMPUSES.find(c => c.code === this.campus);
+    if (!campus) {
+      this.toaster.error(`Couldn't find ${this.campus}, `, '', {
+        positionClass: 'toast-bottom-center',
+        toastClass: 'toast errorToast ngx-toastr',
+        closeButton: false
+      });
+      return;
+    }
+
+    const status = this.plannerService.addClass(searchTerm, campus);
     this.searches.push(status);
 
     status.subscribe(
@@ -98,5 +112,10 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
   public searching(): boolean {
     return this.searches.length !== 0;
+  }
+
+  public setCampus(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.campus = target.value;
   }
 }
