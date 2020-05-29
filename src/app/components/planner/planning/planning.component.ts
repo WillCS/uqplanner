@@ -1,49 +1,61 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ModalService } from '../../modal/modal.service';
-import { faTimesCircle, faSearch, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
-import { PlannerService } from '../../../calendar/planner.service';
-import { Plan, CAMPUSES } from '../../../calendar/calendar';
-import { Subscription, combineLatest } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
-import { environment } from '../../../../environments/environment';
-
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { ModalService } from "../../modal/modal.service";
+import {
+  faTimesCircle,
+  faSearch,
+  faCircleNotch,
+} from "@fortawesome/free-solid-svg-icons";
+import { PlannerService } from "../../../calendar/planner.service";
+import {
+  Plan,
+  CAMPUSES,
+  SEMESTER_OPTIONS,
+  SemesterOption,
+} from "../../../calendar/calendar";
+import { Subscription, combineLatest } from "rxjs";
+import { ToastrService } from "ngx-toastr";
+import { environment } from "../../../../environments/environment";
 
 declare let gtag: Function;
 
 @Component({
-  selector: 'app-planning',
-  templateUrl: './planning.component.html',
-  styleUrls: ['./planning.component.css']
+  selector: "app-planning",
+  templateUrl: "./planning.component.html",
+  styleUrls: ["./planning.component.css"],
 })
 export class PlanningComponent implements OnInit, OnDestroy {
   public subscription: Subscription;
   public plan: Plan;
-  public campus = 'STLUC';
+  public campus = "STLUC";
   public searches = [];
   public campuses = CAMPUSES;
+  public semesterOptions = SEMESTER_OPTIONS;
 
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
   faCircleNotch = faCircleNotch;
 
   constructor(
-      public plannerService: PlannerService,
-      public modalService: ModalService,
-      public toaster: ToastrService) {
-    this.subscription = plannerService.currentPlan.asObservable().subscribe(
-      (plan: Plan) => {
+    public plannerService: PlannerService,
+    public modalService: ModalService,
+    public toaster: ToastrService
+  ) {
+    this.subscription = plannerService.currentPlan
+      .asObservable()
+      .subscribe((plan: Plan) => {
         this.plan = plan;
-    });
+      });
 
     window.onbeforeunload = (e) => {
       if (this.plan.isDirty) {
         e.preventDefault();
-        e.returnValue = 'You have unsaved changes. Are you sure you want to leave the app?';
+        e.returnValue =
+          "You have unsaved changes. Are you sure you want to leave the app?";
       }
     };
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -53,7 +65,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     const name = target.value;
 
-    if (name === '' || name === undefined || name === null) {
+    if (name === "" || name === undefined || name === null) {
       return;
     }
 
@@ -65,14 +77,14 @@ export class PlanningComponent implements OnInit, OnDestroy {
   }
 
   public onSearched(searchTerm: string): string {
-    searchTerm = searchTerm.replace(' ', '').toUpperCase();
+    searchTerm = searchTerm.replace(" ", "").toUpperCase();
 
-    const campus = CAMPUSES.find(c => c.code === this.campus);
+    const campus = CAMPUSES.find((c) => c.code === this.campus);
     if (!campus) {
-      this.toaster.error(`Couldn't find ${this.campus}, `, '', {
-        positionClass: 'toast-bottom-center',
-        toastClass: 'toast errorToast ngx-toastr',
-        closeButton: false
+      this.toaster.error(`Couldn't find ${this.campus}, `, "", {
+        positionClass: "toast-bottom-center",
+        toastClass: "toast errorToast ngx-toastr",
+        closeButton: false,
       });
       return;
     }
@@ -83,26 +95,26 @@ export class PlanningComponent implements OnInit, OnDestroy {
     status.subscribe(
       (next) => {},
       (error) => {
-        this.searches.splice(this.searches.find(s => s === status));
-        this.toaster.error(`Couldn't find ${searchTerm}`, '', {
-          positionClass: 'toast-bottom-center',
-          toastClass: 'toast errorToast ngx-toastr',
-          closeButton: false
+        this.searches.splice(this.searches.find((s) => s === status));
+        this.toaster.error(`Couldn't find ${searchTerm}`, "", {
+          positionClass: "toast-bottom-center",
+          toastClass: "toast errorToast ngx-toastr",
+          closeButton: false,
         });
       },
       () => {
-        this.searches.splice(this.searches.find(s => s === status));
+        this.searches.splice(this.searches.find((s) => s === status));
 
         if (gtag && environment.gaEventParams) {
-          gtag('event', 'addClass', {
+          gtag("event", "addClass", {
             ...environment.gaEventParams,
-            course_code: searchTerm
+            course_code: searchTerm,
           });
         }
       }
     );
 
-    return '';
+    return "";
   }
 
   public onClassCloseClicked(className: string): void {
@@ -117,5 +129,22 @@ export class PlanningComponent implements OnInit, OnDestroy {
   public setCampus(event: Event) {
     const target = event.target as HTMLInputElement;
     this.campus = target.value;
+  }
+
+  public setSemester(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const name: string = target.value;
+    const semester: SemesterOption = SEMESTER_OPTIONS.find(
+      (i) => i.name === name
+    );
+    this.plannerService.setSemester(semester.number, semester.year);
+  }
+
+  public isEmpty(): boolean {
+    return this.plan.classes.length === 0;
+  }
+
+  public semesterClick(event) {
+    console.log("clicked");
   }
 }
