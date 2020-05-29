@@ -1,37 +1,30 @@
 <div class='title'>
-    <input 
-        type='text' maxlength='60'
-        placeholder='{{this.plannerService.defaultPlanName()}}'
-        value='{{this.plan.name}}'
-        (keyup)='this.handleTitleChanged($event)'
-    />
+    <input type='text' maxlength='60' placeholder='{{this.plannerService.defaultPlanName()}}' value='{{this.plan.name}}'
+        (keyup)='this.handleTitleChanged($event)' />
 </div>
 
 <!-- Sidebar -->
 <div class='classList'>
     <div class='selectWrap'>
-        <select class='campusSelect labelText' (change)='this.setCampus($event)'>
+        <select class='semesterSelect' (change)='this.setSemester($event)'>
+            <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
+                [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
+                {{semester.name}}
+            </option>
+        </select>
+        <select class='campusSelect' (change)='this.setCampus($event)'>
             <option *ngFor='let campus of this.campuses' [value]='campus.code' [selected]='this.campus == campus.code'>
                 {{campus.name}}
             </option>
         </select>
     </div>
     <div class='search'>
-        <input #courseCode
-            type='text'
-            placeholder='Add a course'
-            class='classSearchField'
-            maxlength='9'
-            (keyup.enter)='courseCode.value = this.onSearched(courseCode.value)'
-        >
-        <fa-icon
-            class='searchButton'
-            [icon]='this.searching() ? faCircleNotch : faSearch'
-            [class.spin]='this.searching()'
-            (click)='courseCode.value = this.onSearched(courseCode.value)'
-        ></fa-icon>
+        <input #courseCode type='text' placeholder='Add a course' class='classSearchField' maxlength='9'
+            (keyup.enter)='courseCode.value = this.onSearched(courseCode.value)'>
+        <fa-icon class='searchButton' [icon]='this.searching() ? faCircleNotch : faSearch'
+            [class.spin]='this.searching()' (click)='courseCode.value = this.onSearched(courseCode.value)'></fa-icon>
     </div>
-    <p class='labelText'>Courses (Sem 1 2020)</p>
+    <p class='labelText'>Courses</p>
     <div class='classWrapper'>
         <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
             <p><b>Search to add courses</b></p>
@@ -39,12 +32,9 @@
         <div class='classObject normal' *ngFor='let class of this.plan.classes'>
             <p><b>{{class.name}}</b></p>
             <p><b>{{class.description | uppercase}}</b></p>
-            
-            <fa-icon 
-                class='closeButton' 
-                [icon]='faTimesCircle' 
-                (click)='this.onClassCloseClicked(class.name)'
-            ></fa-icon>
+
+            <fa-icon class='closeButton' [icon]='faTimesCircle' (click)='this.onClassCloseClicked(class.name)'>
+            </fa-icon>
         </div>
     </div>
 </div>

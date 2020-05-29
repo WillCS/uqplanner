@@ -1,12 +1,8 @@
-import { Time } from '@angular/common';
+import { Time } from "@angular/common";
 
-export const WEEKDAY_INDICES: number[] = [
-    0, 1, 2, 3, 4
-];
+export const WEEKDAY_INDICES: number[] = [0, 1, 2, 3, 4];
 
-export const WEEKDAYS: string[] = [
-    'MON', 'TUE', 'WED', 'THU', 'FRI'
-];
+export const WEEKDAYS: string[] = ["MON", "TUE", "WED", "THU", "FRI"];
 
 export const DAY_START_TIME: Time = { hours: 8, minutes: 0 };
 
@@ -16,137 +12,189 @@ export const DAY_LENGTH_HOURS = 12;
 export const DAY_LENGTH_MINUTES = DAY_LENGTH_HOURS * 60;
 
 export const TIMETABLE_HOURS: number[] = [
-    8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
 ];
 
 export interface Campus {
-    name: string;
-    code: string;
+  name: string;
+  code: string;
+}
+
+export interface SemesterOption {
+  name: string;
+  year: number;
+  number: 1 | 2 | 3;
 }
 
 export const CAMPUSES: Campus[] = [
-    {
-        name: 'St Lucia',
-        code: 'STLUC'
-    }, {
-        name: 'Gatton',
-        code: 'GATTN'
-    }, {
-        name: 'Herston',
-        code: 'HERST'
-    }
+  {
+    name: "St Lucia",
+    code: "STLUC",
+  },
+  {
+    name: "Gatton",
+    code: "GATTN",
+  },
+  {
+    name: "Herston",
+    code: "HERST",
+  },
 ];
 
+export const SEMESTER_OPTIONS: SemesterOption[] = [
+  {
+    name: "Semester 1 2020",
+    year: 2020,
+    number: 1,
+  },
+  //   {
+  //     name: "Semester 2 2020",
+  //     year: 2020,
+  //     number: 2,
+  //   },
+];
+
+export const CURRENT_SEMESTER: 1 | 2 | 3 = 1;
+export const CURRENT_YEAR = 2020;
+
 export interface Plan {
-    id: string;
-    name: string;
-    year: number;
-    semester: 1 | 2 | 3; // 3 for summer/trimester
-    classes: ClassListing[];
-    selections: Map<string, Map<string, number>>;
-    lastEdited: number;
-    isDirty: boolean;
-    schemaVersion: number;
+  id: string;
+  name: string;
+  year: number;
+  semester: 1 | 2 | 3; // 3 for summer/trimester
+  classes: ClassListing[];
+  selections: Map<string, Map<string, number>>;
+  lastEdited: number;
+  isDirty: boolean;
+  schemaVersion: number;
 }
 
 export interface PlanSummary {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
 }
 
 export interface Plans {
-    [key: string]: Plan;
+  [key: string]: Plan;
 }
 
 export const NULL_SESSION: TimetableSession = {
-    className: '',
-    classType: '',
-    classStream: 0,
-    classSessionIndex: 0,
-    classSession: null
+  className: "",
+  classType: "",
+  classStream: 0,
+  classSessionIndex: 0,
+  classSession: null,
 };
 
 export interface ClassListing {
-    name: string;
-    description: string;
-    classes: ClassType[];
+  name: string;
+  description: string;
+  classes: ClassType[];
 }
 
 export interface ClassType {
-    name: string;
-    streams: ClassStream[];
+  name: string;
+  streams: ClassStream[];
 }
 
 export interface ClassStream {
-    streamId: string;
-    classes: ClassSession[];
+  streamId: string;
+  classes: ClassSession[];
 }
 
 export interface ClassSession {
-    streamId?: string;
-    day: number;
-    startTime: Time;
-    endTime: Time;
-    location: string;
-    weekPattern?: Array<boolean>;
-    startDate?: Date
+  streamId?: string;
+  day: number;
+  startTime: Time;
+  endTime: Time;
+  location: string;
+  weekPattern?: Array<boolean>;
+  startDate?: Date;
 }
 
 export interface TimetableSession {
-    className: string;
-    classType: string;
-    classStream: number;
-    classSessionIndex: number;
-    classSession: ClassSession;
+  className: string;
+  classType: string;
+  classStream: number;
+  classSessionIndex: number;
+  classSession: ClassSession;
 }
 
 export interface Semester {
-    year: number;
-    semester: number;
-    active: boolean;
-    weeks: Date[];
+  year: number;
+  semester: number;
+  active: boolean;
+  weeks: Date[];
 }
 
 export function startTimeToMinutes(session: TimetableSession): number {
-    return session.classSession.startTime.hours * 60 + session.classSession.startTime.minutes;
+  return (
+    session.classSession.startTime.hours * 60 +
+    session.classSession.startTime.minutes
+  );
 }
 
 export function endTimeToMinutes(session: TimetableSession): number {
-    return session.classSession.endTime.hours * 60 + session.classSession.endTime.minutes;
+  return (
+    session.classSession.endTime.hours * 60 +
+    session.classSession.endTime.minutes
+  );
 }
 
 export function lengthToMinutes(session: TimetableSession): number {
-    return endTimeToMinutes(session) - startTimeToMinutes(session);
+  return endTimeToMinutes(session) - startTimeToMinutes(session);
 }
 
-export function doSessionsClash(s1: TimetableSession, s2: TimetableSession): boolean {
-    let weeksInCommon = 0;
+export function doSessionsClash(
+  s1: TimetableSession,
+  s2: TimetableSession
+): boolean {
+  let weeksInCommon = 0;
 
-    s1.classSession.weekPattern.forEach((v, i, a) => {
-        if(v && s2.classSession.weekPattern[i]) {
-            weeksInCommon++;
-        }
-    });
-
-    if(weeksInCommon === 0) {
-        return false;
+  s1.classSession.weekPattern.forEach((v, i, a) => {
+    if (v && s2.classSession.weekPattern[i]) {
+      weeksInCommon++;
     }
+  });
 
-    return doSessionsOverlap(s1, s2);
+  if (weeksInCommon === 0) {
+    return false;
+  }
+
+  return doSessionsOverlap(s1, s2);
 }
 
-export function doSessionsOverlap(s1: TimetableSession, s2: TimetableSession): boolean {
-    const s1Start = startTimeToMinutes(s1);
-    const s2Start = startTimeToMinutes(s2);
-    const s1End = endTimeToMinutes(s1);
-    const s2End = endTimeToMinutes(s2);
+export function doSessionsOverlap(
+  s1: TimetableSession,
+  s2: TimetableSession
+): boolean {
+  const s1Start = startTimeToMinutes(s1);
+  const s2Start = startTimeToMinutes(s2);
+  const s1End = endTimeToMinutes(s1);
+  const s2End = endTimeToMinutes(s2);
 
-    return (s1Start <= s2Start && s1End > s2Start && s1End <= s2End)
-        || (s2Start <= s1Start && s2End > s1Start && s2End <= s1End)
-        || (s1Start <= s2Start && s1End >= s2End)
-        || (s2Start <= s1Start && s2End >= s1End);
+  return (
+    (s1Start <= s2Start && s1End > s2Start && s1End <= s2End) ||
+    (s2Start <= s1Start && s2End > s1Start && s2End <= s1End) ||
+    (s1Start <= s2Start && s1End >= s2End) ||
+    (s2Start <= s1Start && s2End >= s1End)
+  );
 }
 
-export function getEarlierSession(s1: TimetableSession, s2: TimetableSession): TimetableSession {
-    return startTimeToMinutes(s1) <= startTimeToMinutes(s2) ? s1 : s2;
+export function getEarlierSession(
+  s1: TimetableSession,
+  s2: TimetableSession
+): TimetableSession {
+  return startTimeToMinutes(s1) <= startTimeToMinutes(s2) ? s1 : s2;
 }

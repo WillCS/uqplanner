@@ -1,17 +1,26 @@
-import { ApiService } from '../api.service';
-import { Injectable, isDevMode } from '@angular/core';
-import { Plan, Plans, ClassListing, PlanSummary, ClassType, Campus } from './calendar';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { StorageService } from './storage.service';
-import { map } from 'rxjs/operators';
+import { ApiService } from "../api.service";
+import { Injectable, isDevMode } from "@angular/core";
+import {
+  Plan,
+  Plans,
+  ClassListing,
+  PlanSummary,
+  ClassType,
+  Campus,
+  Semester,
+  CURRENT_YEAR,
+  CURRENT_SEMESTER,
+} from "./calendar";
+import { Observable, BehaviorSubject } from "rxjs";
+import { StorageService } from "./storage.service";
+import { map } from "rxjs/operators";
 import * as uuid from "uuid";
 import * as _ from "lodash";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PlannerService {
-
   public currentPlan: BehaviorSubject<Plan>;
   private plans: BehaviorSubject<Plans>;
 
@@ -22,45 +31,50 @@ export class PlannerService {
     this.plans = new BehaviorSubject<Plans>(storageService.get());
 
     const planIds = Object.keys(this.plans.value);
+
     if (planIds.length === 0) {
-      this.currentPlan = new BehaviorSubject<Plan>(this.cleanPlan());
+      this.currentPlan = new BehaviorSubject<Plan>(
+        this.cleanPlan(CURRENT_YEAR, CURRENT_SEMESTER)
+      );
 
       this.plans.next({
-        [this.currentPlan.value.id]: this.currentPlan.value
+        [this.currentPlan.value.id]: this.currentPlan.value,
       });
     } else {
       // TODO: get last edited plan
-      this.currentPlan = new BehaviorSubject<Plan>(_.cloneDeep(this.plans.value[planIds[0]]));
+      this.currentPlan = new BehaviorSubject<Plan>(
+        _.cloneDeep(this.plans.value[planIds[0]])
+      );
     }
   }
 
-  public newPlan() {
-    const cleanPlan: Plan = this.cleanPlan();
+  public newPlan(year = CURRENT_YEAR, semester = CURRENT_SEMESTER) {
+    console.log(year);
+    console.log(semester);
+    const cleanPlan: Plan = this.cleanPlan(year, semester);
     this.currentPlan.next(cleanPlan);
 
     this.plans.next({
       ...this.plans.value,
-      [cleanPlan.id]: cleanPlan
+      [cleanPlan.id]: cleanPlan,
     });
   }
 
   public savePlan() {
     const plan = this.currentPlan.value;
     if (!plan.name) {
-      plan.name = this.defaultPlanName();
+      plan.name = this.defaultPlanName(plan.semester);
     }
 
     plan.isDirty = false;
 
-    this.plans.next(
-      {
-        ...this.plans.value,
-        [plan.id]: {
-          ...plan,
-          lastEdited: Date.now(),
-        }
-      }
-    );
+    this.plans.next({
+      ...this.plans.value,
+      [plan.id]: {
+        ...plan,
+        lastEdited: Date.now(),
+      },
+    });
     this.storageService.save(this.plans.value);
   }
 
@@ -68,7 +82,7 @@ export class PlannerService {
     // delete the plan
     const planId = this.currentPlan.value.id;
     const newPlans = {
-      ...this.plans.value
+      ...this.plans.value,
     };
 
     delete newPlans[planId];
@@ -92,57 +106,67 @@ export class PlannerService {
       throw new Error();
     }
 
-    this.currentPlan.next(
-      _.cloneDeep(this.plans.value[planId])
-    );
+    this.currentPlan.next(_.cloneDeep(this.plans.value[planId]));
   }
 
   public getPlans(): Observable<PlanSummary[]> {
     return this.plans.pipe(
-      map(p => Object.keys(p).map(k => ({
-        id: p[k].id,
-        name: p[k].name,
-      })))
+      map((p) =>
+        Object.keys(p).map((k) => ({
+          id: p[k].id,
+          name: p[k].name,
+        }))
+      )
     );
   }
 
   public addClass(searchTerm: string, campus: Campus): Observable<string> {
-    return new Observable(subscriber => {
-      subscriber.next('In progress...');
+    return new Observable((subscriber) => {
+      subscriber.next("In progress...");
 
-      this.apiService.getClass(searchTerm, campus).subscribe(
-        (newClass: ClassListing) => {
-          isDevMode() && console.log(newClass);
-          const plan = _.cloneDeep(this.currentPlan.value);
-          try {
-            if (!plan.classes.some(c => c.name === newClass.name)) {
-              plan.classes.push(newClass);
-              if (!plan.selections.has(newClass.name)) {
-                const classMap: Map<string, number> = new Map<string, number>();
-                newClass.classes.forEach((classType: ClassType) => {
-                  classMap.set(classType.name, 0);
-                });
-                plan.selections.set(newClass.name, classMap);
+      this.apiService
+        .getClass(
+          searchTerm,
+          campus,
+          this.currentPlan.value.year,
+          this.currentPlan.value.semester
+        )
+        .subscribe(
+          (newClass: ClassListing) => {
+            isDevMode() && console.log(newClass);
+            const plan = _.cloneDeep(this.currentPlan.value);
+            try {
+              if (!plan.classes.some((c) => c.name === newClass.name)) {
+                plan.classes.push(newClass);
+                if (!plan.selections.has(newClass.name)) {
+                  const classMap: Map<string, number> = new Map<
+                    string,
+                    number
+                  >();
+                  newClass.classes.forEach((classType: ClassType) => {
+                    classMap.set(classType.name, 0);
+                  });
+                  plan.selections.set(newClass.name, classMap);
+                }
               }
+              plan.isDirty = true;
+              this.currentPlan.next(plan);
+              subscriber.complete();
+            } catch (error) {
+              console.log("error adding class");
+              subscriber.error(error.message);
             }
-            plan.isDirty = true;
-            this.currentPlan.next(plan);
-            subscriber.complete();
-          } catch (error) {
-            console.log('error addign class');
+          },
+          (error: Error) => {
             subscriber.error(error.message);
           }
-        },
-        (error: Error) => {
-          subscriber.error(error.message);
-        }
-      );
+        );
     });
   }
 
   public removeClass(className: string) {
     const plan = _.cloneDeep(this.currentPlan.value);
-    plan.classes = plan.classes.filter(c => className !== c.name);
+    plan.classes = plan.classes.filter((c) => className !== c.name);
 
     if (plan.selections.has(className)) {
       plan.selections.delete(className);
@@ -156,19 +180,29 @@ export class PlannerService {
     const plan = this.currentPlan.value;
 
     if (!name) {
-      plan.name = this.defaultPlanName();
+      plan.name = this.defaultPlanName(plan.semester);
     }
 
     this.currentPlan.next({
       ...plan,
       isDirty: true,
-      name
+      name,
     });
   }
 
-  public defaultPlanName(): string {
-    const alreadyUsed = Object.values(this.plans.value).map(p => p.name);
-    const pre = 'Semester 1 Timetable';
+  public setSemester(semester: 1 | 2 | 3, year: number) {
+    const plan = this.currentPlan.value;
+
+    this.currentPlan.next({
+      ...plan,
+      year,
+      semester,
+    });
+  }
+
+  public defaultPlanName(semester = CURRENT_SEMESTER): string {
+    const alreadyUsed = Object.values(this.plans.value).map((p) => p.name);
+    const pre = `Semester ${semester} Timetable`;
     let count = 2;
 
     let name = pre;
@@ -179,17 +213,17 @@ export class PlannerService {
     return name;
   }
 
-  private cleanPlan(): Plan {
+  private cleanPlan(year: number, semester: 1 | 2 | 3): Plan {
     return {
       id: uuid.v4(),
-      name: this.defaultPlanName(),
-      year: 2019,
-      semester: 1,
+      name: this.defaultPlanName(semester),
       classes: new Array<ClassListing>(),
       selections: new Map<string, Map<string, number>>(),
       lastEdited: Date.now(),
       isDirty: false,
-      schemaVersion: 1
+      schemaVersion: 1,
+      year,
+      semester,
     };
   }
 }

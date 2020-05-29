@@ -1,178 +1,197 @@
 .title {
-    padding-top: 45px;
-    padding-bottom: 20px;
+  padding-top: 45px;
+  padding-bottom: 25px;
 }
 
 .title > input {
-    font-size: 30px;
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    color: var(--title-color);
-    font-family: 'Lato', Arial;
-    width: 100%;
-    padding-bottom: 10px;
-    border-bottom: 0.5px solid var(--title-accent-color);
+  font-size: 30px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: var(--title-color);
+  font-family: "Lato", Arial;
+  width: 100%;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid var(--title-accent-color);
 }
 
-
 .title > input::placeholder {
-    color: var(--title-color);
-    opacity: 0.5;
+  color: var(--title-color);
+  opacity: 0.5;
 }
 
 .search {
-    position: relative;
+  position: relative;
 }
 
 .spin {
-    animation: fa-spin 1s infinite ease-in-out;
+  animation: fa-spin 1s infinite ease-in-out;
 }
 
 .classSearchField {
-    border-radius: 6px;
-    border: 1px solid var(--search-border-color);
-    text-transform: uppercase;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 11px;
-    height: 40px;
-    padding: 6px 12px;
-    color: black;
-    margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--search-border-color);
+  text-transform: uppercase;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 11px;
+  height: 40px;
+  padding: 6px 12px;
+  color: black;
+  margin-bottom: 12px;
+}
+
+.campusSelect,
+.semesterSelect {
+  position: relative;
+  border: none;
+  color: var(--bg-label);
+  margin-bottom: 10px;
+  background-color: transparent;
+  font-size: 8px;
+  top: 3px;
+  padding-bottom: 2px;
+  transform: translateX(-3px);
+  margin-right: -8px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.campusSelect:focus,
+.semesterSelect:focus {
+  outline: none;
+}
+
+.semesterSelect {
+  left: -6px;
 }
 
 .campusSelect {
-    position: relative;
-    left: -6px;
-    top: 3px;
-    padding-bottom: 2px;
-    border: none;
-    background-color: transparent;
-    transform: translateX(-3px);
-    font-size: 9px !important;
+  left: 15px;
 }
 
-.campusSelect:focus {
-    outline: none;
+.semesterSelect[disabled] {
+  -webkit-appearance: none;
+  left: 0px;
 }
 
 .searchButton {
-    position: absolute;
-    right: 10px;
-    line-height: 40px;
-    color: var(--search-button-color);
-    transition: filter 0.2s;
+  position: absolute;
+  right: 10px;
+  line-height: 40px;
+  color: var(--search-button-color);
+  transition: filter 0.2s;
 }
 
 .searchButton:hover {
-    filter: brightness(0.5);
+  filter: brightness(0.5);
 }
 
 .classList {
-    padding-top: 0px;
-    float: left;
-    width: 18%;
-    min-width: 140px;
+  padding-top: 0px;
+  margin-top: -8px;
+  float: left;
+  width: 18%;
+  min-width: 140px;
 }
 
 .labelText {
-    font-size: 10px;
-    font-weight: bold;
-    color: var(--bg-label);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    max-height: 800px;
-    clear: both;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--bg-label);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  max-height: 800px;
+  clear: both;
 }
 
 .classWrapper {
-    margin: 0;
-    padding: 0;
-    max-height: 600px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgb(168, 168, 168) rgba(223, 223, 223, 0);
-    width: 100%;
+  margin: 0;
+  padding: 0;
+  max-height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(168, 168, 168) rgba(223, 223, 223, 0);
+  width: 100%;
 }
 
 .classWrapper::-webkit-scrollbar {
-    width: 11px;
+  width: 11px;
 }
 
 .classWrapper::-webkit-scrollbar-track {
-    background: rgba(218, 218, 218, 0);
+  background: rgba(218, 218, 218, 0);
 }
 
 .classWrapper::-webkit-scrollbar-thumb {
-    background-color: rgb(173, 173, 173);
-    border-radius: 6px;
-    border: 3px solid rgba(221, 221, 221, 0);
+  background-color: rgb(173, 173, 173);
+  border-radius: 6px;
+  border: 3px solid rgba(221, 221, 221, 0);
 }
 
 div.classObject {
-    width: 100%;
-    padding: 13px 35px 13px 13px;
-    margin-bottom: 10px;
-    color: var(--class-list-color);
-    box-sizing: border-box;
-    border-radius: 5px;
-    position: relative;
-    user-select: none;
+  width: 100%;
+  padding: 13px 35px 13px 13px;
+  margin-bottom: 10px;
+  color: var(--class-list-color);
+  box-sizing: border-box;
+  border-radius: 5px;
+  position: relative;
+  user-select: none;
 }
 
 div.classObject.normal {
-    border: 1px solid var(--accent-color);
-    background-color: var(--class-list-bg);    
+  border: 1px solid var(--accent-color);
+  background-color: var(--class-list-bg);
 }
 
 div.classObject.placeholder {
-    border: 2px dashed var(--bg-label);
-    text-transform: uppercase;
-    height: 360px;
-    padding: 80px 35px;
-    opacity: 0.7;
+  border: 2px dashed var(--bg-label);
+  text-transform: uppercase;
+  height: 360px;
+  padding: 80px 35px;
+  opacity: 0.7;
 }
 
 div.classObject.placeholder > p {
-    width: 100%;
-    text-align: center;
-    color: var(--bg-label);
-    opacity: 0.7;
+  width: 100%;
+  text-align: center;
+  color: var(--bg-label);
+  opacity: 0.7;
 }
 
 div.classObject > p {
-    margin: 3px;
-    line-height: normal;
-    vertical-align: middle;
-    display: inline-block;
-    text-align: left;
-    font-weight: bold;
-    font-size: 12px;
-    color: var(--class-list-color);
+  margin: 3px;
+  line-height: normal;
+  vertical-align: middle;
+  display: inline-block;
+  text-align: left;
+  font-weight: bold;
+  font-size: 12px;
+  color: var(--class-list-color);
 }
 
 .closeButton {
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    color: var(--bg-label);
-    transition: filter 0.1s;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  color: var(--bg-label);
+  transition: filter 0.1s;
 }
 
 .closeButton:hover {
-    filter: brightness(0.8);
+  filter: brightness(0.8);
 }
 
 app-timetable {
-    float: right;
-    width: 78%;
+  float: right;
+  width: 78%;
 }
 
 app-class-search {
-    position: fixed;
-    left: 40px;
-    bottom: 80px;
+  position: fixed;
+  left: 40px;
+  bottom: 80px;
 }
