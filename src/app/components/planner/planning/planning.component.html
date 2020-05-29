@@ -6,10 +6,9 @@
 <!-- Sidebar -->
 <div class='classList'>
     <div class='selectWrap'>
-        <select class='semesterSelect labelText' (change)='this.setSemester($event)'
-            [disabled]='this.isEmpty() ? false : true'
-            [title]='this.isEmpty() ? "" : "Create a new plan to use add courses from a different semester"'>
-            <option *ngFor='let semester of this.semesterOptions' [value]='semester.name' [selected]='false'>
+        <select class='semesterSelect labelText' (change)='this.setSemester($event)'>
+            <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
+                [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
                 {{semester.name}}
             </option>
         </select>
@@ -25,7 +24,7 @@
         <fa-icon class='searchButton' [icon]='this.searching() ? faCircleNotch : faSearch'
             [class.spin]='this.searching()' (click)='courseCode.value = this.onSearched(courseCode.value)'></fa-icon>
     </div>
-    <p class='labelText'>Courses (Sem 1 2020)</p>
+    <p class='labelText'>Courses</p>
     <div class='classWrapper'>
         <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
             <p><b>Search to add courses</b></p>

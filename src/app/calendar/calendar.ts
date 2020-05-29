@@ -54,16 +54,19 @@ export const CAMPUSES: Campus[] = [
 
 export const SEMESTER_OPTIONS: SemesterOption[] = [
   {
-    name: "Semester 1",
+    name: "Semester 1 2020",
     year: 2020,
     number: 1,
   },
-  {
-    name: "Semester 2",
-    year: 2020,
-    number: 2,
-  },
+  //   {
+  //     name: "Semester 2 2020",
+  //     year: 2020,
+  //     number: 2,
+  //   },
 ];
+
+export const CURRENT_SEMESTER: 1 | 2 | 3 = 1;
+export const CURRENT_YEAR = 2020;
 
 export interface Plan {
   id: string;

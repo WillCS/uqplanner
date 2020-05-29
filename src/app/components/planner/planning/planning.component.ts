@@ -134,17 +134,45 @@ export class PlanningComponent implements OnInit, OnDestroy {
   public setSemester(event: Event) {
     const target = event.target as HTMLInputElement;
     const name: string = target.value;
+
+    const currentSemester: SemesterOption = SEMESTER_OPTIONS.find(
+      (i) => i.year === this.plan.year && i.number === this.plan.semester
+    );
     const semester: SemesterOption = SEMESTER_OPTIONS.find(
       (i) => i.name === name
     );
-    this.plannerService.setSemester(semester.number, semester.year);
+
+    console.log(this.plan);
+    console.log(semester);
+    if (
+      semester.year === this.plan.year &&
+      semester.number === this.plan.semester
+    ) {
+      return;
+    }
+
+    if (this.plan.isDirty) {
+      this.showDiscardModal(
+        () => this.plannerService.newPlan(semester.year, semester.number),
+        () => (target.value = currentSemester.name)
+      );
+    } else {
+      this.plannerService.newPlan(semester.year, semester.number);
+    }
   }
 
   public isEmpty(): boolean {
     return this.plan.classes.length === 0;
   }
 
-  public semesterClick(event) {
-    console.log("clicked");
+  private showDiscardModal(andThen: () => void, onReject: () => void): void {
+    this.modalService.showConfirmationModal(
+      "Unsaved Changes",
+      "You have made changes to your current timetable that " +
+        "have not been saved. Are you sure you want to load " +
+        "another timetable?",
+      andThen,
+      onReject
+    );
   }
 }
