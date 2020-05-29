@@ -8,6 +8,8 @@ import {
   ClassType,
   Campus,
   Semester,
+  CURRENT_YEAR,
+  CURRENT_SEMESTER,
 } from "./calendar";
 import { Observable, BehaviorSubject } from "rxjs";
 import { StorageService } from "./storage.service";
@@ -29,8 +31,11 @@ export class PlannerService {
     this.plans = new BehaviorSubject<Plans>(storageService.get());
 
     const planIds = Object.keys(this.plans.value);
+
     if (planIds.length === 0) {
-      this.currentPlan = new BehaviorSubject<Plan>(this.cleanPlan());
+      this.currentPlan = new BehaviorSubject<Plan>(
+        this.cleanPlan(CURRENT_YEAR, CURRENT_SEMESTER)
+      );
 
       this.plans.next({
         [this.currentPlan.value.id]: this.currentPlan.value,
@@ -43,8 +48,10 @@ export class PlannerService {
     }
   }
 
-  public newPlan() {
-    const cleanPlan: Plan = this.cleanPlan();
+  public newPlan(year = CURRENT_YEAR, semester = CURRENT_SEMESTER) {
+    console.log(year);
+    console.log(semester);
+    const cleanPlan: Plan = this.cleanPlan(year, semester);
     this.currentPlan.next(cleanPlan);
 
     this.plans.next({
@@ -56,7 +63,7 @@ export class PlannerService {
   public savePlan() {
     const plan = this.currentPlan.value;
     if (!plan.name) {
-      plan.name = this.defaultPlanName();
+      plan.name = this.defaultPlanName(plan.semester);
     }
 
     plan.isDirty = false;
@@ -173,7 +180,7 @@ export class PlannerService {
     const plan = this.currentPlan.value;
 
     if (!name) {
-      plan.name = this.defaultPlanName();
+      plan.name = this.defaultPlanName(plan.semester);
     }
 
     this.currentPlan.next({
@@ -193,9 +200,9 @@ export class PlannerService {
     });
   }
 
-  public defaultPlanName(): string {
+  public defaultPlanName(semester = CURRENT_SEMESTER): string {
     const alreadyUsed = Object.values(this.plans.value).map((p) => p.name);
-    const pre = "Semester 1 Timetable";
+    const pre = `Semester ${semester} Timetable`;
     let count = 2;
 
     let name = pre;
@@ -206,17 +213,17 @@ export class PlannerService {
     return name;
   }
 
-  private cleanPlan(): Plan {
+  private cleanPlan(year: number, semester: 1 | 2 | 3): Plan {
     return {
       id: uuid.v4(),
-      name: this.defaultPlanName(),
-      year: 2019,
-      semester: 1,
+      name: this.defaultPlanName(semester),
       classes: new Array<ClassListing>(),
       selections: new Map<string, Map<string, number>>(),
       lastEdited: Date.now(),
       isDirty: false,
       schemaVersion: 1,
+      year,
+      semester,
     };
   }
 }

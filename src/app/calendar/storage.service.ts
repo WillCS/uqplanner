@@ -1,45 +1,65 @@
-import { Injectable } from '@angular/core';
-import { Plans } from './calendar';
+import { Injectable } from "@angular/core";
+import { Plans } from "./calendar";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class StorageService {
-  public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = 'timetableData';
-  public static readonly THEME_STORAGE_IDENTIFIER: string= 'themeName';
+  public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = "timetableData";
+  public static readonly THEME_STORAGE_IDENTIFIER: string = "themeName";
 
   constructor() {
     // create an empty store if nothing exists
     if (!this.storeExists()) {
       this.save({});
-      this.saveTheme('classic');
+      this.saveTheme("classic");
     }
   }
 
   public storeExists(): boolean {
-    return localStorage.hasOwnProperty(StorageService.TIMETABLE_STORAGE_IDENTIFIER);
+    return localStorage.hasOwnProperty(
+      StorageService.TIMETABLE_STORAGE_IDENTIFIER
+    );
   }
 
   public save(plans: Plans): void {
     const dataString = JSON.stringify(plans, this.replacer);
-    localStorage.setItem(StorageService.TIMETABLE_STORAGE_IDENTIFIER, dataString);
+    localStorage.setItem(
+      StorageService.TIMETABLE_STORAGE_IDENTIFIER,
+      dataString
+    );
   }
 
   public get(): Plans {
     const data = this.loadData();
 
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       if (!this.uuidValidate(key)) {
-        throw new Error('Invalid schema');
+        throw new Error("Invalid schema");
       }
 
       const classProperties = Object.keys(data[key]);
-      const requiredClassProperties = ['id', 'classes', 'selections', 'lastEdited'];
-      requiredClassProperties.forEach(p => {
+      const requiredClassProperties = [
+        "id",
+        "classes",
+        "selections",
+        "lastEdited",
+      ];
+      requiredClassProperties.forEach((p) => {
         if (classProperties.indexOf(p) === -1) {
-          throw new Error('Invalid schema');
+          throw new Error("Invalid schema");
         }
       });
+    });
+
+    // relabel any 2019 plans as 2020
+    Object.keys(data).forEach((key) => {
+      console.log(data[key]);
+      if (data[key].year === 2019) {
+        data[key].year = 2020;
+      }
+
+      console.log(data);
     });
 
     return data;
@@ -51,7 +71,7 @@ export class StorageService {
 
   public getTheme(): string {
     if (!localStorage.hasOwnProperty(StorageService.THEME_STORAGE_IDENTIFIER)) {
-      return '';
+      return "";
     }
 
     return localStorage.getItem(StorageService.THEME_STORAGE_IDENTIFIER);
@@ -59,9 +79,9 @@ export class StorageService {
 
   private replacer(key, value) {
     const originalObject = this[key];
-    if(originalObject instanceof Map) {
+    if (originalObject instanceof Map) {
       return {
-        dataType: 'Map',
+        dataType: "Map",
         value: Array.from(originalObject.entries()), // or with spread: value: [...originalObject]
       };
     } else {
@@ -70,8 +90,8 @@ export class StorageService {
   }
 
   private reviver(key, value) {
-    if (typeof value === 'object' && value !== null) {
-      if (value.dataType === 'Map') {
+    if (typeof value === "object" && value !== null) {
+      if (value.dataType === "Map") {
         return new Map(value.value);
       }
     }
@@ -88,6 +108,8 @@ export class StorageService {
   }
 
   private uuidValidate(uuid: string) {
-    return uuid.match(/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
+    return uuid.match(
+      /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+    );
   }
 }
