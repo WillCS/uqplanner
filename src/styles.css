@@ -1,170 +1,175 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-    --bg-light: #ffffff;
-    --bg-dark: #ffffff;
-    --search-border-color: black;
-    --search-bar-color: white;
-    --search-button-color: #545454;
-    --title-color: black;
-    --title-accent-color: #000000;
-    --footer-color: #141414;
-    --session-block: #000000;
-    --session-block-hover: #525252e3;
-    --session-clash: #ff3300;
-    --session-editing: #c4cfe0cc;
-    --calendar-label: black;
-    --block-text: white;
-    --accent-color: transparent;
-    --class-list-bg: #525252;
-    --class-list-color: white;
-    --bg-label: #000000;
-    --control-button-color: black;
-    --timetable-button-bg: #000000;
-    --timetable-button-color: white;
-    --timetable-stripes-light: rgba(0, 0, 0, 0.13);
-    --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
-    --add-timetable-button-bg: #000000;
-    --add-timetable-button-color: white;
-    --donate-btn-color: rgba(255, 255, 255, 0.65);
-    --donate-btn-hover: rgba(255, 255, 255, 0.8);
-    --success-toast-bg: #1a791f;
-    --error-toast-bg: #c14343;
+  --bg-light: #ffffff;
+  --bg-dark: #ffffff;
+  --search-border-color: black;
+  --search-bar-color: white;
+  --search-button-color: #545454;
+  --title-color: black;
+  --title-accent-color: #000000;
+  --footer-color: #141414;
+  --session-block: #000000;
+  --session-block-hover: #525252e3;
+  --session-clash: #ff3300;
+  --session-editing: #c4cfe0cc;
+  --calendar-label: black;
+  --block-text: white;
+  --accent-color: transparent;
+  --class-list-bg: #525252;
+  --class-list-color: white;
+  --bg-label: #000000;
+  --control-button-color: black;
+  --timetable-button-bg: #000000;
+  --timetable-button-color: white;
+  --timetable-stripes-light: rgba(0, 0, 0, 0.13);
+  --timetable-stripes-dark: rgba(0, 0, 0, 0.1);
+  --add-timetable-button-bg: #000000;
+  --add-timetable-button-color: white;
+  --donate-btn-color: rgba(255, 255, 255, 0.65);
+  --donate-btn-hover: rgba(255, 255, 255, 0.8);
+  --success-toast-bg: #1a791f;
+  --error-toast-bg: #c14343;
 }
 
 html {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0px;
-    font-family: 'Lato', Arial, sans-serif;
-    color: white;
-    background: var(--bg-light);
-    position: relative;
+  margin: 0px;
+  font-family: "Lato", Arial, sans-serif;
+  color: white;
+  background: var(--bg-light);
+  position: relative;
 }
 
 * {
-    transition: var(--global-transitions);
+  transition: var(--global-transitions);
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 button {
-    font-family: 'Lato', Arial, sans-serif;
+  font-family: "Lato", Arial, sans-serif;
 }
 
 textarea:focus {
-    outline: none;
+  outline: none;
 }
 
 .toast {
-    width: 200px !important;
-    box-shadow: none !important;
-    margin-bottom: 12px !important;
-    padding: 10px !important;
-    font-size: 12px !important;
-    background-image: none !important;
-    border-radius: 6px !important;
-    height: 37px !important;
-    text-align: center !important;
+  width: 200px !important;
+  box-shadow: none !important;
+  margin-bottom: 12px !important;
+  padding: 10px !important;
+  font-size: 12px !important;
+  background-image: none !important;
+  border-radius: 6px !important;
+  height: 37px !important;
+  text-align: center !important;
 }
 
 .errorToast {
-    background-color: var(--error-toast-bg) !important;
+  background-color: var(--error-toast-bg) !important;
 }
 
 .successToast {
-    background-color: var(--success-toast-bg) !important;
+  background-color: var(--success-toast-bg) !important;
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
+  .contentContainer {
+    width: 100vw !important;
+    min-width: 80vw !important;
+  }
 
-    .contentContainer {
-        width: 100vw !important;
-        min-width: 80vw !important;
-    }
+  app-planning {
+    display: flex;
+    flex-direction: column;
+  }
 
-    app-planning {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    app-planning > * {
-        width: 90vw !important;
-        padding-left: 5vw;
-    }
+  app-planning > * {
+    width: 90vw !important;
+    padding-left: 5vw;
+  }
 
-    div.modalBox {
-        max-width: 98vw;
-    }
-    
-    .title {
-        padding-top: 20px !important;
-        order: 1;
-    }
+  div.modalBox {
+    max-width: 98vw;
+  }
 
-    .classList {
-        order: 3;
-    }
+  .title {
+    padding-top: 20px !important;
+    order: 1;
+  }
 
-    app-planning .classObject.placeholder {
-        height: 60px !important;
-        padding: 15px !important;
-    }
-    
-    .topMenu {
-        margin-top: 0px !important;
-        margin-bottom: 0px !important;
-    }
+  .classList {
+    order: 3;
+  }
 
-    .timetableList {
-        width: auto !important;
-    }
+  app-planning .classObject.placeholder {
+    height: 60px !important;
+    padding: 15px !important;
+  }
 
-    app-timetable {
-        padding-left: 12px !important;
-        width: 95vw !important;
-        order: 2;
-    }
+  app-planning .semesterSelect,
+  app-planning .campusSelect {
+    font-size: 10px !important;
+    left: 0 !important;
+    margin-right: 0 !important;
+  }
 
-    .calendarColumnContainer {
-        margin-top: 5px !important;
-    }
+  .topMenu {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+  }
 
-    .timeLabels {
-        left: -12px !important;
-    }
+  .timetableList {
+    width: auto !important;
+  }
 
-    .dayHeader {
-        font-size: 12px !important;
-    }
+  app-timetable {
+    padding-left: 12px !important;
+    width: 95vw !important;
+    order: 2;
+  }
 
-    .timestamp {
-        font-size: 9px !important;
-    }
+  .calendarColumnContainer {
+    margin-top: 5px !important;
+  }
 
-    .scheduledClass {
-        padding-top: 4px !important;
-        padding-left: 4px !important;
-    }
+  .timeLabels {
+    left: -12px !important;
+  }
 
-    .scheduledClass > p {
-        font-size: 11px !important;
-        line-height: 13px !important;
-    }
+  .dayHeader {
+    font-size: 12px !important;
+  }
 
-    app-theme {
-        bottom: 30px !important;
-    }
+  .timestamp {
+    font-size: 9px !important;
+  }
 
-    footer {
-        margin-top: 50px !important;
-    }
-    
+  .scheduledClass {
+    padding-top: 4px !important;
+    padding-left: 4px !important;
+  }
+
+  .scheduledClass > p {
+    font-size: 11px !important;
+    line-height: 13px !important;
+  }
+
+  app-theme {
+    bottom: 30px !important;
+  }
+
+  footer {
+    margin-top: 50px !important;
+  }
 }

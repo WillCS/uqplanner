@@ -6,13 +6,13 @@
 <!-- Sidebar -->
 <div class='classList'>
     <div class='selectWrap'>
-        <select class='semesterSelect labelText' (change)='this.setSemester($event)'>
+        <select class='semesterSelect' (change)='this.setSemester($event)'>
             <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
                 [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
                 {{semester.name}}
             </option>
         </select>
-        <select class='campusSelect labelText' (change)='this.setCampus($event)'>
+        <select class='campusSelect' (change)='this.setCampus($event)'>
             <option *ngFor='let campus of this.campuses' [value]='campus.code' [selected]='this.campus == campus.code'>
                 {{campus.name}}
             </option>
