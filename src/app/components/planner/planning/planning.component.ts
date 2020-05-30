@@ -151,13 +151,29 @@ export class PlanningComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.plan.isDirty) {
-      this.showDiscardModal(
-        () => this.plannerService.newPlan(semester.year, semester.number),
+    if (semester.number === 2) {
+      this.showSemester2DraftModal(
+        () => {
+          if (this.plan.isDirty) {
+            this.showDiscardModal(
+              () => this.plannerService.newPlan(semester.year, semester.number),
+              () => (target.value = currentSemester.name)
+            );
+          } else {
+            this.plannerService.newPlan(semester.year, semester.number);
+          }
+        },
         () => (target.value = currentSemester.name)
       );
     } else {
-      this.plannerService.newPlan(semester.year, semester.number);
+      if (this.plan.isDirty) {
+        this.showDiscardModal(
+          () => this.plannerService.newPlan(semester.year, semester.number),
+          () => (target.value = currentSemester.name)
+        );
+      } else {
+        this.plannerService.newPlan(semester.year, semester.number);
+      }
     }
   }
 
@@ -173,6 +189,20 @@ export class PlanningComponent implements OnInit, OnDestroy {
         "another timetable?",
       andThen,
       onReject
+    );
+  }
+
+  private showSemester2DraftModal(
+    yesAction: () => void,
+    noAction: () => void
+  ): void {
+    this.modalService.showConfirmationModal(
+      "Warning!",
+      "Semester two class times are still drafts at the moment, and might change later without any notice.",
+      yesAction,
+      noAction,
+      "Proceed",
+      "Cancel"
     );
   }
 }
