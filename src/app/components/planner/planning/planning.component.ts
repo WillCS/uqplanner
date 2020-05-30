@@ -198,7 +198,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
   ): void {
     this.modalService.showConfirmationModal(
       "Warning!",
-      "Semester two class times are still drafts at the moment, and might change later without any notice.",
+      "Semester two class times are still in draft stage at the moment, and might change later without any notice.",
       yesAction,
       noAction,
       "Proceed",
