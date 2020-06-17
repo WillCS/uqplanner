@@ -73,6 +73,7 @@ export class PlannerService {
       [plan.id]: {
         ...plan,
         lastEdited: Date.now(),
+        wasEmpty: plan.classes.length === 0,
       },
     });
     this.storageService.save(this.plans.value);
@@ -190,13 +191,18 @@ export class PlannerService {
     });
   }
 
-  public setSemester(semester: 1 | 2 | 3, year: number) {
+  public setSemester(year: number, semester: 1 | 2 | 3) {
     const plan = this.currentPlan.value;
+
+    // clear classes
+    plan.classes = new Array<ClassListing>();
+    plan.selections = new Map<string, Map<string, number>>();
 
     this.currentPlan.next({
       ...plan,
       year,
       semester,
+      name: this.defaultPlanName(semester),
     });
   }
 
@@ -224,6 +230,7 @@ export class PlannerService {
       selections: new Map<string, Map<string, number>>(),
       lastEdited: Date.now(),
       isDirty: false,
+      wasEmpty: true,
       schemaVersion: 1,
       year,
       semester,

@@ -77,6 +77,7 @@ export interface Plan {
   selections: Map<string, Map<string, number>>;
   lastEdited: number;
   isDirty: boolean;
+  wasEmpty: boolean;
   schemaVersion: number;
 }
 

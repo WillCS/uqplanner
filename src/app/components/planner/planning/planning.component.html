@@ -6,7 +6,7 @@
 <!-- Sidebar -->
 <div class='classList'>
     <div class='selectWrap'>
-        <select class='semesterSelect' (change)='this.setSemester($event)'>
+        <select class='semesterSelect' (change)='this.setSemesterHandler($event)'>
             <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
                 [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
                 {{semester.name}}

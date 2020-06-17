@@ -131,7 +131,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
     this.campus = target.value;
   }
 
-  public setSemester(event: Event) {
+  public setSemesterHandler(event: Event) {
     const target = event.target as HTMLInputElement;
     const name: string = target.value;
 
@@ -151,29 +151,34 @@ export class PlanningComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (semester.number === 2) {
-      this.showSemester2DraftModal(
-        () => {
-          if (this.plan.isDirty) {
-            this.showDiscardModal(
-              () => this.plannerService.newPlan(semester.year, semester.number),
-              () => (target.value = currentSemester.name)
-            );
-          } else {
-            this.plannerService.newPlan(semester.year, semester.number);
-          }
-        },
-        () => (target.value = currentSemester.name)
-      );
-    } else {
-      if (this.plan.isDirty) {
-        this.showDiscardModal(
-          () => this.plannerService.newPlan(semester.year, semester.number),
-          () => (target.value = currentSemester.name)
-        );
+    const setSemester = () => {
+      if (this.plan.wasEmpty) {
+        // don't create a new plan if this plan
+        // had no classes the last time it was saved
+        this.plannerService.setSemester(semester.year, semester.number);
       } else {
         this.plannerService.newPlan(semester.year, semester.number);
       }
+    };
+
+    const confirmIfSemester2 = () => {
+      if (semester.number === 2) {
+        this.showSemester2DraftModal(
+          () => setSemester(),
+          () => (target.value = currentSemester.name)
+        );
+      } else {
+        setSemester();
+      }
+    };
+
+    if (this.plan.isDirty && !this.isEmpty()) {
+      this.showDiscardModal(
+        () => confirmIfSemester2(),
+        () => (target.value = currentSemester.name)
+      );
+    } else {
+      confirmIfSemester2();
     }
   }
 
