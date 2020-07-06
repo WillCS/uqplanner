@@ -144,6 +144,19 @@ export class ApiService {
 
   private apiActivityToClassSession(apiActivity: APIActivity): ClassSession {
     const s = apiActivity;
+
+    // HACK: fix sem 2 week_pattern errors that might be in the data
+    let week_pattern = s.week_pattern;
+    if (s.week_pattern.length >= 45 && s.semester.includes("2")) {
+      console.log(week_pattern);
+      week_pattern = week_pattern
+        .substring(29, 46)
+        .padStart(46, "0")
+        .padEnd(65, "0");
+
+      console.log(week_pattern);
+    }
+
     return {
       streamId: apiActivity.streamId,
       day: WEEKDAYS.findIndex((d) => d.startsWith(s.day_of_week.toUpperCase())),
@@ -165,7 +178,7 @@ export class ApiService {
         parseInt(s.start_date.split("/")[1], 10) - 1,
         parseInt(s.start_date.split("/")[0], 10)
       ),
-      weekPattern: s.week_pattern
+      weekPattern: week_pattern
         .split("")
         .map((i: any) => parseInt(i, 10) === 1),
     };
