@@ -59,7 +59,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
         this.deliveryMode = this.deliveryOptions[0];
 
-        console.log(this.deliveryOptions)
+        console.log(this.deliveryOptions);
       });
 
     window.onbeforeunload = (e) => {
@@ -195,11 +195,12 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
     if (this.plan.isDirty && !this.isEmpty()) {
       this.showDiscardModal(
-        () => confirmIfSemester2(),
+        () => setSemester(),
         () => (target.value = currentSemester.name)
       );
     } else {
-      confirmIfSemester2();
+      // confirmIfSemester2();
+      setSemester();
     }
   }
 

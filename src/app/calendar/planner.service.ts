@@ -211,7 +211,7 @@ export class PlannerService {
   public defaultPlanName(semester = CURRENT_SEMESTER): string {
     const alreadyUsed = Object.values(this.plans.value).map((p) => p.name);
     const pre =
-      semester === 2
+      semester === 3
         ? `Semester ${semester} Draft Timetable`
         : `Semester ${semester} Timetable`;
     let count = 2;
