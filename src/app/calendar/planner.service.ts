@@ -10,6 +10,7 @@ import {
   Semester,
   CURRENT_YEAR,
   CURRENT_SEMESTER,
+  DeliveryMode,
 } from "./calendar";
 import { Observable, BehaviorSubject } from "rxjs";
 import { StorageService } from "./storage.service";
@@ -121,7 +122,7 @@ export class PlannerService {
     );
   }
 
-  public addClass(searchTerm: string, campus: Campus): Observable<string> {
+  public addClass(searchTerm: string, campus: Campus, deliveryMode: DeliveryMode): Observable<string> {
     return new Observable((subscriber) => {
       subscriber.next("In progress...");
 
@@ -129,6 +130,7 @@ export class PlannerService {
         .getClass(
           searchTerm,
           campus,
+          deliveryMode,
           this.currentPlan.value.year,
           this.currentPlan.value.semester
         )

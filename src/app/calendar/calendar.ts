@@ -31,12 +31,6 @@ export interface Campus {
   code: string;
 }
 
-export interface SemesterOption {
-  name: string;
-  year: number;
-  number: 1 | 2 | 3;
-}
-
 export const CAMPUSES: Campus[] = [
   {
     name: "St Lucia",
@@ -52,16 +46,47 @@ export const CAMPUSES: Campus[] = [
   },
 ];
 
+export type DeliveryCode = "IN" | "EX" | "FD";
+
+export interface DeliveryMode {
+  name: string;
+  code: DeliveryCode;
+}
+
+export const DELIVERY_MODES: DeliveryMode[] = [
+  {
+    name: "INTERNAL",
+    code: "IN",
+  },
+  {
+    name: "EXTERNAL",
+    code: "EX",
+  },
+  {
+    name: "FLEX. DELIVERY",
+    code: "FD"
+  }
+];
+
+export interface SemesterOption {
+  name: string;
+  year: number;
+  number: 1 | 2 | 3;
+  deliveryModes: DeliveryCode[];
+}
+
 export const SEMESTER_OPTIONS: SemesterOption[] = [
   {
     name: "Semester 1 2020",
     year: 2020,
     number: 1,
+    deliveryModes: ["IN", "EX"],
   },
   {
     name: "Semester 2 2020",
     year: 2020,
     number: 2,
+    deliveryModes: ["FD", "EX"],
   },
 ];
 

@@ -5,26 +5,34 @@
 
 <!-- Sidebar -->
 <div class='classList'>
-    <div class='selectWrap'>
-        <select class='semesterSelect' (change)='this.setSemesterHandler($event)'>
-            <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
-                [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
-                {{semester.name}}
-            </option>
-        </select>
-        <select class='campusSelect' (change)='this.setCampus($event)'>
-            <option *ngFor='let campus of this.campuses' [value]='campus.code' [selected]='this.campus == campus.code'>
-                {{campus.name}}
-            </option>
-        </select>
-    </div>
     <div class='search'>
         <input #courseCode type='text' placeholder='Add a course' class='classSearchField' maxlength='9'
             (keyup.enter)='courseCode.value = this.onSearched(courseCode.value)'>
         <fa-icon class='searchButton' [icon]='this.searching() ? faCircleNotch : faSearch'
             [class.spin]='this.searching()' (click)='courseCode.value = this.onSearched(courseCode.value)'></fa-icon>
     </div>
-    <p class='labelText'>Courses</p>
+    <div class='selectWrap'>
+        <select class='semesterSelect' (change)='this.setSemesterHandler($event)'>
+            <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
+                [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
+                {{semester.name}} &nbsp;▾
+            </option>
+        </select>
+        <div class='line'></div>
+        <select class='campusSelect' (change)='this.setCampus($event)'>
+            <option *ngFor='let campus of this.campuses' [value]='campus.code' [selected]='this.campus == campus.code'>
+                {{campus.name}} &nbsp;▾
+            </option>
+        </select>
+        <select class='deliveryModeSelect' (change)='this.setDeliveryMode($event)'>
+            <option *ngFor='let mode of this.deliveryOptions' [value]='mode'
+                [selected]='this.deliveryMode.code == mode.code'>
+                {{mode.name}} &nbsp;▾
+            </option>
+        </select>
+    </div>
+
+    <!-- <p class='labelText'>Courses</p> -->
     <div class='classWrapper'>
         <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
             <p><b>Search to add courses</b></p>

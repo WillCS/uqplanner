@@ -10,7 +10,7 @@
   padding: 0;
   margin: 0;
   color: var(--title-color);
-  font-family: "Lato", Arial;
+  font-family: 'Lato', Arial;
   width: 100%;
   padding-bottom: 10px;
   border-bottom: 0.5px solid var(--title-accent-color);
@@ -23,6 +23,8 @@
 
 .search {
   position: relative;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .spin {
@@ -39,36 +41,52 @@
   height: 40px;
   padding: 6px 12px;
   color: black;
-  margin-bottom: 12px;
+}
+
+.selectWrap {
+  margin-bottom: 36px;
+}
+
+.line {
+  width: 90%;
+  height: 1px;
+  border-bottom: 1px solid var(--title-accent-color);
+  box-sizing: border-box;
+  clear: left;
 }
 
 .campusSelect,
-.semesterSelect {
-  position: relative;
+.semesterSelect,
+.deliveryModeSelect {
+  float: left;
   border: none;
   color: var(--bg-label);
-  margin-bottom: 10px;
+  margin-bottom: 4px;
+  margin-top: 6px;
   background-color: transparent;
-  font-size: 8px;
-  top: 3px;
+  font-size: 8.5px;
   padding-bottom: 2px;
-  transform: translateX(-3px);
-  margin-right: -8px;
   text-transform: uppercase;
   font-weight: bold;
+  -webkit-appearance: none;
 }
 
 .campusSelect:focus,
-.semesterSelect:focus {
+.semesterSelect:focus,
+.deliveryModeSelect:focus {
   outline: none;
 }
 
 .semesterSelect {
-  left: -6px;
+  /* left: -6px; */
 }
 
 .campusSelect {
-  left: 15px;
+  /* left: 15px; */
+}
+
+.deliveryModeSelect {
+  margin-left: 10px;
 }
 
 .semesterSelect[disabled] {
@@ -109,7 +127,7 @@
 .classWrapper {
   margin: 0;
   padding: 0;
-  max-height: 600px;
+  max-height: 630px;
   overflow-y: scroll;
   overflow-x: hidden;
   scrollbar-width: thin;

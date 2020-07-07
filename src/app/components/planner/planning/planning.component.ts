@@ -11,6 +11,9 @@ import {
   CAMPUSES,
   SEMESTER_OPTIONS,
   SemesterOption,
+  DeliveryCode,
+  DELIVERY_MODES,
+  DeliveryMode,
 } from "../../../calendar/calendar";
 import { Subscription, combineLatest } from "rxjs";
 import { ToastrService } from "ngx-toastr";
@@ -26,10 +29,15 @@ declare let gtag: Function;
 export class PlanningComponent implements OnInit, OnDestroy {
   public subscription: Subscription;
   public plan: Plan;
-  public campus = "STLUC";
   public searches = [];
+
+  public campus = "STLUC";
   public campuses = CAMPUSES;
+
   public semesterOptions = SEMESTER_OPTIONS;
+
+  public deliveryMode: DeliveryMode;
+  public deliveryOptions: DeliveryMode[] = [];
 
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
@@ -44,6 +52,14 @@ export class PlanningComponent implements OnInit, OnDestroy {
       .asObservable()
       .subscribe((plan: Plan) => {
         this.plan = plan;
+
+        this.deliveryOptions = this.semesterOptions.find(
+          i => i.year === this.plan.year && i.number === this.plan.semester
+        ).deliveryModes.map(i => DELIVERY_MODES.find(j => j.code === i));
+
+        this.deliveryMode = this.deliveryOptions[0];
+
+        console.log(this.deliveryOptions)
       });
 
     window.onbeforeunload = (e) => {
@@ -55,7 +71,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
     };
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -89,11 +105,11 @@ export class PlanningComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const status = this.plannerService.addClass(searchTerm, campus);
+    const status = this.plannerService.addClass(searchTerm, campus, this.deliveryMode);
     this.searches.push(status);
 
     status.subscribe(
-      (next) => {},
+      (next) => { },
       (error) => {
         this.searches.splice(this.searches.find((s) => s === status));
         this.toaster.error(`Couldn't find ${searchTerm}`, "", {
@@ -129,6 +145,11 @@ export class PlanningComponent implements OnInit, OnDestroy {
   public setCampus(event: Event) {
     const target = event.target as HTMLInputElement;
     this.campus = target.value;
+  }
+
+  public setDeliveryMode(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.deliveryMode = DELIVERY_MODES.find(i => i.code === target.value);
   }
 
   public setSemesterHandler(event: Event) {
@@ -190,8 +211,8 @@ export class PlanningComponent implements OnInit, OnDestroy {
     this.modalService.showConfirmationModal(
       "Unsaved Changes",
       "You have made changes to your current timetable that " +
-        "have not been saved. Are you sure you want to load " +
-        "another timetable?",
+      "have not been saved. Are you sure you want to load " +
+      "another timetable?",
       andThen,
       onReject
     );
