@@ -11,7 +11,7 @@ import {
   CAMPUSES,
   SEMESTER_OPTIONS,
   SemesterOption,
-  DeliveryCode,
+  DeliveryModeId,
   DELIVERY_MODES,
   DeliveryMode,
 } from "../../../calendar/calendar";
@@ -53,11 +53,14 @@ export class PlanningComponent implements OnInit, OnDestroy {
       .subscribe((plan: Plan) => {
         this.plan = plan;
 
+        // update delivery modes
         this.deliveryOptions = this.semesterOptions.find(
           i => i.year === this.plan.year && i.number === this.plan.semester
-        ).deliveryModes.map(i => DELIVERY_MODES.find(j => j.code === i));
+        ).deliveryModes.map(i => DELIVERY_MODES.find(j => j.id === i));
 
-        this.deliveryMode = this.deliveryOptions[0];
+        if (!this.deliveryOptions.includes(this.deliveryMode)) {
+          this.deliveryMode = this.deliveryOptions[0];
+        }
       });
 
     window.onbeforeunload = (e) => {
@@ -147,7 +150,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
   public setDeliveryMode(event: Event) {
     const target = event.target as HTMLInputElement;
-    this.deliveryMode = DELIVERY_MODES.find(i => i.code === target.value);
+    this.deliveryMode = DELIVERY_MODES.find(i => i.id === target.value);
   }
 
   public setSemesterHandler(event: Event) {

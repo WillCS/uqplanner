@@ -195,6 +195,11 @@ div.classObject > p {
   color: var(--class-list-color);
 }
 
+div.classObject > p.deliveryMode {
+  font-size: 8.5px;
+  opacity: 0.6;
+}
+
 .closeButton {
   position: absolute;
   top: 15px;

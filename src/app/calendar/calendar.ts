@@ -46,25 +46,25 @@ export const CAMPUSES: Campus[] = [
   },
 ];
 
-export type DeliveryCode = "IN" | "EX" | "FD";
+export type DeliveryModeId = "IN" | "EX" | "FD";
 
 export interface DeliveryMode {
   name: string;
-  code: DeliveryCode;
+  id: DeliveryModeId;
 }
 
 export const DELIVERY_MODES: DeliveryMode[] = [
   {
     name: "INTERNAL",
-    code: "IN",
+    id: "IN",
   },
   {
     name: "EXTERNAL",
-    code: "EX",
+    id: "EX",
   },
   {
     name: "FLEX. DELIVERY",
-    code: "FD"
+    id: "FD"
   }
 ];
 
@@ -72,7 +72,7 @@ export interface SemesterOption {
   name: string;
   year: number;
   number: 1 | 2 | 3;
-  deliveryModes: DeliveryCode[];
+  deliveryModes: DeliveryModeId[];
 }
 
 export const SEMESTER_OPTIONS: SemesterOption[] = [
@@ -127,6 +127,8 @@ export interface ClassListing {
   name: string;
   description: string;
   classes: ClassType[];
+  deliveryMode?: DeliveryMode;
+  campus?: Campus;
 }
 
 export interface ClassType {

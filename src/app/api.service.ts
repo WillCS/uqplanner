@@ -8,6 +8,8 @@ import {
   WEEKDAYS,
   Campus,
   DeliveryMode,
+  CAMPUSES,
+  DELIVERY_MODES,
 } from "./calendar/calendar";
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -82,12 +84,14 @@ export class ApiService {
   private reformatClass(courseCode: string, apiObject: object, deliveryMode: DeliveryMode): ClassListing {
     // find course key within returned list
     const name = Object.keys(apiObject)
-      .filter((key) => key.includes(`_${deliveryMode.code}`))
+      .filter((key) => key.includes(`_${deliveryMode.id}`))
       .find((key) => key.split("_")[0].toUpperCase() === courseCode);
 
     if (!name) {
       throw new Error("Course not found");
     }
+
+    const campus = CAMPUSES.find(c => c.code === apiObject[name].campus);
 
     // group activities by class type
     const subject: APIClass = apiObject[name];
@@ -138,6 +142,8 @@ export class ApiService {
     const classList: ClassListing = {
       name: name.split("_")[0],
       description: subject.description,
+      campus,
+      deliveryMode,
       classes,
     };
 

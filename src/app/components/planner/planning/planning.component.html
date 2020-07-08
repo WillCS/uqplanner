@@ -27,9 +27,9 @@
             </option>
         </select>
         <select class='deliveryModeSelect' (change)='this.setDeliveryMode($event)'>
-            <option *ngFor='let mode of this.deliveryOptions' [value]='mode'
-                [selected]='this.deliveryMode.code == mode.code'>
-                {{mode.name}} {{this.deliveryMode.code == mode.code ? '&nbsp;▾' : ''}}
+            <option *ngFor='let mode of this.deliveryOptions' [value]='mode.id'
+                [selected]='this.deliveryMode.id == mode.id'>
+                {{mode.name}} {{this.deliveryMode.id == mode.id ? '&nbsp;▾' : ''}}
             </option>
         </select>
     </div>
@@ -42,6 +42,9 @@
         <div class='classObject normal' *ngFor='let class of this.plan.classes'>
             <p><b>{{class.name}}</b></p>
             <p><b>{{class.description | uppercase}}</b></p>
+            <p *ngIf='class.deliveryMode' class='deliveryMode'><b>
+                    {{ class.deliveryMode.name }}
+                </b></p>
 
             <fa-icon class='closeButton' [icon]='faTimesCircle' (click)='this.onClassCloseClicked(class.name)'>
             </fa-icon>
