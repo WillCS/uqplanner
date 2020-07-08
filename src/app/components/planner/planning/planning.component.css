@@ -191,7 +191,7 @@ div.classObject > p {
   display: inline-block;
   text-align: left;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--class-list-color);
 }
 
