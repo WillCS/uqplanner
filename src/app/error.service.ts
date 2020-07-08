@@ -18,7 +18,7 @@ export class ErrorService implements ErrorHandler {
     const title = 'Whoops!';
     const text = 'It looks like we\'ve run into a problem. This ' +
       'might be solved by refreshing the page, or by resetting the app. ' +
-      'Resetting the app will erase your saved timetables.';
+      'Resetting the app will delete all your saved timetables.';
 
     const reloadButton: ModalButton = new ModalButton('Reload', () => {
       window.location.reload();
@@ -32,6 +32,6 @@ export class ErrorService implements ErrorHandler {
     this.modalService = this.injector.get(ModalService);
     this.modalService.showModal(
       new ModalSettings(title, text, [reloadButton, resetButton])
-      );
+    );
   }
 }

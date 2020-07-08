@@ -74,7 +74,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.planSub.unsubscribe();
@@ -190,7 +190,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
       this.modalService.showConfirmationModal(
         "Confirm Delete",
         "This plan will not be recoverable after you have deleted it. A" +
-          "re you sure you want to delete?",
+        "re you sure you want to delete?",
         () => this.plannerService.deletePlan()
       );
     } else {
@@ -200,7 +200,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
   public handleTimetableClicked(id: string): void {
     if (this.plan.isDirty && !this.planIsEmpty()) {
-      this.showDiscardModal(() => this.setPlan(id));
+      this.showSaveModal(() => this.setPlan(id));
     } else {
       this.setPlan(id);
     }
@@ -219,7 +219,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     if (this.plan.isDirty) {
-      this.showDiscardModal(() => this.plannerService.newPlan());
+      this.showSaveModal(() => this.plannerService.newPlan());
     } else {
       this.plannerService.newPlan();
     }
@@ -245,12 +245,14 @@ export class TimetableComponent implements OnInit, OnDestroy {
     this.week = week;
   }
 
-  private showDiscardModal(andThen: () => void): void {
+  private showSaveModal(andThen: () => void): void {
     this.modalService.showConfirmationModal(
       "Unsaved Changes",
-      "You have made changes to your current timetable that " +
-        "have not been saved. Are you sure you want to load " +
-        "another timetable?",
+      "Do you want the changes you made to be saved?",
+      () => {
+        this.handleSaveClicked();
+        andThen();
+      },
       andThen
     );
   }
