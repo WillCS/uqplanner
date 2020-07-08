@@ -15,19 +15,21 @@
         <select class='semesterSelect' (change)='this.setSemesterHandler($event)'>
             <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
                 [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
-                {{semester.name}} &nbsp;▾
+                {{semester.name}}
+                {{(semester.year == this.plan.year && semester.number == this.plan.semester) ? '&nbsp;▾' : ''}}
             </option>
         </select>
         <div class='line'></div>
         <select class='campusSelect' (change)='this.setCampus($event)'>
-            <option *ngFor='let campus of this.campuses' [value]='campus.code' [selected]='this.campus == campus.code'>
-                {{campus.name}} &nbsp;▾
+            <option *ngFor='let campusOption of this.campuses' [value]='campusOption.code'
+                [selected]='this.campus == campusOption.code'>
+                {{campusOption.name}} {{this.campus == campusOption.code ? '&nbsp;▾' : ''}}
             </option>
         </select>
         <select class='deliveryModeSelect' (change)='this.setDeliveryMode($event)'>
             <option *ngFor='let mode of this.deliveryOptions' [value]='mode'
                 [selected]='this.deliveryMode.code == mode.code'>
-                {{mode.name}} &nbsp;▾
+                {{mode.name}} {{this.deliveryMode.code == mode.code ? '&nbsp;▾' : ''}}
             </option>
         </select>
     </div>

@@ -27,7 +27,7 @@ export class ApiService {
   public getClass(
     courseCode: string,
     campus?: Campus,
-    deliveryMode: DeliveryMode,
+    deliveryMode?: DeliveryMode,
     year?: number,
     semester?: 1 | 2 | 3
   ): Observable<ClassListing | Error> {

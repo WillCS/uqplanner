@@ -68,7 +68,11 @@
   padding-bottom: 2px;
   text-transform: uppercase;
   font-weight: bold;
+  /* select styling*/
   -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url('/assets/select-arrow.svg') no-repeat right;
 }
 
 .campusSelect:focus,
@@ -111,7 +115,7 @@
   margin-top: -8px;
   float: left;
   width: 18%;
-  min-width: 150px;
+  min-width: 160px;
 }
 
 .labelText {
@@ -205,7 +209,7 @@ div.classObject > p {
 
 app-timetable {
   float: right;
-  width: 78%;
+  width: calc(96% - max(160px, 18%));
 }
 
 app-class-search {
