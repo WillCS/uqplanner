@@ -150,13 +150,10 @@ export class ApiService {
     // HACK: fix sem 2 week_pattern errors that might be in the data
     let week_pattern = s.week_pattern;
     if (s.week_pattern.length >= 45 && s.semester.includes("2")) {
-      console.log(week_pattern);
       week_pattern = week_pattern
         .substring(29, 46)
         .padStart(46, "0")
         .padEnd(65, "0");
-
-      console.log(week_pattern);
     }
 
     return {

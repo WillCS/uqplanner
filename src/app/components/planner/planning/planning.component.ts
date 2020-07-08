@@ -58,8 +58,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
         ).deliveryModes.map(i => DELIVERY_MODES.find(j => j.code === i));
 
         this.deliveryMode = this.deliveryOptions[0];
-
-        console.log(this.deliveryOptions);
       });
 
     window.onbeforeunload = (e) => {
@@ -163,8 +161,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
       (i) => i.name === name
     );
 
-    console.log(this.plan);
-    console.log(semester);
     if (
       semester.year === this.plan.year &&
       semester.number === this.plan.semester

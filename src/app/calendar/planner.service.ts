@@ -50,8 +50,6 @@ export class PlannerService {
   }
 
   public newPlan(year = CURRENT_YEAR, semester = CURRENT_SEMESTER) {
-    console.log(year);
-    console.log(semester);
     const cleanPlan: Plan = this.cleanPlan(year, semester);
     this.currentPlan.next(cleanPlan);
 

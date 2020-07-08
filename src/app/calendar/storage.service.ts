@@ -54,12 +54,9 @@ export class StorageService {
 
     // relabel any 2019 plans as 2020
     Object.keys(data).forEach((key) => {
-      console.log(data[key]);
       if (data[key].year === 2019) {
         data[key].year = 2020;
       }
-
-      console.log(data);
     });
 
     return data;
