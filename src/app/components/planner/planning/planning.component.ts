@@ -11,6 +11,9 @@ import {
   CAMPUSES,
   SEMESTER_OPTIONS,
   SemesterOption,
+  DeliveryModeId,
+  DELIVERY_MODES,
+  DeliveryMode,
 } from "../../../calendar/calendar";
 import { Subscription, combineLatest } from "rxjs";
 import { ToastrService } from "ngx-toastr";
@@ -26,10 +29,15 @@ declare let gtag: Function;
 export class PlanningComponent implements OnInit, OnDestroy {
   public subscription: Subscription;
   public plan: Plan;
-  public campus = "STLUC";
   public searches = [];
+
+  public campus = "STLUC";
   public campuses = CAMPUSES;
+
   public semesterOptions = SEMESTER_OPTIONS;
+
+  public deliveryMode: DeliveryMode;
+  public deliveryOptions: DeliveryMode[] = [];
 
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
@@ -44,6 +52,15 @@ export class PlanningComponent implements OnInit, OnDestroy {
       .asObservable()
       .subscribe((plan: Plan) => {
         this.plan = plan;
+
+        // update delivery modes
+        this.deliveryOptions = this.semesterOptions.find(
+          i => i.year === this.plan.year && i.number === this.plan.semester
+        ).deliveryModes.map(i => DELIVERY_MODES.find(j => j.id === i));
+
+        if (!this.deliveryOptions.includes(this.deliveryMode)) {
+          this.deliveryMode = this.deliveryOptions[0];
+        }
       });
 
     window.onbeforeunload = (e) => {
@@ -55,7 +72,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
     };
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -89,11 +106,11 @@ export class PlanningComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const status = this.plannerService.addClass(searchTerm, campus);
+    const status = this.plannerService.addClass(searchTerm, campus, this.deliveryMode);
     this.searches.push(status);
 
     status.subscribe(
-      (next) => {},
+      (next) => { },
       (error) => {
         this.searches.splice(this.searches.find((s) => s === status));
         this.toaster.error(`Couldn't find ${searchTerm}`, "", {
@@ -131,7 +148,12 @@ export class PlanningComponent implements OnInit, OnDestroy {
     this.campus = target.value;
   }
 
-  public setSemester(event: Event) {
+  public setDeliveryMode(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.deliveryMode = DELIVERY_MODES.find(i => i.id === target.value);
+  }
+
+  public setSemesterHandler(event: Event) {
     const target = event.target as HTMLInputElement;
     const name: string = target.value;
 
@@ -142,8 +164,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
       (i) => i.name === name
     );
 
-    console.log(this.plan);
-    console.log(semester);
     if (
       semester.year === this.plan.year &&
       semester.number === this.plan.semester
@@ -151,13 +171,35 @@ export class PlanningComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.plan.isDirty) {
+    const setSemester = () => {
+      if (this.plan.wasEmpty) {
+        // don't create a new plan if this plan
+        // had no classes the last time it was saved
+        this.plannerService.setSemester(semester.year, semester.number);
+      } else {
+        this.plannerService.newPlan(semester.year, semester.number);
+      }
+    };
+
+    const confirmIfSemester2 = () => {
+      if (semester.number === 2) {
+        this.showSemester2DraftModal(
+          () => setSemester(),
+          () => (target.value = currentSemester.name)
+        );
+      } else {
+        setSemester();
+      }
+    };
+
+    if (this.plan.isDirty && !this.isEmpty()) {
       this.showDiscardModal(
-        () => this.plannerService.newPlan(semester.year, semester.number),
+        () => setSemester(),
         () => (target.value = currentSemester.name)
       );
     } else {
-      this.plannerService.newPlan(semester.year, semester.number);
+      // confirmIfSemester2();
+      setSemester();
     }
   }
 
@@ -169,10 +211,24 @@ export class PlanningComponent implements OnInit, OnDestroy {
     this.modalService.showConfirmationModal(
       "Unsaved Changes",
       "You have made changes to your current timetable that " +
-        "have not been saved. Are you sure you want to load " +
-        "another timetable?",
+      "have not been saved. Are you sure you want to load " +
+      "another timetable?",
       andThen,
       onReject
+    );
+  }
+
+  private showSemester2DraftModal(
+    yesAction: () => void,
+    noAction: () => void
+  ): void {
+    this.modalService.showConfirmationModal(
+      "Warning!",
+      "Semester 2 class times are still in draft stage at the moment, and might change later without any notice.",
+      yesAction,
+      noAction,
+      "Proceed",
+      "Cancel"
     );
   }
 }

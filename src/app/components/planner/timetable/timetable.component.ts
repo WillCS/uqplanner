@@ -1,23 +1,34 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import {
-  WEEKDAYS, WEEKDAY_INDICES, TIMETABLE_HOURS, ClassListing,
-  TimetableSession, ClassStream, ClassType, ClassSession
-} from 'src/app/calendar/calendar';
-import { ExportService } from 'src/app/calendar/export.service';
-import { faDownload, faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Plan, PlanSummary } from '../../../calendar/calendar';
-import { Subscription } from 'rxjs';
-import { PlannerService } from '../../../calendar/planner.service';
-import { ModalService } from '../../modal/modal.service';
-import { ToastrService } from 'ngx-toastr';
-import { environment } from 'src/environments/environment';
+  WEEKDAYS,
+  WEEKDAY_INDICES,
+  TIMETABLE_HOURS,
+  ClassListing,
+  TimetableSession,
+  ClassStream,
+  ClassType,
+  ClassSession,
+} from "src/app/calendar/calendar";
+import { ExportService } from "src/app/calendar/export.service";
+import {
+  faDownload,
+  faPlus,
+  faSave,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import { Plan, PlanSummary } from "../../../calendar/calendar";
+import { Subscription } from "rxjs";
+import { PlannerService } from "../../../calendar/planner.service";
+import { ModalService } from "../../modal/modal.service";
+import { ToastrService } from "ngx-toastr";
+import { environment } from "src/environments/environment";
 
 declare let gtag: Function;
 
 @Component({
-  selector: 'app-timetable',
-  templateUrl: './timetable.component.html',
-  styleUrls: ['./timetable.component.css']
+  selector: "app-timetable",
+  templateUrl: "./timetable.component.html",
+  styleUrls: ["./timetable.component.css"],
 })
 export class TimetableComponent implements OnInit, OnDestroy {
   public weekdays: string[] = WEEKDAYS;
@@ -49,17 +60,18 @@ export class TimetableComponent implements OnInit, OnDestroy {
     public plannerService: PlannerService,
     public exportService: ExportService,
     public modalService: ModalService,
-    public toaster: ToastrService) {
-      this.planSub = this.plannerService.currentPlan.asObservable().subscribe(
-        (plan: Plan) => {
-          this.plan = plan;
-        }
-      );
-      this.nameSub = this.plannerService.getPlans().subscribe(
-        (summaries: PlanSummary[]) => {
-          this.plans = summaries;
-        }
-      );
+    public toaster: ToastrService
+  ) {
+    this.planSub = this.plannerService.currentPlan
+      .asObservable()
+      .subscribe((plan: Plan) => {
+        this.plan = plan;
+      });
+    this.nameSub = this.plannerService
+      .getPlans()
+      .subscribe((summaries: PlanSummary[]) => {
+        this.plans = summaries;
+      });
   }
 
   ngOnInit() { }
@@ -82,30 +94,41 @@ export class TimetableComponent implements OnInit, OnDestroy {
       classListing.classes.forEach((classType: ClassType) => {
         const selectionForType = selectionsForClass.get(classType.name);
 
-        classType.streams.forEach((classStream: ClassStream, streamIndex: number) => {
+        classType.streams.forEach(
+          (classStream: ClassStream, streamIndex: number) => {
+            if (
+              (this.editing &&
+                classType.name === this.editingClassType &&
+                classListing.name === this.editingClassName) ||
+              streamIndex === selectionForType
+            ) {
+              classStream.classes.forEach(
+                (session: ClassSession, sessionIndex: number) => {
+                  if (
+                    isNaN(this.week) ||
+                    this.week === undefined ||
+                    session.weekPattern[this.week]
+                  ) {
+                    const day: number =
+                      session instanceof Date
+                        ? (session as Date).getDay()
+                        : (session.day as number);
 
-          if((this.editing && classType.name === this.editingClassType && classListing.name === this.editingClassName)
-              || (streamIndex === selectionForType)) {
-            classStream.classes.forEach((session: ClassSession, sessionIndex: number) => {
-
-              if(isNaN(this.week) || this.week === undefined || session.weekPattern[this.week]) {
-                const day: number = session instanceof Date
-                  ? (session as Date).getDay()
-                  : session.day as number;
-
-                if(day === dayIndex) {
-                  sessions.push({
-                    className: classListing.name,
-                    classType: classType.name,
-                    classStream: streamIndex,
-                    classSessionIndex: sessionIndex,
-                    classSession: session
-                  });
+                    if (day === dayIndex) {
+                      sessions.push({
+                        className: classListing.name,
+                        classType: classType.name,
+                        classStream: streamIndex,
+                        classSessionIndex: sessionIndex,
+                        classSession: session,
+                      });
+                    }
+                  }
                 }
-              }
-            });
+              );
+            }
           }
-        });
+        );
       });
     });
 
@@ -113,14 +136,17 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleSessionClicked(session: TimetableSession): void {
-    const isEditingSession = session.className === this.editingClassName
-      && session.classType === this.editingClassType;
+    const isEditingSession =
+      session.className === this.editingClassName &&
+      session.classType === this.editingClassType;
 
-    if(this.editing && isEditingSession) {
-      this.plan.selections.get(this.editingClassName).set(session.classType, session.classStream);
+    if (this.editing && isEditingSession) {
+      this.plan.selections
+        .get(this.editingClassName)
+        .set(session.classType, session.classStream);
 
       if (gtag && environment.gaEventParams) {
-        gtag('event', 'changeSelection', environment.gaEventParams);
+        gtag("event", "changeSelection", environment.gaEventParams);
       }
     } else {
       this.editingClassName = session.className;
@@ -136,7 +162,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
   }
 
   public handleSessionLeave(session: TimetableSession): void {
-    this.hoverStream = '';
+    this.hoverStream = "";
   }
 
   public handleBlockClicked(): void {
@@ -149,32 +175,32 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     this.plannerService.savePlan();
-    this.toaster.success(`${this.plan.name} saved to device!`, '', {
-      positionClass: 'toast-bottom-center',
-      toastClass: 'toast successToast ngx-toastr',
-      closeButton: false
+    this.toaster.success(`${this.plan.name} saved to device!`, "", {
+      positionClass: "toast-bottom-center",
+      toastClass: "toast successToast ngx-toastr",
+      closeButton: false,
     });
     if (gtag && environment.gaEventParams) {
-      gtag('event', 'savePlan', environment.gaEventParams);
+      gtag("event", "savePlan", environment.gaEventParams);
     }
   }
 
   public handleDeleteClicked(): void {
     if (this.plan.classes.length > 0) {
       this.modalService.showConfirmationModal(
-        'Confirm Delete',
-        'This plan will not be recoverable after you have deleted it. A' +
-        're you sure you want to delete?',
-        () => this.plannerService.deletePlan() );
+        "Confirm Delete",
+        "This plan will not be recoverable after you have deleted it. A" +
+        "re you sure you want to delete?",
+        () => this.plannerService.deletePlan()
+      );
     } else {
       this.plannerService.deletePlan();
     }
   }
 
   public handleTimetableClicked(id: string): void {
-    if (this.plan.isDirty) {
-      this.showDiscardModal(
-        () => this.setPlan(id));
+    if (this.plan.isDirty && !this.planIsEmpty()) {
+      this.showSaveModal(() => this.setPlan(id));
     } else {
       this.setPlan(id);
     }
@@ -183,7 +209,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
   public setPlan(id: string) {
     this.plannerService.setCurrentPlan(id);
     if (gtag && environment.gaEventParams) {
-      gtag('event', 'changePlan', environment.gaEventParams);
+      gtag("event", "changePlan", environment.gaEventParams);
     }
   }
 
@@ -193,15 +219,14 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     if (this.plan.isDirty) {
-      this.showDiscardModal(
-        () => this.plannerService.newPlan());
+      this.showSaveModal(() => this.plannerService.newPlan());
     } else {
       this.plannerService.newPlan();
     }
   }
 
   public planSaved(): boolean {
-    const planIds = this.plans.map(p => p.id);
+    const planIds = this.plans.map((p) => p.id);
     return planIds.indexOf(this.plan.id) !== -1;
   }
 
@@ -210,7 +235,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
     if (planId === this.plan.id) {
       name = this.plan.name;
     } else {
-      name = this.plans.find(p => p.id === planId).name;
+      name = this.plans.find((p) => p.id === planId).name;
     }
 
     return name;
@@ -220,12 +245,19 @@ export class TimetableComponent implements OnInit, OnDestroy {
     this.week = week;
   }
 
-  private showDiscardModal(andThen: () => void): void {
+  private showSaveModal(andThen: () => void): void {
     this.modalService.showConfirmationModal(
-      'Unsaved Changes',
-      'You have made changes to your current timetable that ' +
-      'have not been saved. Are you sure you want to load ' +
-      'another timetable?',
-      andThen);
+      "Unsaved Changes",
+      "Do you want the changes you made to be saved?",
+      () => {
+        this.handleSaveClicked();
+        andThen();
+      },
+      andThen
+    );
+  }
+
+  private planIsEmpty() {
+    return this.plan.classes.length === 0;
   }
 }

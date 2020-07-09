@@ -32,16 +32,18 @@ export class ModalService {
     title: string,
     text: string,
     yesAction: () => void,
-    noAction = () => {}
+    noAction = () => {},
+    proceedText = "Yes",
+    cancelText = "No"
   ): void {
-    const yesButton: ModalButton = new ModalButton("Yes", () => {
-      yesAction();
+    const yesButton: ModalButton = new ModalButton(proceedText, () => {
       this.closeModal();
+      yesAction();
     });
 
-    const noButton: ModalButton = new ModalButton("No", () => {
-      noAction();
+    const noButton: ModalButton = new ModalButton(cancelText, () => {
       this.closeModal();
+      noAction();
     });
 
     this.showModal(new ModalSettings(title, text, [yesButton, noButton]));

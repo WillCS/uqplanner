@@ -10,6 +10,7 @@ import {
   Semester,
   CURRENT_YEAR,
   CURRENT_SEMESTER,
+  DeliveryMode,
 } from "./calendar";
 import { Observable, BehaviorSubject } from "rxjs";
 import { StorageService } from "./storage.service";
@@ -49,8 +50,6 @@ export class PlannerService {
   }
 
   public newPlan(year = CURRENT_YEAR, semester = CURRENT_SEMESTER) {
-    console.log(year);
-    console.log(semester);
     const cleanPlan: Plan = this.cleanPlan(year, semester);
     this.currentPlan.next(cleanPlan);
 
@@ -73,6 +72,7 @@ export class PlannerService {
       [plan.id]: {
         ...plan,
         lastEdited: Date.now(),
+        wasEmpty: plan.classes.length === 0,
       },
     });
     this.storageService.save(this.plans.value);
@@ -120,7 +120,7 @@ export class PlannerService {
     );
   }
 
-  public addClass(searchTerm: string, campus: Campus): Observable<string> {
+  public addClass(searchTerm: string, campus: Campus, deliveryMode: DeliveryMode): Observable<string> {
     return new Observable((subscriber) => {
       subscriber.next("In progress...");
 
@@ -128,6 +128,7 @@ export class PlannerService {
         .getClass(
           searchTerm,
           campus,
+          deliveryMode,
           this.currentPlan.value.year,
           this.currentPlan.value.semester
         )
@@ -190,19 +191,27 @@ export class PlannerService {
     });
   }
 
-  public setSemester(semester: 1 | 2 | 3, year: number) {
+  public setSemester(year: number, semester: 1 | 2 | 3) {
     const plan = this.currentPlan.value;
+
+    // clear classes
+    plan.classes = new Array<ClassListing>();
+    plan.selections = new Map<string, Map<string, number>>();
 
     this.currentPlan.next({
       ...plan,
       year,
       semester,
+      name: this.defaultPlanName(semester),
     });
   }
 
   public defaultPlanName(semester = CURRENT_SEMESTER): string {
     const alreadyUsed = Object.values(this.plans.value).map((p) => p.name);
-    const pre = `Semester ${semester} Timetable`;
+    const pre =
+      semester === 3
+        ? `Semester ${semester} Draft Timetable`
+        : `Semester ${semester} Timetable`;
     let count = 2;
 
     let name = pre;
@@ -221,6 +230,7 @@ export class PlannerService {
       selections: new Map<string, Map<string, number>>(),
       lastEdited: Date.now(),
       isDirty: false,
+      wasEmpty: true,
       schemaVersion: 1,
       year,
       semester,

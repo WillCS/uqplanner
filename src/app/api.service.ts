@@ -7,6 +7,9 @@ import {
   Semester,
   WEEKDAYS,
   Campus,
+  DeliveryMode,
+  CAMPUSES,
+  DELIVERY_MODES,
 } from "./calendar/calendar";
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -21,11 +24,12 @@ import { APIActivity, APIClass } from "./api";
 export class ApiService {
   private proxy = environment.proxyAddress;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public getClass(
     courseCode: string,
     campus?: Campus,
+    deliveryMode?: DeliveryMode,
     year?: number,
     semester?: 1 | 2 | 3
   ): Observable<ClassListing | Error> {
@@ -37,8 +41,8 @@ export class ApiService {
       .post<string>(
         endpoint,
         `search-term=${courseCode}&semester=${semesterCode}&campus=${campusCode}&faculty=ALL&type=ALL` +
-          "&days=1&days=2&days=3&days=4&days=5&days=6&days=0&" +
-          "start-time=00%3A00&end-time=23%3A00",
+        "&days=1&days=2&days=3&days=4&days=5&days=6&days=0&" +
+        "start-time=00%3A00&end-time=23%3A00",
         {
           headers: {
             accept: "application/json, text/javascript, */*; q=0.01",
@@ -57,7 +61,7 @@ export class ApiService {
 
           let classListing: ClassListing;
           try {
-            classListing = this.reformatClass(courseCode, classObj);
+            classListing = this.reformatClass(courseCode, classObj, deliveryMode);
           } catch (error) {
             throw new Error(error.message);
           }
@@ -77,15 +81,17 @@ export class ApiService {
     return `${this.proxy}?/${name}`;
   }
 
-  private reformatClass(courseCode: string, apiObject: object): ClassListing {
+  private reformatClass(courseCode: string, apiObject: object, deliveryMode: DeliveryMode): ClassListing {
     // find course key within returned list
     const name = Object.keys(apiObject)
-      .filter((key) => !key.includes("_EX"))
+      .filter((key) => key.includes(`_${deliveryMode.id}`))
       .find((key) => key.split("_")[0].toUpperCase() === courseCode);
 
     if (!name) {
       throw new Error("Course not found");
     }
+
+    const campus = CAMPUSES.find(c => c.code === apiObject[name].campus);
 
     // group activities by class type
     const subject: APIClass = apiObject[name];
@@ -136,6 +142,8 @@ export class ApiService {
     const classList: ClassListing = {
       name: name.split("_")[0],
       description: subject.description,
+      campus,
+      deliveryMode,
       classes,
     };
 
@@ -144,6 +152,16 @@ export class ApiService {
 
   private apiActivityToClassSession(apiActivity: APIActivity): ClassSession {
     const s = apiActivity;
+
+    // HACK: fix sem 2 week_pattern errors that might be in the data
+    let week_pattern = s.week_pattern;
+    if (s.week_pattern.length >= 45 && s.semester.includes("2")) {
+      week_pattern = week_pattern
+        .substring(29, 46)
+        .padStart(46, "0")
+        .padEnd(65, "0");
+    }
+
     return {
       streamId: apiActivity.streamId,
       day: WEEKDAYS.findIndex((d) => d.startsWith(s.day_of_week.toUpperCase())),
@@ -165,7 +183,7 @@ export class ApiService {
         parseInt(s.start_date.split("/")[1], 10) - 1,
         parseInt(s.start_date.split("/")[0], 10)
       ),
-      weekPattern: s.week_pattern
+      weekPattern: week_pattern
         .split("")
         .map((i: any) => parseInt(i, 10) === 1),
     };

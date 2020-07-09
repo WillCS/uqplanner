@@ -31,12 +31,6 @@ export interface Campus {
   code: string;
 }
 
-export interface SemesterOption {
-  name: string;
-  year: number;
-  number: 1 | 2 | 3;
-}
-
 export const CAMPUSES: Campus[] = [
   {
     name: "St Lucia",
@@ -52,20 +46,51 @@ export const CAMPUSES: Campus[] = [
   },
 ];
 
+export type DeliveryModeId = "IN" | "EX" | "FD";
+
+export interface DeliveryMode {
+  name: string;
+  id: DeliveryModeId;
+}
+
+export const DELIVERY_MODES: DeliveryMode[] = [
+  {
+    name: "INTERNAL",
+    id: "IN",
+  },
+  {
+    name: "EXTERNAL",
+    id: "EX",
+  },
+  {
+    name: "FLEX. DELIVERY",
+    id: "FD"
+  }
+];
+
+export interface SemesterOption {
+  name: string;
+  year: number;
+  number: 1 | 2 | 3;
+  deliveryModes: DeliveryModeId[];
+}
+
 export const SEMESTER_OPTIONS: SemesterOption[] = [
   {
     name: "Semester 1 2020",
     year: 2020,
     number: 1,
+    deliveryModes: ["IN", "EX"],
   },
-  //   {
-  //     name: "Semester 2 2020",
-  //     year: 2020,
-  //     number: 2,
-  //   },
+  {
+    name: "Semester 2 2020",
+    year: 2020,
+    number: 2,
+    deliveryModes: ["FD", "EX"],
+  },
 ];
 
-export const CURRENT_SEMESTER: 1 | 2 | 3 = 1;
+export const CURRENT_SEMESTER: 1 | 2 | 3 = 2;
 export const CURRENT_YEAR = 2020;
 
 export interface Plan {
@@ -77,6 +102,7 @@ export interface Plan {
   selections: Map<string, Map<string, number>>;
   lastEdited: number;
   isDirty: boolean;
+  wasEmpty: boolean;
   schemaVersion: number;
 }
 
@@ -101,6 +127,8 @@ export interface ClassListing {
   name: string;
   description: string;
   classes: ClassType[];
+  deliveryMode?: DeliveryMode;
+  campus?: Campus;
 }
 
 export interface ClassType {
