@@ -127,11 +127,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
             ...environment.gaEventParams,
             event_label: searchTerm,
           });
-
-          // gtag("event", "search", {
-          //   ...environment.gaEventParams,
-          //   search_term: searchTerm,
-          // });
         }
       }
     );
