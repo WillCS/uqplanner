@@ -55,6 +55,10 @@
   clear: left;
 }
 
+.line.after {
+  display: none;
+}
+
 .campusSelect,
 .semesterSelect,
 .deliveryModeSelect {
