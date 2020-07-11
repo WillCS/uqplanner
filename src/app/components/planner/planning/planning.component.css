@@ -196,6 +196,7 @@ div.classObject > p {
 }
 
 div.classObject > p.deliveryMode {
+  display: block;
   font-size: 8.5px;
   opacity: 0.6;
 }
