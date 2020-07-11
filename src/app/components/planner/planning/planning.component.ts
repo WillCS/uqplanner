@@ -130,7 +130,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
           gtag("event", "addClassWithDeliveryMode", {
             ...environment.gaEventParams,
-            event_label: this.deliveryMode,
+            event_label: this.deliveryMode.id,
           });
         }
       }
