@@ -7,6 +7,7 @@ import { Plans } from "./calendar";
 export class StorageService {
   public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = "timetableData";
   public static readonly THEME_STORAGE_IDENTIFIER: string = "themeName";
+  public static readonly LAST_OPENED_IDENTIFIER: string = "lastOpened";
 
   constructor() {
     // create an empty store if nothing exists
@@ -72,6 +73,18 @@ export class StorageService {
     }
 
     return localStorage.getItem(StorageService.THEME_STORAGE_IDENTIFIER);
+  }
+
+  public getLastOpened(): string {
+    if (!localStorage.hasOwnProperty(StorageService.LAST_OPENED_IDENTIFIER)) {
+      return "";
+    }
+
+    return localStorage.getItem(StorageService.LAST_OPENED_IDENTIFIER);
+  }
+
+  public setLastOpened(planId: string): void {
+    localStorage.setItem(StorageService.LAST_OPENED_IDENTIFIER, planId);
   }
 
   private replacer(key, value) {
