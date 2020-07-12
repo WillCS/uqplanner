@@ -29,6 +29,7 @@
   --donate-btn-hover: rgba(255, 255, 255, 0.8);
   --success-toast-bg: #1a791f;
   --error-toast-bg: #c14343;
+  --sidebar-width: 185px;
 }
 
 html {
@@ -71,7 +72,7 @@ textarea:focus {
   font-size: 12px !important;
   background-image: none !important;
   border-radius: 6px !important;
-  height: 37px !important;
+  /* height: 37px !important; */
   text-align: center !important;
 }
 
