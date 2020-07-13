@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Plans } from "./calendar";
+import { Plans, Plan, addHashToClass } from "./calendar";
 
 @Injectable({
   providedIn: "root",
@@ -59,6 +59,10 @@ export class StorageService {
       }
     });
 
+    Object.keys(data).forEach((key) => {
+      data[key] = this.migratePlan(data[key]);
+    });
+
     return data;
   }
 
@@ -108,5 +112,21 @@ export class StorageService {
     return uuid.match(
       /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
     );
+  }
+
+  private migratePlan(plan: Plan): Plan {
+    switch(plan.schemaVersion) {
+      // Schema version 1: original version
+      case 1:
+        plan.classes = plan.classes.map(addHashToClass);
+        plan.schemaVersion = 2;
+      // Schema version 2: introduced hash
+      case 2:
+        break;
+      default:
+        break;
+    }
+
+    return plan;
   }
 }

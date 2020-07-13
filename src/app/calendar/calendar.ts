@@ -1,5 +1,8 @@
 import { Time } from "@angular/common";
 
+import stringify from 'fast-json-stable-stringify';
+import { murmur3 } from 'murmurhash-js';
+
 export const WEEKDAY_INDICES: number[] = [0, 1, 2, 3, 4];
 
 export const WEEKDAYS: string[] = ["MON", "TUE", "WED", "THU", "FRI"];
@@ -129,6 +132,7 @@ export interface ClassListing {
   classes: ClassType[];
   deliveryMode?: DeliveryMode;
   campus?: Campus;
+  hash?: number;
 }
 
 export interface ClassType {
@@ -225,4 +229,11 @@ export function getEarlierSession(
   s2: TimetableSession
 ): TimetableSession {
   return startTimeToMinutes(s1) <= startTimeToMinutes(s2) ? s1 : s2;
+}
+
+export function addHashToClass(classList: ClassListing): ClassListing {
+  classList.hash = null;
+  const hash = murmur3(stringify(classList), 1);
+  classList.hash = hash;
+  return classList;
 }
