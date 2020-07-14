@@ -50,10 +50,15 @@
                 <div class='streamWrapper' *ngFor='let streamType of class.classes'>
                     <span class='streamType'
                         (click)='this.onSidebarClassClicked(streamType)'>{{ streamType.name }}</span>
-                    <div class='dropdownContent' *ngIf='streamType.id && streamType.id == this.streamDropdown'>
-                        <span class='stream'
-                            *ngFor='let stream of streamType.streams'>{{ stream.streamId | slice:-7}}</span>
+
+                    <div class='dropdownWrapper' *ngIf='streamType.id && streamType.id == this.streamDropdown'>
+                        <div class='screen' (click)='this.onDropdownScreenClicked()'></div>
+                        <div class='dropdownContent'>
+                            <span class='stream'
+                                *ngFor='let stream of streamType.streams'>{{ stream.streamId | slice:-7}}</span>
+                        </div>
                     </div>
+
                 </div>
             </span>
 

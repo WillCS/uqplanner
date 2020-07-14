@@ -137,11 +137,12 @@
   padding: 0;
   max-height: 630px;
   overflow-y: scroll;
-  overflow-x: ;
+  overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: rgb(168, 168, 168) rgba(223, 223, 223, 0);
   width: 100%;
 
+  /* allow stream dropdowns to flow out */
   margin-right: -10000px;
   padding-right: 10000px;
   margin-bottom: -10000px;
@@ -231,7 +232,6 @@ div.classObject .streamWrapper:first-child {
 div.classObject .streamType {
   font-weight: bold;
   padding: 5px;
-  border-radius: 3px;
   opacity: 0.8;
   user-select: pointer;
 }
@@ -240,12 +240,16 @@ div.classObject .stream {
   padding: 7px;
 }
 
+div.classObject .stream:hover {
+  background-color: #eeeeee;
+}
+
 div.classObject .streamType,
 div.classObject .stream {
   background-color: white;
   font-size: 9px;
   color: black;
-  width: fit-content;
+  border-radius: 3px;
 }
 
 div.classObject .stream:first-child {
@@ -259,10 +263,19 @@ div.classObject .stream:first-child {
   z-index: 999999;
   background-color: white;
   border-radius: 3px;
+  padding: 5px;
 
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
-  max-height: 120px;
+}
+
+.dropdownWrapper .screen {
+  z-index: 100;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
 
 .closeButton {

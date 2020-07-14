@@ -243,4 +243,8 @@ export class PlanningComponent implements OnInit, OnDestroy {
   public onSidebarClassClicked(classType: ClassType) {
     this.streamDropdown = classType.id;
   }
+
+  public onDropdownScreenClicked() {
+    this.streamDropdown = '';
+  }
 }
