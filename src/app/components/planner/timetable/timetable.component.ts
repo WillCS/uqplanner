@@ -181,7 +181,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
       closeButton: false,
     });
     if (gtag && environment.gaEventParams) {
-      gtag("event", "savePlan", environment.gaEventParams);
+      gtag("event", "savePlan", {
+        ...environment.gaEventParams,
+        event_label: this.plan.classes.map(c => c.name).join('-')
+      });
     }
   }
 

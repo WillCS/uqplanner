@@ -24,6 +24,8 @@ import { DatePipe } from './calendar/date.pipe';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 
@@ -53,7 +55,8 @@ import { ToastrModule } from 'ngx-toastr';
     FontAwesomeModule,
     ToastrModule.forRoot({
       autoDismiss: false
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [{provide: ErrorHandler, useClass: ErrorService}],
   bootstrap: [AppComponent]
