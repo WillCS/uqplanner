@@ -29,6 +29,7 @@
   --donate-btn-hover: rgba(255, 255, 255, 0.8);
   --success-toast-bg: #1a791f;
   --error-toast-bg: #c14343;
+  --sidebar-width: 185px;
 }
 
 html {
@@ -71,7 +72,6 @@ textarea:focus {
   font-size: 12px !important;
   background-image: none !important;
   border-radius: 6px !important;
-  height: 37px !important;
   text-align: center !important;
 }
 
@@ -117,12 +117,32 @@ textarea:focus {
     padding: 15px !important;
   }
 
+  app-planning .selectWrap {
+    margin-bottom: 25px !important;
+  }
+
   app-planning .semesterSelect,
   app-planning .campusSelect,
   app-planning .deliveryModeSelect {
     font-size: 10px !important;
     left: 0 !important;
     margin-right: 0 !important;
+    float: right !important;
+    margin-left: 15px !important;
+  }
+
+  app-planning .line {
+    width: 99% !important;
+  }
+
+  app-planning .line.before {
+    display: none !important;
+  }
+
+  app-planning .line.after {
+    display: block !important;
+    clear: both !important;
+    padding-top: 7px !important;
   }
 
   .topMenu {
@@ -167,10 +187,15 @@ textarea:focus {
   }
 
   app-theme {
-    bottom: 30px !important;
+    bottom: 42px !important;
   }
 
   footer {
     margin-top: 50px !important;
+  }
+
+  footer .textWrap {
+    width: 80vw !important;
+    margin-left: 10vw !important;
   }
 }

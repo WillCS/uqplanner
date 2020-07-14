@@ -55,6 +55,10 @@
   clear: left;
 }
 
+.line.after {
+  display: none;
+}
+
 .campusSelect,
 .semesterSelect,
 .deliveryModeSelect {
@@ -115,7 +119,7 @@
   margin-top: -8px;
   float: left;
   width: 18%;
-  min-width: 160px;
+  min-width: var(--sidebar-width);
 }
 
 .labelText {
@@ -196,6 +200,7 @@ div.classObject > p {
 }
 
 div.classObject > p.deliveryMode {
+  display: block;
   font-size: 8.5px;
   opacity: 0.6;
 }
@@ -214,7 +219,7 @@ div.classObject > p.deliveryMode {
 
 app-timetable {
   float: right;
-  width: calc(96% - max(160px, 18%));
+  width: calc(96% - max(var(--sidebar-width), 18%));
 }
 
 app-class-search {

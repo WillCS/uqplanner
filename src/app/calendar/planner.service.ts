@@ -31,22 +31,24 @@ export class PlannerService {
   ) {
     this.plans = new BehaviorSubject<Plans>(storageService.get());
 
+    const lastOpened = storageService.getLastOpened();
     const planIds = Object.keys(this.plans.value);
 
+    let initialPlan;
     if (planIds.length === 0) {
-      this.currentPlan = new BehaviorSubject<Plan>(
-        this.cleanPlan(CURRENT_YEAR, CURRENT_SEMESTER)
-      );
-
+      initialPlan = this.cleanPlan(CURRENT_YEAR, CURRENT_SEMESTER);
       this.plans.next({
-        [this.currentPlan.value.id]: this.currentPlan.value,
+        [initialPlan.id]: initialPlan,
       });
+    } else if (lastOpened && planIds.includes(lastOpened)) {
+      initialPlan = this.plans.value[lastOpened];
     } else {
-      // TODO: get last edited plan
-      this.currentPlan = new BehaviorSubject<Plan>(
-        _.cloneDeep(this.plans.value[planIds[0]])
-      );
+      initialPlan = _.cloneDeep(this.plans.value[planIds[0]]);
     }
+
+    this.currentPlan = new BehaviorSubject<Plan>(
+      initialPlan
+    );
   }
 
   public newPlan(year = CURRENT_YEAR, semester = CURRENT_SEMESTER) {
@@ -75,7 +77,9 @@ export class PlannerService {
         wasEmpty: plan.classes.length === 0,
       },
     });
+
     this.storageService.save(this.plans.value);
+    this.storageService.setLastOpened(plan.id);
   }
 
   public deletePlan() {
@@ -107,6 +111,7 @@ export class PlannerService {
     }
 
     this.currentPlan.next(_.cloneDeep(this.plans.value[planId]));
+    this.storageService.setLastOpened(planId);
   }
 
   public getPlans(): Observable<PlanSummary[]> {

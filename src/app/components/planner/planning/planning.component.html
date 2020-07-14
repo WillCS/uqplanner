@@ -19,7 +19,7 @@
                 {{(semester.year == this.plan.year && semester.number == this.plan.semester) ? '&nbsp;▾' : ''}}
             </option>
         </select>
-        <div class='line'></div>
+        <div class='line before'></div>
         <select class='campusSelect' (change)='this.setCampus($event)'>
             <option *ngFor='let campusOption of this.campuses' [value]='campusOption.code'
                 [selected]='this.campus == campusOption.code'>
@@ -32,6 +32,7 @@
                 {{mode.name}} {{this.deliveryMode.id == mode.id ? '&nbsp;▾' : ''}}
             </option>
         </select>
+        <div class='line after'></div>
     </div>
 
     <!-- <p class='labelText'>Courses</p> -->

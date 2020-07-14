@@ -15,7 +15,7 @@
   padding: 0px 12px;
   color: var(--timetable-button-color);
   transition: filter 0.1s, opacity 0.2s;
-  opacity: 0.6;
+  opacity: 0.4;
   font-size: 11px;
 }
 

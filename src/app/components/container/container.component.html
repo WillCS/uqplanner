@@ -4,7 +4,7 @@
 <footer>
     <app-theme></app-theme>
     <div class='textWrap'>
-        <span class='footerText'>Not affiliated with UQ. Always check the official course timetable.</span>
+        <span class='footerText'>Not affiliated with UQ. Always check the official course timetable. </span>
         <a class='footerText' href='https://github.com/WillCS/timetable-planner-sequel'>Github</a>
         <a class='donate' [href]='this.donateLink'>Donate</a>
         <span class='footerText button' (click)='this.showFeedbackModal()'>Give Feedback</span>
@@ -12,15 +12,8 @@
 </footer>
 
 <ng-template #feedback>
-    <form 
-        name='feedbackAndBugs'
-        id='feedbackForm'
-        class='feedbackForm'
-        method='POST'
-        enctype='application/x-www-form-urlencoded'
-        action='/'
-        form-name='feedbackAndBugs'
-    >
+    <form name='feedbackAndBugs' id='feedbackForm' class='feedbackForm' method='POST'
+        enctype='application/x-www-form-urlencoded' action='/' form-name='feedbackAndBugs'>
         <input name='email' type='email' class='feedbackEmail' placeholder='email (optional)' />
         <textarea name='content' class='feebackTextarea' placeholder='Enter your submission here'></textarea>
         <input name='extra' class='feedbackExtra' />
