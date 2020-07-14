@@ -205,6 +205,61 @@ div.classObject > p.deliveryMode {
   opacity: 0.6;
 }
 
+div.classObject .classTypeWrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+div.classObject .streamWrapper {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 4px;
+}
+
+div.classObject .streamWrapper:first-child {
+  margin-left: 0px;
+}
+
+div.classObject .streamType {
+  font-weight: bold;
+  padding: 5px;
+}
+
+div.classObject .stream {
+  padding: 7px;
+}
+
+div.classObject .streamType,
+div.classObject .stream {
+  opacity: 0.8;
+  background-color: white;
+  font-size: 9px;
+  color: black;
+  display: block;
+  width: fit-content;
+  border-radius: 3px;
+}
+
+div.classObject .stream:first-child {
+  border-radius: 3px;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  transform: translateY(5px);
+  z-index: 1;
+  background-color: white;
+  border-radius: 3px;
+}
+
+.streamWrapper:hover .dropdownContent {
+  display: block;
+}
+
 .closeButton {
   position: absolute;
   top: 15px;
