@@ -10,6 +10,7 @@ import {
   DeliveryMode,
   CAMPUSES,
   DELIVERY_MODES,
+  addHashToClass
 } from "./calendar/calendar";
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -148,7 +149,7 @@ export class ApiService {
       classes,
     };
 
-    return classList;
+    return addHashToClass(classList);
   }
 
   private apiActivityToClassSession(apiActivity: APIActivity): ClassSession {

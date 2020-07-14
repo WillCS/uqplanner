@@ -47,15 +47,14 @@
             <p><b>{{class.description | uppercase}}</b></p>
 
             <span class='classTypeWrapper'>
-                <div class='streamWrapper' *ngFor='let streamType of class.classes'>
-                    <span class='streamType'
-                        (click)='this.onSidebarClassClicked(streamType)'>{{ streamType.name }}</span>
+                <div class='streamWrapper' *ngFor='let classType of class.classes'>
+                    <span class='classType' (click)='this.onSidebarClassClicked(classType)'>{{ classType.name }}</span>
 
-                    <div class='dropdownWrapper' *ngIf='streamType.id && streamType.id == this.streamDropdown'>
+                    <div class='dropdownWrapper' *ngIf='classType.id && classType.id == this.streamDropdown'>
                         <div class='screen' (click)='this.onDropdownScreenClicked()'></div>
                         <div class='dropdownContent'>
-                            <span class='stream'
-                                *ngFor='let stream of streamType.streams'>{{ stream.streamId | slice:-7}}</span>
+                            <span class='stream' *ngFor='let stream of classType.streams; let i = index'
+                                (click)='this.onStreamClicked(class, classType, i)'>{{ stream.streamId | slice:-7}}{{this.isStreamSelected(class, classType, i) ? '✅' : '&nbsp;&nbsp;'}}</span>
                         </div>
                     </div>
 

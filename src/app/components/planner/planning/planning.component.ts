@@ -15,6 +15,8 @@ import {
   DELIVERY_MODES,
   DeliveryMode,
   ClassType,
+  ClassStream,
+  ClassListing,
 } from "../../../calendar/calendar";
 import { Subscription, combineLatest } from "rxjs";
 import { ToastrService } from "ngx-toastr";
@@ -246,5 +248,34 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
   public onDropdownScreenClicked() {
     this.streamDropdown = '';
+  }
+
+  public isStreamSelected(selectedClass: ClassListing, classType: ClassType, streamIndex: number) {
+    const currentSelection = this.plan.selections.get(selectedClass.name).get(classType.name);
+
+    return currentSelection.includes(streamIndex);
+  }
+
+  public onStreamClicked(selectedClass: ClassListing, classType: ClassType, streamIndex: number) {
+    console.log(selectedClass, classType, streamIndex);
+
+    // what is already set?
+    let newSelection = [...this.plan.selections.get(selectedClass.name).get(classType.name)];
+
+    // modify selection
+    if (newSelection.includes(streamIndex)) {
+      // remove index
+      newSelection = newSelection.filter(i => i !== streamIndex);
+    } else {
+      // add index
+      newSelection.push(streamIndex);
+    }
+
+    console.log(newSelection);
+
+    // set new selection
+    this.plan.selections
+      .get(selectedClass.name)
+      .set(classType.name, newSelection);
   }
 }
