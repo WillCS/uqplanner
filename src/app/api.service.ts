@@ -114,6 +114,7 @@ export class ApiService {
       (act: APIActivity[]): ClassType => {
         return {
           name: act[0].activity_group_code,
+          id: act[0].streamId.slice(0, -3),
           streams: act.reduce(
             (acc: ClassStream[], apiActivity: APIActivity): ClassStream[] => {
               const session = this.apiActivityToClassSession(apiActivity);

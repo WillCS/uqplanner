@@ -48,8 +48,9 @@
 
             <span class='classTypeWrapper'>
                 <div class='streamWrapper' *ngFor='let streamType of class.classes'>
-                    <span class='streamType'>{{ streamType.name }}</span>
-                    <div class='dropdownContent'>
+                    <span class='streamType'
+                        (click)='this.onSidebarClassClicked(streamType)'>{{ streamType.name }}</span>
+                    <div class='dropdownContent' *ngIf='streamType.id && streamType.id == this.streamDropdown'>
                         <span class='stream'
                             *ngFor='let stream of streamType.streams'>{{ stream.streamId | slice:-7}}</span>
                     </div>

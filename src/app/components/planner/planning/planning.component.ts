@@ -14,6 +14,7 @@ import {
   DeliveryModeId,
   DELIVERY_MODES,
   DeliveryMode,
+  ClassType,
 } from "../../../calendar/calendar";
 import { Subscription, combineLatest } from "rxjs";
 import { ToastrService } from "ngx-toastr";
@@ -38,6 +39,8 @@ export class PlanningComponent implements OnInit, OnDestroy {
 
   public deliveryMode: DeliveryMode;
   public deliveryOptions: DeliveryMode[] = [];
+
+  public streamDropdown = null;
 
   faTimesCircle = faTimesCircle;
   faSearch = faSearch;
@@ -235,5 +238,9 @@ export class PlanningComponent implements OnInit, OnDestroy {
       "Proceed",
       "Cancel"
     );
+  }
+
+  public onSidebarClassClicked(classType: ClassType) {
+    this.streamDropdown = classType.id;
   }
 }

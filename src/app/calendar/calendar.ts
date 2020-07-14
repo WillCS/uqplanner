@@ -132,6 +132,7 @@ export interface ClassListing {
 }
 
 export interface ClassType {
+  id: string;
   name: string;
   streams: ClassStream[];
 }

@@ -137,10 +137,15 @@
   padding: 0;
   max-height: 630px;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: ;
   scrollbar-width: thin;
   scrollbar-color: rgb(168, 168, 168) rgba(223, 223, 223, 0);
   width: 100%;
+
+  margin-right: -10000px;
+  padding-right: 10000px;
+  margin-bottom: -10000px;
+  padding-bottom: 10000px;
 }
 
 .classWrapper::-webkit-scrollbar {
@@ -214,7 +219,7 @@ div.classObject .classTypeWrapper {
 }
 
 div.classObject .streamWrapper {
-  margin-top: 5px;
+  margin-top: 2px;
   margin-bottom: 5px;
   margin-right: 4px;
 }
@@ -226,6 +231,9 @@ div.classObject .streamWrapper:first-child {
 div.classObject .streamType {
   font-weight: bold;
   padding: 5px;
+  border-radius: 3px;
+  opacity: 0.8;
+  user-select: pointer;
 }
 
 div.classObject .stream {
@@ -234,13 +242,10 @@ div.classObject .stream {
 
 div.classObject .streamType,
 div.classObject .stream {
-  opacity: 0.8;
   background-color: white;
   font-size: 9px;
   color: black;
-  display: block;
   width: fit-content;
-  border-radius: 3px;
 }
 
 div.classObject .stream:first-child {
@@ -248,16 +253,16 @@ div.classObject .stream:first-child {
 }
 
 .dropdownContent {
-  display: none;
+  display: flex;
   position: absolute;
-  transform: translateY(5px);
-  z-index: 1;
+  transform: translateY(10px);
+  z-index: 999999;
   background-color: white;
   border-radius: 3px;
-}
 
-.streamWrapper:hover .dropdownContent {
-  display: block;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-height: 120px;
 }
 
 .closeButton {
