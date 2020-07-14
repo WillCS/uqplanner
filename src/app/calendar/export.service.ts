@@ -14,7 +14,7 @@ export class ExportService {
     console.log(`Exporting ${name} as iCal`);
 
     const cal = ics();
-    plan.selections.forEach((streams: Map<string, number>, subjectName: string) => {
+    plan.selections.forEach((streams: Map<string, (number | number[])>, subjectName: string) => {
       streams.forEach((id: number, streamName: string) => {
         const subject: ClassListing = plan.classes.find(c => c.name === subjectName);
         const stream: ClassType = subject.classes.find(s => s.name === streamName);

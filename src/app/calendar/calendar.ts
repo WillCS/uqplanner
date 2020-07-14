@@ -99,7 +99,7 @@ export interface Plan {
   year: number;
   semester: 1 | 2 | 3; // 3 for summer/trimester
   classes: ClassListing[];
-  selections: Map<string, Map<string, number>>;
+  selections: Map<string, Map<string, number[]>>;
   lastEdited: number;
   isDirty: boolean;
   wasEmpty: boolean;

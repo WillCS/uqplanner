@@ -100,7 +100,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
               (this.editing &&
                 classType.name === this.editingClassType &&
                 classListing.name === this.editingClassName) ||
-              streamIndex === selectionForType
+              selectionForType.includes(streamIndex)
             ) {
               classStream.classes.forEach(
                 (session: ClassSession, sessionIndex: number) => {
@@ -143,7 +143,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
     if (this.editing && isEditingSession) {
       this.plan.selections
         .get(this.editingClassName)
-        .set(session.classType, session.classStream);
+        .set(session.classType, [session.classStream]);
 
       if (gtag && environment.gaEventParams) {
         gtag("event", "changeSelection", environment.gaEventParams);
