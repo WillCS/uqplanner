@@ -63,9 +63,9 @@ export class PlanningComponent implements OnInit, OnDestroy {
           i => i.year === this.plan.year && i.number === this.plan.semester
         ).deliveryModes.map(i => DELIVERY_MODES.find(j => j.id === i));
 
-        if (!this.deliveryOptions.includes(this.deliveryMode)) {
-          this.deliveryMode = this.deliveryOptions[0];
-        }
+        this.deliveryMode = this.deliveryOptions[0];
+        // if (!this.deliveryOptions.includes(this.deliveryMode)) {
+        // }
       });
 
     window.onbeforeunload = (e) => {
@@ -272,11 +272,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
     }
 
     console.log(newSelection);
-
-    // set new selection
-    // this.plan.selections
-    //   .get(selectedClass.name)
-    //   .set(classType.name, newSelection);
 
     this.plannerService.setSelections(selectedClass.name, classType.name, newSelection);
   }

@@ -133,12 +133,6 @@
   scrollbar-width: thin;
   scrollbar-color: rgb(168, 168, 168) rgba(223, 223, 223, 0);
   width: 100%;
-
-  /* allow stream dropdowns to flow out */
-  margin-right: -10000px;
-  padding-right: 10000px;
-  margin-bottom: -10000px;
-  padding-bottom: 10000px;
 }
 
 .classWrapper::-webkit-scrollbar {
