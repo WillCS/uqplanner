@@ -381,17 +381,17 @@ export class PlannerService {
           this.modalService.showModal({
             title: 'Update Your Timetable',
             text: [
-              'Updated times are available for: ', classNames, '. ',
+              'Updated times are available for: ', classNames, '.\n',
               'Do you want to apply them now? Your selections for ', thisWord, ' ', classWord,
               ' will be reset.'].join(''),
             buttons: [
-              new ModalButton('Yes', () => {
+              new ModalButton('Update', () => {
                 this.replaceClassListing(nonMatchingClasses.map(clazz => clazz.class));
                 this.savePlan();
                 this.toaster.success('Updates applied!');
                 this.modalService.closeModal();
               }),
-              new ModalButton('No', () => this.modalService.closeModal())
+              new ModalButton('Cancel', () => this.modalService.closeModal())
             ]
           });
         } else {
