@@ -274,8 +274,10 @@ export class PlanningComponent implements OnInit, OnDestroy {
     console.log(newSelection);
 
     // set new selection
-    this.plan.selections
-      .get(selectedClass.name)
-      .set(classType.name, newSelection);
+    // this.plan.selections
+    //   .get(selectedClass.name)
+    //   .set(classType.name, newSelection);
+
+    this.plannerService.setSelections(selectedClass.name, classType.name, newSelection);
   }
 }

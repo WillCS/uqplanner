@@ -141,9 +141,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
       session.classType === this.editingClassType;
 
     if (this.editing && isEditingSession) {
-      this.plan.selections
-        .get(this.editingClassName)
-        .set(session.classType, [session.classStream]);
+      this.plannerService.setSelections(this.editingClassName, session.classType, [session.classStream]);
 
       if (gtag && environment.gaEventParams) {
         gtag("event", "changeSelection", environment.gaEventParams);

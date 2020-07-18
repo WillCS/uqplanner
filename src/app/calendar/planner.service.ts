@@ -193,6 +193,31 @@ export class PlannerService {
     this.currentPlan.next(plan);
   }
 
+  public setSelections(className: string, classType: string, selections: number[]) {
+    const plan = this.currentPlan.value;
+
+    if (!plan.selections.has(className) || !plan.selections.get(className).has(classType)) {
+      // the class or classtype doesn't exist
+      return;
+    }
+
+    const classInfo = plan.classes.find(c => c.name === className);
+    const classTypeInfo = classInfo.classes.find(c => c.name === classType);
+    if (Math.min(...selections) < 0 || Math.max(...selections) >= classTypeInfo.streams.length) {
+      // selection is out of range
+      return;
+    }
+
+    plan.selections
+      .get(className)
+      .set(classType, selections);
+
+    this.currentPlan.next({
+      ...plan,
+      isDirty: true
+    })
+  }
+
   public changeName(name: string) {
     const plan = this.currentPlan.value;
 
