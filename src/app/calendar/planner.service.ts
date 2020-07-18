@@ -295,9 +295,11 @@ export class PlannerService {
    * @param plan 
    */
   public tryRefreshPlan(plan: Plan): void {
-    const hourInMillis = 60 * 60 * 1000;
-    if (this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
-      this.refreshPlan(this.currentPlan.value);
+    if(plan) {
+      const hourInMillis = 60 * 60 * 1000;
+      if (this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
+        this.refreshPlan(this.currentPlan.value);
+      }
     }
   }
 
