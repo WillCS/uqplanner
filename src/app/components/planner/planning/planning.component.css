@@ -85,14 +85,6 @@
   outline: none;
 }
 
-.semesterSelect {
-  /* left: -6px; */
-}
-
-.campusSelect {
-  /* left: 15px; */
-}
-
 .deliveryModeSelect {
   margin-left: 10px;
 }
@@ -219,60 +211,51 @@ div.classObject > p.deliveryMode {
   opacity: 0.6;
 }
 
-div.classObject .classTypeWrapper {
+div.classObject .selectionWrapper {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   margin-left: 3px;
   margin-top: 2px;
   margin-bottom: 7px;
 }
 
-div.classObject .streamWrapper {
-  margin-top: 2px;
-  margin-bottom: 5px;
-  margin-right: 4px;
+.selectionWrapper .classType {
+  margin: 2px 4px 5px 0px;
 }
 
-div.classObject .streamWrapper:first-child {
-  margin-left: 0px;
-}
-
-div.classObject .classType {
+.selectionWrapper .classTypeLabel {
+  color: var(--class-list-button-color);
+  font-size: 9px;
   font-weight: bold;
   padding: 5px;
-  background-color: white;
-  color: var(--bg-label);
-  opacity: 0.8;
-  user-select: pointer;
+  background-color: var(--class-list-button);
+  cursor: pointer;
   border-radius: 3px;
 }
 
-div.classObject .stream {
+div.dropdownContent .item {
   padding: 5px 10px;
   border-radius: 18px;
   float: left;
   margin: 2px;
 }
 
-div.classObject .stream[data-selected='true'] {
+div.dropdownContent .item[data-selected='true'] {
   color: white;
-  background-color: var(--class-list-bg);
+  background-color: var(--class-list-dropdown-btn);
   transition: background-color 0.3s;
 }
 
-div.classObject .stream[data-selected='true']:hover {
-  background-color: var(--class-list-bg);
-  opacity: 0.9;
+div.dropdownContent .item[data-selected='true']:hover {
+  filter: brightness(1.1);
+  background-color: var(--class-list-dropdown-btn);
 }
 
-div.classObject .stream:hover {
+div.dropdownContent .item:hover {
   background-color: #eeeeee;
 }
 
-div.classObject .classType,
-div.classObject .stream {
-  background-color: white;
+div.dropdownContent .item {
   font-size: 9px;
   color: black;
 }
@@ -281,14 +264,14 @@ div.classObject .stream {
   position: absolute;
   transform: translateY(10px);
   z-index: 999999;
-  background-color: white;
+  background-color: var(--class-list-dropdown-bg);
   border-radius: 3px;
   padding: 5px;
   font-weight: bold;
   max-width: 258px;
 }
 
-.dropdownWrapper .screen {
+.dropdown .screen {
   z-index: 100;
   position: fixed;
   width: 100vw;

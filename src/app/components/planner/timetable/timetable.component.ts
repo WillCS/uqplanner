@@ -152,7 +152,6 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     this.editing = !this.editing;
-    this.plan.isDirty = true;
   }
 
   public handleSessionEnter(session: TimetableSession): void {

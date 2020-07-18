@@ -198,6 +198,7 @@ export class PlannerService {
   }
 
   public setSelections(className: string, classType: string, selections: number[]) {
+    console.log(className, classType, selections);
     const plan = this.currentPlan.value;
 
     if (!plan.selections.has(className) || !plan.selections.get(className).has(classType)) {
@@ -212,6 +213,15 @@ export class PlannerService {
       return;
     }
 
+    const currentSelection = plan.selections.get(className).get(classType);
+    const newContainsCurrent = currentSelection.reduce((acc, i) => acc || selections.includes(i), false);
+    const currentContainsNew = selections.reduce((acc, i) => acc || currentSelection.includes(i), false);
+
+    if (newContainsCurrent && currentContainsNew) {
+      // there is no change
+      return;
+    }
+
     plan.selections
       .get(className)
       .set(classType, selections);
@@ -219,7 +229,7 @@ export class PlannerService {
     this.currentPlan.next({
       ...plan,
       isDirty: true
-    })
+    });
   }
 
   public changeName(name: string) {

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Plans, Plan, addHashToClass } from "./calendar";
+import { Plans, Plan, addHashToClass, ClassType, ClassListing } from "./calendar";
 
 @Injectable({
   providedIn: "root",
@@ -125,6 +125,22 @@ export class StorageService {
     if (plan.year === 2019) {
       plan.year = 2020;
     }
+
+    // add id to ClassType
+    plan.classes = plan.classes.map((listing: ClassListing) => {
+      const newListing = { ...listing };
+      newListing.classes = newListing.classes.map((c: ClassType) => {
+        if (!c.id) {
+          return {
+            ...c,
+            id: c.streams[0].streamId.slice(0, -3),
+          };
+        } else {
+          return c;
+        }
+      });
+      return newListing;
+    });
 
     switch (plan.schemaVersion) {
       // Schema version 1: original version

@@ -1,75 +1,75 @@
 div.dayColumn {
-    width: 100%;
-    height: 600px;
-    top: 0%;
-    position: relative;
-    overflow: hidden;
-    color: white;
+  width: 100%;
+  height: 600px;
+  top: 0%;
+  position: relative;
+  overflow: hidden;
+  color: white;
 }
 
 div.sessionBlock {
-    background: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 2px,
-        var(--timetable-stripes-dark) 2px,
-        var(--timetable-stripes-dark) 4px
-    );
-    position: absolute;
-    width: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 2px,
+    var(--timetable-stripes-dark) 2px,
+    var(--timetable-stripes-dark) 4px
+  );
+  position: absolute;
+  width: 100%;
 }
 
 div.sessionBlock:nth-child(even) {
-    background: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 2px,
-        var(--timetable-stripes-light) 2px,
-        var(--timetable-stripes-light) 4px
-    );
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 2px,
+    var(--timetable-stripes-light) 2px,
+    var(--timetable-stripes-light) 4px
+  );
 }
 
 div.scheduledClass {
-    position: absolute;
-    background-color: var(--session-block);
-    width: 100%;
-    box-sizing: border-box;
-    cursor: pointer;
-    padding-top: 6px;
-    padding-left: 8px;
-    overflow: hidden;
-    white-space: nowrap;
-    color: var(--block-text);
+  position: absolute;
+  background-color: var(--session-block);
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding-top: 6px;
+  padding-left: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--block-text);
 }
 
 div.scheduledClass > p {
-    height: 100%;
-    margin: 0px;
-    font-size: 11px;
-    line-height: 14px;
-    word-break: break-word;
-    white-space: normal;
+  height: 100%;
+  margin: 0px;
+  font-size: 11px;
+  line-height: 14px;
+  word-break: break-word;
+  white-space: normal;
 }
 
 div.scheduledClass.editing,
-        div.scheduledClass.clashing.editing {
-    background-color: var(--session-editing);
+div.scheduledClass.clashing.editing {
+  background-color: var(--session-editing);
 }
 
-div.editing:hover, 
-    div.editing.hover {
-    background-color: var(--session-block-hover);
+div.editing:hover,
+div.editing.hover {
+  background-color: var(--session-block-hover);
 }
 
 div.editing.clashing:hover,
-    div.editing.clashing.hover {
-    background-color: var(--session-clash);
+div.editing.clashing.hover {
+  background-color: var(--session-clash);
 }
 
 div.scheduledClass.clashing {
-    background-color: var(--session-clash);
+  background-color: var(--session-clash);
 }
 
 div.scheduledClass.notEditing:hover {
-    cursor: default;
+  cursor: default;
 }

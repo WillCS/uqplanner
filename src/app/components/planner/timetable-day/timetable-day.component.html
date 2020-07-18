@@ -1,29 +1,18 @@
 <div class='dayColumn'>
-    <div
-        class='sessionBlock'
-        *ngFor='let block of this.sessionStartTimes'
-        [style.height.%]='this.sessionBlockHeight'
-        [style.top.%]='this.sessionBlockTopOffset(block)'
-        (click)='this.handleBlockClicked()'
-    >
+    <div class='sessionBlock' *ngFor='let block of this.sessionStartTimes' [style.height.%]='this.sessionBlockHeight'
+        [style.top.%]='this.sessionBlockTopOffset(block)' (click)='this.handleBlockClicked()'>
     </div>
-    <div 
-        class='scheduledClass'
-        *ngFor='let session of this.sessionList; trackBy:trackByIndex'
+    <div class='scheduledClass' *ngFor='let session of this.sessionList; trackBy:trackByIndex'
         [class.editing]='this.displaySessionAsEditing(session)'
-        [class.notEditing]='this.displaySessionAsNotEditing(session)'
-        [class.clashing]='this.isSessionClashing(session)'
+        [class.notEditing]='this.displaySessionAsNotEditing(session)' [class.clashing]='this.isSessionClashing(session)'
         [class.hover]='this.hoverStream == session.classSession.streamId'
         [ngStyle]='this.getSessionClashStyling(session)'
         [style.top.%]='this.getSessionTopPercentage(session.classSession)'
-        [style.height.%]='this.getSessionHeightPercentage(session.classSession)'
-        (click)='this.handleClicked(session)'
-        (mouseenter)='this.handleEnter(session)'
-        (mouseleave)='this.handleLeave(session)'
-        >
+        [style.height.%]='this.getSessionHeightPercentage(session.classSession)' (click)='this.handleClicked(session)'
+        (mouseenter)='this.handleEnter(session)' (mouseleave)='this.handleLeave(session)'>
         <p>
-            <b>{{session.className }}</b> 
-            {{session.classType|slice:0:1}}{{session.classStream + 1 | number:'2.0'}}
+            <b>{{session.className }}</b>
+            {{session.classType|slice:0:1}}{{session.classType|slice:-1}}-{{session.classStream + 1 | number:'2.0'}}
             <br />
             {{session.classSession.location}}
 

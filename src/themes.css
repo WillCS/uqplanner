@@ -20,6 +20,10 @@
   --accent-color: #715678;
   --class-list-bg: #381343;
   --class-list-color: white;
+  --class-list-button: rgba(255, 255, 255, 0.8);
+  --class-list-button-color: #381343;
+  --class-list-dropdown-bg: white;
+  --class-list-dropdown-btn: #381343;
   --bg-label: #eaeaea;
   --control-button-color: white;
   --timetable-button-bg: #643d6e;
@@ -54,6 +58,10 @@
   --accent-color: #ffffff00;
   --class-list-bg: #8a8a8a;
   --class-list-color: white;
+  --class-list-button: white;
+  --class-list-button-color: black;
+  --class-list-dropdown-bg: white;
+  --class-list-dropdown-btn: #8a8a8a;
   --bg-label: #000000;
   --control-button-color: black;
   --timetable-button-bg: #000000;
@@ -88,6 +96,10 @@
   --accent-color: transparent;
   --class-list-bg: #525252;
   --class-list-color: white;
+  --class-list-button: rgba(255, 255, 255, 0.9);
+  --class-list-button-color: black;
+  --class-list-dropdown-bg: white;
+  --class-list-dropdown-btn: black;
   --bg-label: #000000;
   --control-button-color: black;
   --timetable-button-bg: #000000;
@@ -122,6 +134,10 @@
   --accent-color: #ffffff;
   --class-list-bg: #52525000;
   --class-list-color: #e8e8e8;
+  --class-list-button: #555555;
+  --class-list-button-color: #e8e8e8;
+  --class-list-dropdown-bg: white;
+  --class-list-dropdown-btn: #212121;
   --bg-label: #949494;
   --control-button-color: gainsboro;
   --timetable-button-bg: #ffffff;
