@@ -116,7 +116,11 @@ export class PlannerService {
     this.currentPlan.next(_.cloneDeep(this.plans.value[planId]));
     this.storageService.setLastOpened(planId);
 
+    const hourInMillis = 60 * 60 * 1000;
+
+    // if(this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
     this.refreshPlan(this.currentPlan.value);
+    // }
   }
 
   public getPlans(): Observable<PlanSummary[]> {
@@ -272,7 +276,7 @@ export class PlannerService {
       lastEdited: Date.now(),
       isDirty: false,
       wasEmpty: true,
-      schemaVersion: 1,
+      schemaVersion: 2,
       year,
       semester,
     };
@@ -325,6 +329,20 @@ export class PlannerService {
 
         // If any have changed, prompt the user about it
         if (nonMatchingClasses.length > 0) {
+          console.log('uh oh a change happened');
+          nonMatchingClasses.forEach(clazz => {
+            const existingClass = plan.classes.find(c => c.name === clazz.name);
+
+            console.log(`change detected for ${clazz.name}`);
+            console.log(`old hash: ${existingClass.hash}`);
+            console.log(`new hash: ${clazz.class.hash}`);
+
+            console.log('old json:');
+            console.log(existingClass);
+            console.log('new json:');
+            console.log(clazz.class);
+          });
+
           const numMatches = nonMatchingClasses.length;
           const classNames = nonMatchingClasses.map(match => match.name).join(', ');
           const classWord = numMatches === 1 ? 'class' : 'classes';
