@@ -71,7 +71,7 @@
 
 div.timeLabels {
   position: absolute;
-  height: 620px;
+  height: 685px;
   flex: 0 0 100%;
   display: flex;
   flex-direction: column;
@@ -97,7 +97,7 @@ div.calendarColumnContainer {
   justify-content: center;
   position: relative;
   width: 100%;
-  height: 650px;
+  height: 720px;
   margin-top: 10px;
 }
 
