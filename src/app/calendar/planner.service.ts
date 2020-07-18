@@ -117,6 +117,7 @@ export class PlannerService {
 
     this.currentPlan.next(_.cloneDeep(this.plans.value[planId]));
     this.storageService.setLastOpened(planId);
+
     this.tryRefreshPlan(this.currentPlan.value);
   }
 
@@ -167,12 +168,12 @@ export class PlannerService {
     if (!plan.classes.some((c) => c.name === newClass.name)) {
       plan.classes.push(newClass);
       if (!plan.selections.has(newClass.name)) {
-        const classMap: Map<string, number> = new Map<
+        const classMap: Map<string, number[]> = new Map<
           string,
-          number
+          number[]
         >();
         newClass.classes.forEach((classType: ClassType) => {
-          classMap.set(classType.name, 0);
+          classMap.set(classType.name, [0]);
         });
         plan.selections.set(newClass.name, classMap);
       }
@@ -194,6 +195,41 @@ export class PlannerService {
     this.currentPlan.next(plan);
   }
 
+  public setSelections(className: string, classType: string, selections: number[]) {
+    console.log(className, classType, selections);
+    const plan = this.currentPlan.value;
+
+    if (!plan.selections.has(className) || !plan.selections.get(className).has(classType)) {
+      // the class or classtype doesn't exist
+      return;
+    }
+
+    const classInfo = plan.classes.find(c => c.name === className);
+    const classTypeInfo = classInfo.classes.find(c => c.name === classType);
+    if (Math.min(...selections) < 0 || Math.max(...selections) >= classTypeInfo.streams.length) {
+      // selection is out of range
+      return;
+    }
+
+    const currentSelection = plan.selections.get(className).get(classType);
+    const newContainsCurrent = currentSelection.reduce((acc, i) => acc || selections.includes(i), false);
+    const currentContainsNew = selections.reduce((acc, i) => acc || currentSelection.includes(i), false);
+
+    if (newContainsCurrent && currentContainsNew) {
+      // there is no change
+      return;
+    }
+
+    plan.selections
+      .get(className)
+      .set(classType, selections);
+
+    this.currentPlan.next({
+      ...plan,
+      isDirty: true
+    });
+  }
+
   public changeName(name: string) {
     const plan = this.currentPlan.value;
 
@@ -213,7 +249,7 @@ export class PlannerService {
 
     // clear classes
     plan.classes = new Array<ClassListing>();
-    plan.selections = new Map<string, Map<string, number>>();
+    plan.selections = new Map<string, Map<string, number[]>>();
 
     this.currentPlan.next({
       ...plan,
@@ -244,7 +280,7 @@ export class PlannerService {
       id: uuid.v4(),
       name: this.defaultPlanName(semester),
       classes: new Array<ClassListing>(),
-      selections: new Map<string, Map<string, number>>(),
+      selections: new Map<string, Map<string, number[]>>(),
       lastEdited: Date.now(),
       isDirty: false,
       wasEmpty: true,
@@ -260,7 +296,7 @@ export class PlannerService {
    */
   public tryRefreshPlan(plan: Plan): void {
     const hourInMillis = 60 * 60 * 1000;
-    if(this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
+    if (this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
       this.refreshPlan(this.currentPlan.value);
     }
   }
@@ -271,12 +307,12 @@ export class PlannerService {
    * @param plan The Plan to refresh
    */
   public refreshPlan(plan: Plan): void {
-    if(isDevMode()) {
+    if (isDevMode()) {
       console.log('refreshing');
       console.log(plan);
 
       console.log('new stuff');
-   }
+    }
 
     const classesObservable = forkJoin(plan.classes.map(listing =>
       this.apiService.getClass(listing.name, listing.campus, listing.deliveryMode, plan.year, plan.semester)
@@ -285,22 +321,22 @@ export class PlannerService {
     classesObservable.subscribe({
       next: (classes) => {
         // If we're just flicking through timetables we don't want to be barraged with modals
-        if(plan.id !== this.currentPlan.value.id) {
+        if (plan.id !== this.currentPlan.value.id) {
           return;
         }
 
-        if(isDevMode()) {
+        if (isDevMode()) {
           console.log(classes);
         }
 
         // Compare the new data with our stored data. If any classes came back with an error, ignore it
         const classMatches = classes.map(refreshedClass => {
-          if(refreshedClass instanceof Error) {
+          if (refreshedClass instanceof Error) {
             return { name: refreshedClass.name, matches: true };
           } else {
             const existingClass = plan.classes.find(clazz => clazz.name === refreshedClass.name);
 
-            if(existingClass === undefined) {
+            if (existingClass === undefined) {
               return { name: refreshedClass.name, matches: true };
             } else {
               return {
@@ -315,16 +351,16 @@ export class PlannerService {
         const nonMatchingClasses = classMatches.filter(match => !match.matches);
 
         // If any have changed, prompt the user about it
-        if(nonMatchingClasses.length > 0) {
+        if (nonMatchingClasses.length > 0) {
 
-          if(isDevMode()) {
+          if (isDevMode()) {
             console.log('uh oh a change happened');
           }
 
           nonMatchingClasses.forEach(clazz => {
             const existingClass = plan.classes.find(c => c.name === clazz.name);
 
-            if(isDevMode()) {
+            if (isDevMode()) {
               console.log(`change detected for ${clazz.name}`);
               console.log(`old hash: ${existingClass.hash}`);
               console.log(`new hash: ${clazz.class.hash}`);
@@ -338,8 +374,8 @@ export class PlannerService {
 
           const numMatches = nonMatchingClasses.length;
           const classNames = nonMatchingClasses.map(match => match.name).join(', ');
-          const classWord  = numMatches === 1 ? 'class' : 'classes';
-          const thisWord   = numMatches === 1 ? 'this'  : 'these';
+          const classWord = numMatches === 1 ? 'class' : 'classes';
+          const thisWord = numMatches === 1 ? 'this' : 'these';
           this.modalService.showModal({
             title: 'Update Your Timetable',
             text: [
@@ -353,11 +389,11 @@ export class PlannerService {
                 this.toaster.success('Updates applied!');
                 this.modalService.closeModal();
               }),
-              new ModalButton('No',  () => this.modalService.closeModal())
+              new ModalButton('No', () => this.modalService.closeModal())
             ]
           });
         } else {
-          if(isDevMode()) {
+          if (isDevMode()) {
             console.log('everything is fine!');
           }
         }

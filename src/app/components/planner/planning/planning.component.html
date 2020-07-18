@@ -40,15 +40,35 @@
         <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
             <p><b>Search to add courses</b></p>
         </div>
+        <!-- Class Object -->
         <div class='classObject normal' *ngFor='let class of this.plan.classes'>
-            <p><b>{{class.name}}</b></p>
-            <p><b>{{class.description | uppercase}}</b></p>
-            <p *ngIf='class.deliveryMode' class='deliveryMode'><b>
-                    {{ class.deliveryMode.name }}
-                </b></p>
-
             <fa-icon class='closeButton' [icon]='faTimesCircle' (click)='this.onClassCloseClicked(class.name)'>
             </fa-icon>
+            <p class='classTitle'><b>{{class.name}}</b></p>
+            <p class='description'><b>{{class.description | uppercase}}</b></p>
+
+            <span class='selectionWrapper'>
+                <div class='classType' *ngFor='let classType of class.classes'>
+                    <span class='classTypeLabel'
+                        (click)='this.onSidebarClassClicked(classType)'>{{ classType.name }}</span>
+
+                    <div class='dropdown' *ngIf='classType.id && classType.id == this.streamDropdown'>
+                        <div class='screen' (click)='this.onDropdownScreenClicked()'></div>
+                        <div class='dropdownContent'>
+                            <div class='item' *ngFor='let stream of classType.streams; let i = index'
+                                (click)='this.onStreamClicked(class, classType, i)'
+                                [attr.data-selected]="this.isStreamSelected(class, classType, i)">
+                                {{ stream.streamId.split("|").slice(-2).join("-") }}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </span>
+
+
+            <p *ngIf='class.deliveryMode' class='deliveryMode'>
+                <b>{{ class.deliveryMode.name }}</b>
+            </p>
         </div>
     </div>
 </div>

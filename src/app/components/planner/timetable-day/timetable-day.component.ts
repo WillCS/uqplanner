@@ -43,10 +43,11 @@ export class TimetableDayComponent implements OnInit {
 
   constructor() {
 
+
   }
 
   ngOnInit() {
-
+    console.log(this.sessionList);
   }
 
   public getClashes(session: TimetableSession): TimetableSession[] {

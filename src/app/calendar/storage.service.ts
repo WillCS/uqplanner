@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Plans, Plan, addHashToClass } from "./calendar";
+import { Plans, Plan, addHashToClass, ClassType, ClassListing } from "./calendar";
 
 @Injectable({
   providedIn: "root",
@@ -51,13 +51,6 @@ export class StorageService {
           throw new Error("Invalid schema");
         }
       });
-    });
-
-    // relabel any 2019 plans as 2020
-    Object.keys(data).forEach((key) => {
-      if (data[key].year === 2019) {
-        data[key].year = 2020;
-      }
     });
 
     Object.keys(data).forEach((key) => {
@@ -128,12 +121,49 @@ export class StorageService {
   }
 
   private migratePlan(plan: Plan): Plan {
-    switch(plan.schemaVersion) {
+    // relabel any 2019 plans as 2020
+    if (plan.year === 2019) {
+      plan.year = 2020;
+    }
+
+    // add id to ClassType
+    plan.classes = plan.classes.map((listing: ClassListing) => {
+      const newListing = { ...listing };
+      newListing.classes = newListing.classes.map((c: ClassType) => {
+        if (!c.id) {
+          return {
+            ...c,
+            id: c.streams[0].streamId.slice(0, -3),
+          };
+        } else {
+          return c;
+        }
+      });
+      return newListing;
+    });
+
+    switch (plan.schemaVersion) {
       // Schema version 1: original version
       case 1:
+        // hash classes
         plan.classes = plan.classes.map(addHashToClass);
+
+        // convert number to number[] in selections
+        // eslint-disable-next-line
+        plan.selections.forEach((classMap, courseName) => {
+          if (typeof classMap.values().next().value === 'number') {
+            const newSelection = new Map<string, number[]>();
+            classMap.forEach((selection: any, className) => {
+              newSelection.set(className, [selection]);
+            });
+
+            plan.selections.set(courseName, newSelection);
+          }
+        });
+
+        // update schema version
         plan.schemaVersion = 2;
-      // Schema version 2: introduced hash
+      // Schema version 2: introduced hash, selections are number[] instead of number
       case 2:
         break;
       default:
