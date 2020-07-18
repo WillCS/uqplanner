@@ -212,8 +212,8 @@ export class PlannerService {
     }
 
     const currentSelection = plan.selections.get(className).get(classType);
-    const newContainsCurrent = currentSelection.reduce((acc, i) => acc || selections.includes(i), false);
-    const currentContainsNew = selections.reduce((acc, i) => acc || currentSelection.includes(i), false);
+    const newContainsCurrent = currentSelection.reduce((acc, i) => acc && selections.includes(i), true);
+    const currentContainsNew = selections.reduce((acc, i) => acc && currentSelection.includes(i), true);
 
     if (newContainsCurrent && currentContainsNew) {
       // there is no change
