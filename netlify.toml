@@ -4,4 +4,4 @@
   command = 'ng build'
 
 [context.production]
-  command = 'ng build --prod && ./node_modules/.bin/ngsw-config dist ngsw-config.json'
+  command = 'ng build --prod && ./node_modules/.bin/ngsw-config dist/webapp ngsw-config.json'
