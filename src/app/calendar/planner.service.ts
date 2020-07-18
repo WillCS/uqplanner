@@ -12,11 +12,14 @@ import {
   CURRENT_SEMESTER,
   DeliveryMode,
 } from "./calendar";
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject, forkJoin } from "rxjs";
 import { StorageService } from "./storage.service";
+import { ModalService } from "../components/modal/modal.service";
 import { map } from "rxjs/operators";
 import * as uuid from "uuid";
 import * as _ from "lodash";
+import { ToastrService } from "ngx-toastr";
+import { ModalButton } from '../components/modal/modal';
 
 @Injectable({
   providedIn: "root",
@@ -27,7 +30,9 @@ export class PlannerService {
 
   constructor(
     public apiService: ApiService,
-    public storageService: StorageService
+    public storageService: StorageService,
+    public modalService: ModalService,
+    public toaster: ToastrService
   ) {
     this.plans = new BehaviorSubject<Plans>(storageService.get());
 
@@ -112,6 +117,7 @@ export class PlannerService {
 
     this.currentPlan.next(_.cloneDeep(this.plans.value[planId]));
     this.storageService.setLastOpened(planId);
+    this.tryRefreshPlan(this.currentPlan.value);
   }
 
   public getPlans(): Observable<PlanSummary[]> {
@@ -142,21 +148,7 @@ export class PlannerService {
             isDevMode() && console.log(newClass);
             const plan = _.cloneDeep(this.currentPlan.value);
             try {
-              if (!plan.classes.some((c) => c.name === newClass.name)) {
-                plan.classes.push(newClass);
-                if (!plan.selections.has(newClass.name)) {
-                  const classMap: Map<string, number> = new Map<
-                    string,
-                    number
-                  >();
-                  newClass.classes.forEach((classType: ClassType) => {
-                    classMap.set(classType.name, 0);
-                  });
-                  plan.selections.set(newClass.name, classMap);
-                }
-              }
-              plan.isDirty = true;
-              this.currentPlan.next(plan);
+              this.addClassListing(newClass);
               subscriber.complete();
             } catch (error) {
               console.log("error adding class");
@@ -168,6 +160,26 @@ export class PlannerService {
           }
         );
     });
+  }
+
+  private addClassListing(newClass: ClassListing): void {
+    const plan = _.cloneDeep(this.currentPlan.value);
+    if (!plan.classes.some((c) => c.name === newClass.name)) {
+      plan.classes.push(newClass);
+      if (!plan.selections.has(newClass.name)) {
+        const classMap: Map<string, number> = new Map<
+          string,
+          number
+        >();
+        newClass.classes.forEach((classType: ClassType) => {
+          classMap.set(classType.name, 0);
+        });
+        plan.selections.set(newClass.name, classMap);
+      }
+    }
+
+    plan.isDirty = true;
+    this.currentPlan.next(plan);
   }
 
   public removeClass(className: string) {
@@ -236,9 +248,133 @@ export class PlannerService {
       lastEdited: Date.now(),
       isDirty: false,
       wasEmpty: true,
-      schemaVersion: 1,
+      schemaVersion: 2,
       year,
       semester,
     };
+  }
+
+  /**
+   * Refresh our plan but only if it hasn't been edited for an hour
+   * @param plan 
+   */
+  public tryRefreshPlan(plan: Plan): void {
+    const hourInMillis = 60 * 60 * 1000;
+    if(this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
+      this.refreshPlan(this.currentPlan.value);
+    }
+  }
+
+  /**
+   * Update the stored timetable data for this plan,
+   * prompting the user if there are changes.
+   * @param plan The Plan to refresh
+   */
+  public refreshPlan(plan: Plan): void {
+    if(isDevMode()) {
+      console.log('refreshing');
+      console.log(plan);
+
+      console.log('new stuff');
+   }
+
+    const classesObservable = forkJoin(plan.classes.map(listing =>
+      this.apiService.getClass(listing.name, listing.campus, listing.deliveryMode, plan.year, plan.semester)
+    ));
+
+    classesObservable.subscribe({
+      next: (classes) => {
+        // If we're just flicking through timetables we don't want to be barraged with modals
+        if(plan.id !== this.currentPlan.value.id) {
+          return;
+        }
+
+        if(isDevMode()) {
+          console.log(classes);
+        }
+
+        // Compare the new data with our stored data. If any classes came back with an error, ignore it
+        const classMatches = classes.map(refreshedClass => {
+          if(refreshedClass instanceof Error) {
+            return { name: refreshedClass.name, matches: true };
+          } else {
+            const existingClass = plan.classes.find(clazz => clazz.name === refreshedClass.name);
+
+            if(existingClass === undefined) {
+              return { name: refreshedClass.name, matches: true };
+            } else {
+              return {
+                name: refreshedClass.name,
+                class: refreshedClass,
+                matches: existingClass.hash === refreshedClass.hash
+              };
+            }
+          }
+        });
+
+        const nonMatchingClasses = classMatches.filter(match => !match.matches);
+
+        // If any have changed, prompt the user about it
+        if(nonMatchingClasses.length > 0) {
+
+          if(isDevMode()) {
+            console.log('uh oh a change happened');
+          }
+
+          nonMatchingClasses.forEach(clazz => {
+            const existingClass = plan.classes.find(c => c.name === clazz.name);
+
+            if(isDevMode()) {
+              console.log(`change detected for ${clazz.name}`);
+              console.log(`old hash: ${existingClass.hash}`);
+              console.log(`new hash: ${clazz.class.hash}`);
+
+              console.log('old json:');
+              console.log(existingClass);
+              console.log('new json:');
+              console.log(clazz.class);
+            }
+          });
+
+          const numMatches = nonMatchingClasses.length;
+          const classNames = nonMatchingClasses.map(match => match.name).join(', ');
+          const classWord  = numMatches === 1 ? 'class' : 'classes';
+          const thisWord   = numMatches === 1 ? 'this'  : 'these';
+          this.modalService.showModal({
+            title: 'Update Your Timetable',
+            text: [
+              'Updated times are available for: ', classNames, '. ',
+              'Do you want to apply them now? Your selections for ', thisWord, ' ', classWord,
+              ' will be reset.'].join(''),
+            buttons: [
+              new ModalButton('Yes', () => {
+                this.replaceClassListing(nonMatchingClasses.map(clazz => clazz.class));
+                this.savePlan();
+                this.toaster.success('Updates applied!');
+                this.modalService.closeModal();
+              }),
+              new ModalButton('No',  () => this.modalService.closeModal())
+            ]
+          });
+        } else {
+          if(isDevMode()) {
+            console.log('everything is fine!');
+          }
+        }
+      },
+      error: (error) => console.error(error)
+    });
+  }
+
+  private replaceClassListing(classListings: ClassListing[]) {
+    classListings.forEach(listing => {
+      this.removeClass(listing.name);
+
+      try {
+        this.addClassListing(listing);
+      } catch (error) {
+        console.error('error replacing class');
+      }
+    });
   }
 }
