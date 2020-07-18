@@ -89,7 +89,7 @@ export const SEMESTER_OPTIONS: SemesterOption[] = [
     name: "Semester 2 2020",
     year: 2020,
     number: 2,
-    deliveryModes: ["FD", "EX"],
+    deliveryModes: ["FD", "IN", "EX"],
   },
 ];
 
