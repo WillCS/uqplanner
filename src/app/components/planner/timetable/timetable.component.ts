@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener, Host } from "@angular/core";
 import {
   WEEKDAYS,
   WEEKDAY_INDICES,
@@ -72,6 +72,13 @@ export class TimetableComponent implements OnInit, OnDestroy {
       .subscribe((summaries: PlanSummary[]) => {
         this.plans = summaries;
       });
+
+    this.plannerService.tryRefreshPlan(this.plannerService.currentPlan.value);
+  }
+
+  @HostListener('window:focus', ['$event'])
+  public onFocus(event: FocusEvent): void {
+    this.plannerService.tryRefreshPlan(this.plannerService.currentPlan.value);
   }
 
   ngOnInit() { }
