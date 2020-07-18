@@ -166,10 +166,16 @@ textarea:focus {
 
   .calendarColumnContainer {
     margin-top: 5px !important;
+    height: 685px !important;
+  }
+
+  .dayColumn {
+    height: 635px !important;
   }
 
   .timeLabels {
     left: -12px !important;
+    height: 655px !important;
   }
 
   .dayHeader {
