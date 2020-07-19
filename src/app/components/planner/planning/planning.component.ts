@@ -257,8 +257,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
   }
 
   public onStreamClicked(selectedClass: ClassListing, classType: ClassType, streamIndex: number) {
-    console.log(selectedClass, classType, streamIndex);
-
     // what is already set?
     let newSelection = [...this.plan.selections.get(selectedClass.name).get(classType.name)];
 
@@ -270,8 +268,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
       // add index
       newSelection.push(streamIndex);
     }
-
-    console.log(newSelection);
 
     this.plannerService.setSelections(selectedClass.name, classType.name, newSelection);
   }
