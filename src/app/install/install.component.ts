@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 declare let gtag: Function;
 
@@ -18,16 +19,14 @@ export class InstallComponent implements OnInit {
 
   public installHandler(event: Event) {
     console.log('Install clicked');
-    gtag('event', 'install', 'clicked');
+    gtag('event', 'installClicked', environment.gaEventParams);
     if (this.promptEvent) {
       this.promptEvent.prompt();
-      console.log(this.promptEvent);
       this.promptEvent.userChoice.then((result) => {
         this.promptEvent = null;
-        gtag('event', 'install', result);
       }).catch((err) => {
         this.promptEvent = null;
-        gtag('event', 'install', 'errored');
+        gtag('event', 'installErrored', environment.gaEventParams);
 
       });
     }
@@ -38,13 +37,13 @@ export class InstallComponent implements OnInit {
     console.log(event);
     this.promptEvent = event;
     this.promptEvent.preventDefault();
-    gtag('event', 'install', 'available');
+    gtag('event', 'installAvailable', environment.gaEventParams);
   }
 
   @HostListener('window:appinstalled', ['$event'])
   installedHandler(event: Event) {
     this.promptEvent = null;
-    gtag('event', 'install', 'installed');
+    gtag('event', 'installCompleted', environment.gaEventParams);
   }
 
 }
