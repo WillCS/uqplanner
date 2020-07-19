@@ -87,6 +87,7 @@ textarea:focus {
   .contentContainer {
     width: 100vw !important;
     min-width: 80vw !important;
+    margin-bottom: 20px !important;
   }
 
   app-planning {
@@ -202,6 +203,10 @@ textarea:focus {
 
   footer {
     margin-top: 50px !important;
+  }
+
+  app-install {
+    display: block !important;
   }
 
   footer .textWrap {

@@ -295,7 +295,7 @@ export class PlannerService {
    * @param plan 
    */
   public tryRefreshPlan(plan: Plan): void {
-    if(plan) {
+    if (plan) {
       const hourInMillis = 60 * 60 * 1000;
       if (this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
         this.refreshPlan(this.currentPlan.value);
@@ -388,7 +388,13 @@ export class PlannerService {
               new ModalButton('Update', () => {
                 this.replaceClassListing(nonMatchingClasses.map(clazz => clazz.class));
                 this.savePlan();
-                this.toaster.success('Updates applied!');
+
+                this.toaster.success(`Updates applied!`, "", {
+                  positionClass: "toast-bottom-center",
+                  toastClass: "toast successToast ngx-toastr",
+                  closeButton: false,
+                });
+
                 this.modalService.closeModal();
               }),
               new ModalButton('Cancel', () => this.modalService.closeModal())

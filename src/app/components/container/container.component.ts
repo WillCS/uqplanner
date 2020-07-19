@@ -21,23 +21,4 @@ export class ContainerComponent implements OnInit {
   ngOnInit() {
 
   }
-
-  public showFeedbackModal() {
-    const settings = new ModalSettings(
-      'Report a problem or submit feedback',
-      'If you\'ve run into a problem with the planner, try and ' +
-      'be as precise as you can when describing it. ' +
-      'Additionally, if you\'d like us to get back to you, ' +
-      'enter your email as well. Thanks!',
-      [
-        new ModalButton('Cancel', () => this.modalService.closeModal()),
-        new ModalButton('Submit', (content?: any) => {
-          (content as HTMLFormElement).submit();
-        })
-      ],
-      this.feedbackTemplate
-    );
-
-    this.modalService.showModal(settings);
-  }
 }

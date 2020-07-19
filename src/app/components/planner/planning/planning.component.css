@@ -21,6 +21,21 @@
   opacity: 0.5;
 }
 
+.installButton {
+  border: none;
+  float: right;
+  height: 30px;
+  color: var(--title-color);
+  background: transparent;
+  cursor: pointer;
+
+  font-size: 10px;
+  border-radius: 15px;
+  background-color: var(--accent-color);
+  padding: 5px 12px;
+  font-weight: bold;
+}
+
 .search {
   position: relative;
   margin-top: 8px;

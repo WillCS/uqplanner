@@ -1,0 +1,19 @@
+:host {
+  position: absolute;
+  bottom: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+}
+
+.installButton {
+  color: var(--title-color);
+  background-color: var(--timetable-stripes-dark);
+  border: none;
+  height: 30px;
+  cursor: pointer;
+  font-size: 10px;
+  border-radius: 15px;
+  padding: 5px 12px;
+  font-weight: bold;
+}

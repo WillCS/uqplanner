@@ -66,7 +66,7 @@ export const DELIVERY_MODES: DeliveryMode[] = [
     id: "EX",
   },
   {
-    name: "FLEX. DELIVERY",
+    name: "FLEXI. DELIVERY",
     id: "FD"
   }
 ];
