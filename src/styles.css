@@ -82,11 +82,14 @@ textarea:focus {
   padding: 20px 40px !important;
   background-image: none !important;
   border-radius: 6px !important;
+  max-height: 90vh;
+  overflow: scroll;
 }
 
 .announcementToast hr {
   border: 1px solid black;
   opacity: 0.15;
+  margin: 30px 0px;
 }
 
 .announcementToast .toast-close-button {
