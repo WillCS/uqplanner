@@ -20,6 +20,9 @@ import * as uuid from "uuid";
 import * as _ from "lodash";
 import { ToastrService } from "ngx-toastr";
 import { ModalButton } from '../components/modal/modal';
+import { environment } from 'src/environments/environment';
+
+declare const gtag: Function;
 
 @Injectable({
   providedIn: "root",
@@ -393,6 +396,11 @@ export class PlannerService {
                   positionClass: "toast-bottom-center",
                   toastClass: "toast successToast ngx-toastr",
                   closeButton: false,
+                });
+
+                gtag('event', 'timetableUpdated', {
+                  ...environment.gaEventParams,
+                  event_label: nonMatchingClasses.map(c => c.class.name).join('-');
                 });
 
                 this.modalService.closeModal();
