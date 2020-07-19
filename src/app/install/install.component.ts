@@ -18,7 +18,6 @@ export class InstallComponent implements OnInit {
   }
 
   public installHandler(event: Event) {
-    console.log('Install clicked');
     gtag('event', 'installClicked', environment.gaEventParams);
     if (this.promptEvent) {
       this.promptEvent.prompt();
@@ -34,7 +33,6 @@ export class InstallComponent implements OnInit {
 
   @HostListener('window:beforeinstallprompt', ['$event'])
   beforeInstallPromptHandler(event: Event) {
-    console.log(event);
     this.promptEvent = event;
     this.promptEvent.preventDefault();
     gtag('event', 'installAvailable', environment.gaEventParams);

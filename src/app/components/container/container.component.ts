@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/
 import { ModalService } from '../modal/modal.service';
 import { ModalSettings, ModalButton } from '../modal/modal';
 import { environment } from '../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
+import { StorageService } from 'src/app/calendar/storage.service';
 
 @Component({
   selector: 'app-container',
@@ -14,11 +16,50 @@ export class ContainerComponent implements OnInit {
 
   public donateLink = environment.donateLink;
 
-  constructor(private modalService: ModalService) {
+  public announcement = `
+        <h2>Welcome, Semester 2!</h2>
+        <p>For this semester, we've added...</p>
+
+        <p><b>Multi-stream selections</b><br />
+        Select multiple class streams to show in your timetable</p>
+
+        <p><b>Add to home screen</b><br />
+        Add your timetable directly to your Android home screen</p>
+
+        <p><b>Timetable updates</b><br />
+        Automatic checks for updates to your course times</p>
+
+        <!-- <p><b>Offline mode</b><br />
+        Open your saved timetable, even without internet</p> -->
+
+        <br /><hr /><br />
+
+        <p>Please <a href="https://facebook.com/uqplanner" target="_blank">like our Facebook page</a> for updates, and tell us if you run into any bugs!</p>
+
+        <p>Here's to a fresh start for the new semester.</p>
+
+        <br />
+        <p> — Darren, Will</p>
+        <br />
+  `;
+
+  constructor(private modalService: ModalService, private toaster: ToastrService, private storageService: StorageService) {
 
   }
 
   ngOnInit() {
-
+    if (!this.storageService.getAnnouncementADismissed()) {
+      this.toaster.success(this.announcement, '', {
+        closeButton: true,
+        timeOut: 0,
+        disableTimeOut: true,
+        enableHtml: true,
+        positionClass: 'toast-bottom-right',
+        toastClass: 'announcementToast ngx-toastr',
+        tapToDismiss: false,
+      }).onHidden.subscribe(() => {
+        this.storageService.setAnnouncementADismissed(true);
+      });
+    }
   }
 }

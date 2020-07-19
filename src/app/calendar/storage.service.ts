@@ -8,6 +8,8 @@ export class StorageService {
   public static readonly TIMETABLE_STORAGE_IDENTIFIER: string = "timetableData";
   public static readonly THEME_STORAGE_IDENTIFIER: string = "themeName";
   public static readonly LAST_OPENED_IDENTIFIER: string = "lastOpened";
+  public static readonly ANNOUNCEMENT_A_DISMISSED_IDENTIFIER: string = "announcementADismissed";
+
 
   constructor() {
     // create an empty store if nothing exists
@@ -84,6 +86,18 @@ export class StorageService {
     localStorage.setItem(StorageService.LAST_OPENED_IDENTIFIER, planId);
   }
 
+  public getAnnouncementADismissed(): boolean {
+    if (!localStorage.hasOwnProperty(StorageService.ANNOUNCEMENT_A_DISMISSED_IDENTIFIER)) {
+      return false;
+    }
+
+    return localStorage.getItem(StorageService.ANNOUNCEMENT_A_DISMISSED_IDENTIFIER) === 'true';
+  }
+
+  public setAnnouncementADismissed(dismissed: boolean): void {
+    localStorage.setItem(StorageService.ANNOUNCEMENT_A_DISMISSED_IDENTIFIER, dismissed ? 'true' : 'false');
+  }
+
   private replacer(key, value) {
     const originalObject = this[key];
     if (originalObject instanceof Map) {
@@ -144,7 +158,7 @@ export class StorageService {
           });
           return newListing;
         });
-        
+
         // hash classes
         plan.classes = plan.classes.map(addHashToClass);
 
