@@ -10,6 +10,7 @@ import {
   DeliveryMode,
   CAMPUSES,
   DELIVERY_MODES,
+  addHashToClass
 } from "./calendar/calendar";
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -114,6 +115,7 @@ export class ApiService {
       (act: APIActivity[]): ClassType => {
         return {
           name: act[0].activity_group_code,
+          id: act[0].streamId.slice(0, -3),
           streams: act.reduce(
             (acc: ClassStream[], apiActivity: APIActivity): ClassStream[] => {
               const session = this.apiActivityToClassSession(apiActivity);
@@ -147,7 +149,7 @@ export class ApiService {
       classes,
     };
 
-    return classList;
+    return addHashToClass(classList);
   }
 
   private apiActivityToClassSession(apiActivity: APIActivity): ClassSession {

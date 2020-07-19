@@ -26,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { InstallComponent } from './install/install.component';
 
 
 
@@ -43,7 +44,8 @@ import { environment } from '../environments/environment';
     SemesterPipe,
     ThemeComponent,
     WeeksComponent,
-    DatePipe
+    DatePipe,
+    InstallComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener, Host } from "@angular/core";
 import {
   WEEKDAYS,
   WEEKDAY_INDICES,
@@ -72,6 +72,13 @@ export class TimetableComponent implements OnInit, OnDestroy {
       .subscribe((summaries: PlanSummary[]) => {
         this.plans = summaries;
       });
+
+    this.plannerService.tryRefreshPlan(this.plannerService.currentPlan.value);
+  }
+
+  @HostListener('window:focus', ['$event'])
+  public onFocus(event: FocusEvent): void {
+    this.plannerService.tryRefreshPlan(this.plannerService.currentPlan.value);
   }
 
   ngOnInit() { }
@@ -100,7 +107,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
               (this.editing &&
                 classType.name === this.editingClassType &&
                 classListing.name === this.editingClassName) ||
-              streamIndex === selectionForType
+              selectionForType.includes(streamIndex)
             ) {
               classStream.classes.forEach(
                 (session: ClassSession, sessionIndex: number) => {
@@ -141,9 +148,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
       session.classType === this.editingClassType;
 
     if (this.editing && isEditingSession) {
-      this.plan.selections
-        .get(this.editingClassName)
-        .set(session.classType, session.classStream);
+      this.plannerService.setSelections(this.editingClassName, session.classType, [session.classStream]);
 
       if (gtag && environment.gaEventParams) {
         gtag("event", "changeSelection", environment.gaEventParams);
@@ -154,7 +159,6 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     this.editing = !this.editing;
-    this.plan.isDirty = true;
   }
 
   public handleSessionEnter(session: TimetableSession): void {

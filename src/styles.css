@@ -87,6 +87,7 @@ textarea:focus {
   .contentContainer {
     width: 100vw !important;
     min-width: 80vw !important;
+    margin-bottom: 20px !important;
   }
 
   app-planning {
@@ -145,6 +146,10 @@ textarea:focus {
     padding-top: 7px !important;
   }
 
+  app-planning .selectionWrapper {
+    display: none !important;
+  }
+
   .topMenu {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
@@ -162,10 +167,16 @@ textarea:focus {
 
   .calendarColumnContainer {
     margin-top: 5px !important;
+    height: 685px !important;
+  }
+
+  .dayColumn {
+    height: 635px !important;
   }
 
   .timeLabels {
     left: -12px !important;
+    height: 655px !important;
   }
 
   .dayHeader {
@@ -192,6 +203,10 @@ textarea:focus {
 
   footer {
     margin-top: 50px !important;
+  }
+
+  app-install {
+    display: block !important;
   }
 
   footer .textWrap {

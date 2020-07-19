@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Plans } from "./calendar";
+import { Plans, Plan, addHashToClass, ClassType, ClassListing } from "./calendar";
 
 @Injectable({
   providedIn: "root",
@@ -53,11 +53,8 @@ export class StorageService {
       });
     });
 
-    // relabel any 2019 plans as 2020
     Object.keys(data).forEach((key) => {
-      if (data[key].year === 2019) {
-        data[key].year = 2020;
-      }
+      data[key] = this.migratePlan(data[key]);
     });
 
     return data;
@@ -121,5 +118,58 @@ export class StorageService {
     return uuid.match(
       /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
     );
+  }
+
+  private migratePlan(plan: Plan): Plan {
+    // relabel any 2019 plans as 2020
+    if (plan.year === 2019) {
+      plan.year = 2020;
+    }
+
+    switch (plan.schemaVersion) {
+      // Schema version 1: original version
+      case 1:
+        // add id to ClassType
+        plan.classes = plan.classes.map((listing: ClassListing) => {
+          const newListing = { ...listing };
+          newListing.classes = newListing.classes.map((c: ClassType) => {
+            if (!c.id) {
+              return {
+                ...c,
+                id: c.streams[0].streamId.slice(0, -3),
+              };
+            } else {
+              return c;
+            }
+          });
+          return newListing;
+        });
+        
+        // hash classes
+        plan.classes = plan.classes.map(addHashToClass);
+
+        // convert number to number[] in selections
+        // eslint-disable-next-line
+        plan.selections.forEach((classMap, courseName) => {
+          if (typeof classMap.values().next().value === 'number') {
+            const newSelection = new Map<string, number[]>();
+            classMap.forEach((selection: any, className) => {
+              newSelection.set(className, [selection]);
+            });
+
+            plan.selections.set(courseName, newSelection);
+          }
+        });
+
+        // update schema version
+        plan.schemaVersion = 2;
+      // Schema version 2: introduced hash, selections are number[] instead of number
+      case 2:
+        break;
+      default:
+        break;
+    }
+
+    return plan;
   }
 }

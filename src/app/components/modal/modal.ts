@@ -4,7 +4,7 @@ export class ModalSettings {
     public title: string;
     public text: string;
     public buttons: ModalButton[];
-    public content!: TemplateRef<any>;
+    public content?: TemplateRef<any>;
 
     constructor(title: string, text: string, buttons: ModalButton[], content: TemplateRef<any> = null) {
         this.title = title;
