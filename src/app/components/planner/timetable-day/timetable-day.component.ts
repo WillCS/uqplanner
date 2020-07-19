@@ -46,9 +46,7 @@ export class TimetableDayComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    console.log(this.sessionList);
-  }
+  ngOnInit() { }
 
   public getClashes(session: TimetableSession): TimetableSession[] {
     return this.sessionList.filter(

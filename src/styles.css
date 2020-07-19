@@ -75,6 +75,33 @@ textarea:focus {
   text-align: center !important;
 }
 
+.announcementToast {
+  width: 400px !important;
+  box-shadow: 0 0 800px #292929 !important;
+  margin-bottom: 12px !important;
+  padding: 20px 40px !important;
+  background-image: none !important;
+  border-radius: 6px !important;
+}
+
+.announcementToast hr {
+  border: 1px solid black;
+  opacity: 0.15;
+}
+
+.announcementToast .toast-close-button {
+  margin-top: 20px;
+  font-size: 1.5em;
+}
+
+.announcementToast b {
+  line-height: 30px;
+}
+
+.announcementToast a:hover {
+  color: white !important;
+}
+
 .errorToast {
   background-color: var(--error-toast-bg) !important;
 }

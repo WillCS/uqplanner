@@ -20,6 +20,9 @@ import * as uuid from "uuid";
 import * as _ from "lodash";
 import { ToastrService } from "ngx-toastr";
 import { ModalButton } from '../components/modal/modal';
+import { environment } from 'src/environments/environment';
+
+declare const gtag: Function;
 
 @Injectable({
   providedIn: "root",
@@ -146,13 +149,11 @@ export class PlannerService {
         )
         .subscribe(
           (newClass: ClassListing) => {
-            isDevMode() && console.log(newClass);
             const plan = _.cloneDeep(this.currentPlan.value);
             try {
               this.addClassListing(newClass);
               subscriber.complete();
             } catch (error) {
-              console.log("error adding class");
               subscriber.error(error.message);
             }
           },
@@ -196,7 +197,6 @@ export class PlannerService {
   }
 
   public setSelections(className: string, classType: string, selections: number[]) {
-    console.log(className, classType, selections);
     const plan = this.currentPlan.value;
 
     if (!plan.selections.has(className) || !plan.selections.get(className).has(classType)) {
@@ -309,13 +309,6 @@ export class PlannerService {
    * @param plan The Plan to refresh
    */
   public refreshPlan(plan: Plan): void {
-    if (isDevMode()) {
-      console.log('refreshing');
-      console.log(plan);
-
-      console.log('new stuff');
-    }
-
     const classesObservable = forkJoin(plan.classes.map(listing =>
       this.apiService.getClass(listing.name, listing.campus, listing.deliveryMode, plan.year, plan.semester)
     ));
@@ -325,10 +318,6 @@ export class PlannerService {
         // If we're just flicking through timetables we don't want to be barraged with modals
         if (plan.id !== this.currentPlan.value.id) {
           return;
-        }
-
-        if (isDevMode()) {
-          console.log(classes);
         }
 
         // Compare the new data with our stored data. If any classes came back with an error, ignore it
@@ -354,24 +343,11 @@ export class PlannerService {
 
         // If any have changed, prompt the user about it
         if (nonMatchingClasses.length > 0) {
-
-          if (isDevMode()) {
-            console.log('uh oh a change happened');
-          }
+          isDevMode() && console.log('Timetable changes have been detected...');
 
           nonMatchingClasses.forEach(clazz => {
             const existingClass = plan.classes.find(c => c.name === clazz.name);
-
-            if (isDevMode()) {
-              console.log(`change detected for ${clazz.name}`);
-              console.log(`old hash: ${existingClass.hash}`);
-              console.log(`new hash: ${clazz.class.hash}`);
-
-              console.log('old json:');
-              console.log(existingClass);
-              console.log('new json:');
-              console.log(clazz.class);
-            }
+            isDevMode() && console.log(`Change detected for ${clazz.name}`);
           });
 
           const numMatches = nonMatchingClasses.length;
@@ -395,15 +371,16 @@ export class PlannerService {
                   closeButton: false,
                 });
 
+                gtag('event', 'timetableUpdated', {
+                  ...environment.gaEventParams,
+                  event_label: nonMatchingClasses.map(c => c.class.name).join('-')
+                });
+
                 this.modalService.closeModal();
               }),
               new ModalButton('Cancel', () => this.modalService.closeModal())
             ]
           });
-        } else {
-          if (isDevMode()) {
-            console.log('everything is fine!');
-          }
         }
       },
       error: (error) => console.error(error)
