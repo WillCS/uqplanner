@@ -83,7 +83,7 @@ textarea:focus {
   background-image: none !important;
   border-radius: 6px !important;
   max-height: 90vh;
-  overflow: scroll;
+  overflow: scroll !important;
 }
 
 .announcementToast hr {
