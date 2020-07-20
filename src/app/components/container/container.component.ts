@@ -21,20 +21,22 @@ export class ContainerComponent implements OnInit {
         <p>For this semester, we've added...</p>
 
         <p><b>Multi-stream selections</b><br />
-        Select multiple class streams to show in your timetable</p>
+        Select multiple class streams to show in your timetable (on desktop and tablet)</p>
 
         <p><b>Add to home screen</b><br />
-        Add your timetable directly to your Android home screen</p>
+        Add your timetable to the home screen on Chrome with Android or Safari with iOS</p>
 
         <p><b>Timetable updates</b><br />
-        Automatic checks for updates to your course times</p>
+        Automatic checks and notifications for updates to your course times</p>
+
+        <p><b>...among many other improvements.</b></p>
 
         <!-- <p><b>Offline mode</b><br />
         Open your saved timetable, even without internet</p> -->
 
-        <br /><hr /><br />
+        <hr />
 
-        <p>Please <a href="https://facebook.com/uqplanner" target="_blank">like our Facebook page</a> for updates, and tell us if you run into any bugs!</p>
+        <p>Please <a href="https://facebook.com/uqplanner" target="_blank">like our Facebook page</a> for updates, and let us know if you run into any bugs!</p>
 
         <p>Here's to a fresh start for the new semester.</p>
 
