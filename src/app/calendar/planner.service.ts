@@ -48,10 +48,18 @@ export class PlannerService {
       this.plans.next({
         [initialPlan.id]: initialPlan,
       });
-    } else if (lastOpened && planIds.includes(lastOpened)) {
+    } else if (lastOpened && planIds.includes(lastOpened) &&
+      this.plans.value[lastOpened].semester === CURRENT_SEMESTER &&
+      this.plans.value[lastOpened].year === CURRENT_YEAR
+    ) {
       initialPlan = this.plans.value[lastOpened];
     } else {
-      initialPlan = _.cloneDeep(this.plans.value[planIds[0]]);
+      const thisSemester = Object.values(this.plans.value).find((plan) => plan.semester === CURRENT_SEMESTER && plan.year === CURRENT_YEAR);
+      if (thisSemester) {
+        initialPlan = _.cloneDeep(thisSemester);
+      } else {
+        initialPlan = this.cleanPlan(CURRENT_YEAR, CURRENT_SEMESTER);
+      }
     }
 
     this.currentPlan = new BehaviorSubject<Plan>(
@@ -371,12 +379,12 @@ export class PlannerService {
                   closeButton: false,
                 });
 
+                this.modalService.closeModal();
+
                 gtag('event', 'timetableUpdated', {
                   ...environment.gaEventParams,
                   event_label: nonMatchingClasses.map(c => c.class.name).join('-')
                 });
-
-                this.modalService.closeModal();
               }),
               new ModalButton('Cancel', () => this.modalService.closeModal())
             ]
