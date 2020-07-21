@@ -299,6 +299,9 @@ export class PlannerService {
       const hourInMillis = 60 * 60 * 1000;
       if (this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
         this.refreshPlan(this.currentPlan.value);
+      } else {
+        this.currentPlan.value.lastEdited = Date.now();
+        this.savePlan();
       }
     }
   }
