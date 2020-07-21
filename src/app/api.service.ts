@@ -85,7 +85,7 @@ export class ApiService {
   private reformatClass(courseCode: string, apiObject: object, deliveryMode: DeliveryMode): ClassListing {
     // find course key within returned list
     const name = Object.keys(apiObject)
-      .filter((key) => key.includes(`_${deliveryMode.id}`))
+      .filter((key) => !deliveryMode || key.includes(`_${deliveryMode.id}`))
       .find((key) => key.split("_")[0].toUpperCase() === courseCode);
 
     if (!name) {
