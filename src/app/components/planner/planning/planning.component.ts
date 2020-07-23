@@ -118,7 +118,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
       (next) => { },
       (error) => {
         this.searches.splice(this.searches.find((s) => s === status));
-        this.toaster.error(`Couldn't find ${searchTerm}`, "", {
+        this.toaster.error(`Couldn't find ${searchTerm}. Make sure to check campus and delivery mode!`, "", {
           positionClass: "toast-bottom-center",
           toastClass: "toast errorToast ngx-toastr",
           closeButton: false,
