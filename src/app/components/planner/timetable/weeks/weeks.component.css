@@ -50,5 +50,5 @@ button.weekButton.selected {
 }
 
 button.weekButton.currentWeek {
-  border-bottom: 2px solid var(--current-week-color);
+  border-bottom: 1.5px solid var(--current-week-color);
 }
