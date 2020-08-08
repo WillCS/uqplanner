@@ -242,6 +242,14 @@ div.classObject .selectionWrapper {
   border-radius: 3px;
 }
 
+.classTypeLabel.deselected {
+  opacity: 0.4;
+}
+
+.classTypeLabel.deselected:after {
+  content: '*';
+}
+
 div.dropdownContent .item {
   padding: 5px 10px;
   border-radius: 18px;

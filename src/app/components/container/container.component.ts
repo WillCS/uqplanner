@@ -50,18 +50,18 @@ export class ContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.storageService.getAnnouncementADismissed()) {
-      this.toaster.success(this.announcement, '', {
-        closeButton: true,
-        timeOut: 0,
-        disableTimeOut: true,
-        enableHtml: true,
-        positionClass: 'toast-bottom-right',
-        toastClass: 'announcementToast ngx-toastr',
-        tapToDismiss: false,
-      }).onHidden.subscribe(() => {
-        this.storageService.setAnnouncementADismissed(true);
-      });
-    }
+    // if (!this.storageService.getAnnouncementADismissed()) {
+    //   this.toaster.success(this.announcement, '', {
+    //     closeButton: true,
+    //     timeOut: 0,
+    //     disableTimeOut: true,
+    //     enableHtml: true,
+    //     positionClass: 'toast-bottom-right',
+    //     toastClass: 'announcementToast ngx-toastr',
+    //     tapToDismiss: false,
+    //   }).onHidden.subscribe(() => {
+    //     this.storageService.setAnnouncementADismissed(true);
+    //   });
+    // }
   }
 }

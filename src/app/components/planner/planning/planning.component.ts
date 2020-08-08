@@ -242,6 +242,10 @@ export class PlanningComponent implements OnInit, OnDestroy {
     );
   }
 
+  public classTypeDeselected(classListing: ClassListing, classType: ClassType) {
+    return this.plan.selections.get(classListing.name).get(classType.name).length === 0;
+  }
+
   public onSidebarClassClicked(classType: ClassType) {
     this.streamDropdown = classType.id;
   }

@@ -38,9 +38,9 @@ export class WeeksComponent implements OnInit {
   }
 
   public handlePlanChanged(plan: Plan): void {
-    if(plan && plan.classes.length > 0) {
+    if (plan && plan.classes.length > 0) {
       this.startDate = new Date(this.getStartDate(plan));
-      this.lastWeek  = this.getLastWeek(plan);
+      this.lastWeek = this.getLastWeek(plan);
       this.firstWeek = this.getFirstWeek(plan);
 
       this.weeks = [...Array(this.lastWeek - this.firstWeek).keys()].map((v, i, a) => i);
@@ -65,9 +65,34 @@ export class WeeksComponent implements OnInit {
     date.setDate(this.startDate.getDate() + ((this.firstWeek + week) * 7));
     return date;
   }
-  
+
+  public calculateWeekEndDate(week: number): Date {
+    let date = new Date(this.endDate);
+    date.setDate(this.startDate.getDate() + ((this.firstWeek + week + 1) * 7 - 1));
+    return date;
+  }
+
+  public isCurrentWeek(week: number): boolean {
+    const today = new Date();
+    const weekHasStarted = this.calculateWeekStartDate(week) < today;
+    const weekHasEnded = this.calculateWeekEndDate(week) > today;
+
+    if (weekHasStarted && !weekHasEnded) {
+      console.log(week);
+    }
+
+    return weekHasStarted && !weekHasEnded;
+  }
+
+  public getFormattedStartDate(week: number) {
+    console.log(week);
+    const startDate = this.calculateWeekStartDate(week);
+    console.log(startDate);
+    return `${startDate.getDate()}/${startDate.getMonth()}`;
+  }
+
   private getStartDate(plan: Plan): Date | undefined {
-    if(!plan || plan.classes.length == 0) {
+    if (!plan || plan.classes.length == 0) {
       return undefined;
     } else {
       return plan.classes[0].classes[0].streams[0].classes[0].startDate || undefined;
@@ -75,16 +100,16 @@ export class WeeksComponent implements OnInit {
   }
 
   private getFirstWeek(plan: Plan): number {
-    if(!plan || plan.classes.length === 0) {
+    if (!plan || plan.classes.length === 0) {
       return undefined;
     } else {
       let earliestWeek = 50;
-      
+
       plan.classes.forEach(clazz => {
         clazz.classes.forEach(type => {
           type.streams.forEach(stream => {
             stream.classes.forEach(session => {
-              if(session.weekPattern) {
+              if (session.weekPattern) {
                 let first = session.weekPattern.indexOf(true);
                 earliestWeek = first < earliestWeek ? first : earliestWeek;
               }
@@ -98,16 +123,16 @@ export class WeeksComponent implements OnInit {
   }
 
   private getLastWeek(plan: Plan): number {
-    if(!plan || plan.classes.length === 0) {
+    if (!plan || plan.classes.length === 0) {
       return undefined;
     } else {
       let latestWeek = 0;
-      
+
       plan.classes.forEach(clazz => {
         clazz.classes.forEach(type => {
           type.streams.forEach(stream => {
             stream.classes.forEach(session => {
-              if(session.weekPattern) {
+              if (session.weekPattern) {
                 let last = session.weekPattern.lastIndexOf(true);
                 latestWeek = last > latestWeek ? last : latestWeek;
               }
@@ -121,7 +146,7 @@ export class WeeksComponent implements OnInit {
   }
 
   private getWeekContents(plan: Plan): boolean[] {
-    if(!plan || plan.classes.length === 0) {
+    if (!plan || plan.classes.length === 0) {
       return []
     } else {
       let contents = this.weeks.map(week => false);
@@ -130,7 +155,7 @@ export class WeeksComponent implements OnInit {
         clazz.classes.forEach(type => {
           type.streams.forEach(stream => {
             stream.classes.forEach(session => {
-              if(session.weekPattern) {
+              if (session.weekPattern) {
                 contents = contents.map((v, i, a) => v || session.weekPattern[this.firstWeek + i]);
               }
             })
