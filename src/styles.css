@@ -64,6 +64,36 @@ textarea:focus {
   outline: none;
 }
 
+.tooltip {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 6px;
+  white-space: nowrap;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.4);
+  position: absolute;
+  transform: translate(-13px, -180%);
+  text-align: center;
+  border-radius: 6px;
+  opacity: 0;
+  transition: background-color 0.1s;
+}
+
+*:hover > .tooltip {
+  opacity: 1;
+}
+
+.tooltip:after,
+.tooltip:before {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: ' ';
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
 .toast {
   width: 200px !important;
   box-shadow: none !important;
