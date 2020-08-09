@@ -67,7 +67,7 @@ export class WeeksComponent implements OnInit {
   }
 
   public calculateWeekEndDate(week: number): Date {
-    let date = new Date(this.endDate);
+    const date = new Date(this.startDate);
     date.setDate(this.startDate.getDate() + ((this.firstWeek + week + 1) * 7 - 1));
     return date;
   }
