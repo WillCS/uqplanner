@@ -75,11 +75,7 @@ export class WeeksComponent implements OnInit {
   public isCurrentWeek(week: number): boolean {
     const today = new Date();
     const weekHasStarted = this.calculateWeekStartDate(week) < today;
-    const weekHasEnded = this.calculateWeekEndDate(week) > today;
-
-    if (weekHasStarted && !weekHasEnded) {
-      console.log(week);
-    }
+    const weekHasEnded = this.calculateWeekEndDate(week) < today;
 
     return weekHasStarted && !weekHasEnded;
   }
@@ -92,7 +88,7 @@ export class WeeksComponent implements OnInit {
   }
 
   private getStartDate(plan: Plan): Date | undefined {
-    if (!plan || plan.classes.length == 0) {
+    if (!plan || plan.classes.length === 0) {
       return undefined;
     } else {
       return plan.classes[0].classes[0].streams[0].classes[0].startDate || undefined;
