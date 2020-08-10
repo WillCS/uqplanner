@@ -49,7 +49,7 @@
 
             <span class='selectionWrapper'>
                 <div class='classType' *ngFor='let classType of class.classes'>
-                    <span class='classTypeLabel'
+                    <span class='classTypeLabel' [class.deselected]='this.classTypeDeselected(class, classType)'
                         (click)='this.onSidebarClassClicked(classType)'>{{ classType.name }}</span>
 
                     <div class='dropdown' *ngIf='classType.id && classType.id == this.streamDropdown'>

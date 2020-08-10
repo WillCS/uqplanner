@@ -118,7 +118,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
       (next) => { },
       (error) => {
         this.searches.splice(this.searches.find((s) => s === status));
-        this.toaster.error(`Couldn't find ${searchTerm}. Make sure to check campus and delivery mode!`, "", {
+        this.toaster.error(`Couldn't find ${searchTerm}. Check campus and delivery mode!`, "", {
           positionClass: "toast-bottom-center",
           toastClass: "toast errorToast ngx-toastr",
           closeButton: false,
@@ -240,6 +240,10 @@ export class PlanningComponent implements OnInit, OnDestroy {
       "Proceed",
       "Cancel"
     );
+  }
+
+  public classTypeDeselected(classListing: ClassListing, classType: ClassType) {
+    return this.plan.selections.get(classListing.name).get(classType.name).length === 0;
   }
 
   public onSidebarClassClicked(classType: ClassType) {

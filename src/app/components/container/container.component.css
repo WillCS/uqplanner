@@ -1,80 +1,82 @@
 :host {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .contentContainer {
-    width: 75vw;
-    max-width: 900px;
-    min-width: 760px;
-    margin: auto auto;
+  width: 75vw;
+  max-width: 900px;
+  min-width: 760px;
+  margin: auto auto;
 }
 
 footer {
-    position: relative;
-    width: 100vw;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    user-select: none;
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  user-select: none;
 }
 
 footer > .textWrap {
-    font-size: 12px;
-    text-align: center;
+  font-size: 12px;
+  text-align: center;
 }
 
 .footerText {
-    margin-right: 5px;
-    color: var(--footer-color);
-    transition: filter 0.2s;
+  margin-right: 5px;
+  line-height: 16px;
+  color: var(--footer-color);
+  transition: filter 0.2s;
 }
 
-a.footerText:hover, .button.footerText:hover {
-    filter: brightness(1.4);
+a.footerText:hover,
+.button.footerText:hover {
+  filter: brightness(1.4);
 }
 
 .donate {
-    margin-right: 5px;
-    color: var(--donate-btn-color);
-    transition: color 0.2s;
+  margin-right: 5px;
+  color: var(--donate-btn-color);
+  transition: color 0.2s;
 }
 
 .donate:hover {
-    color: var(--donate-btn-hover);
+  color: var(--donate-btn-hover);
 }
 
 span.footerText.button {
-    text-decoration: underline;
-    cursor: pointer;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 textarea.feebackTextarea {
-    resize: vertical;
-    min-height: 40px;
-    max-height: 300px;
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    display: block;
-    border: none;
-    padding: 10px;
-    box-sizing: border-box;
-    font-family: 'Lato', Arial, sans-serif;
-    font-size: 12px;
+  resize: vertical;
+  min-height: 40px;
+  max-height: 300px;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  display: block;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 12px;
 }
 
 input.feedbackEmail {
-    resize: none;
-    width: 100%;
-    margin-bottom: 10px;
-    display: block;
-    border: none;
-    padding: 10px;
-    box-sizing: border-box;
-    font-size: 12px;
+  resize: none;
+  width: 100%;
+  margin-bottom: 10px;
+  display: block;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 12px;
 }
 
 input.feedbackExtra {
-    display: none;
+  display: none;
 }

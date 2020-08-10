@@ -1,17 +1,10 @@
 <div class='weeksContainer' [class.isActive]='this.startDate'>
-    <button
-        class='weekButton'
-        [class.selected]='this.isSelected(undefined)'
-        (click)='this.selectWeek(undefined)'
-    >
+    <button class='weekButton' [class.selected]='this.isSelected(undefined)' (click)='this.selectWeek(undefined)'>
         All Weeks
     </button>
-    <button 
-        *ngFor='let week of this.weeks'
-        class='weekButton'
-        [class.selected]='this.isSelected(week)'
-        (click)='this.selectWeek(week)'
-    >
+    <button *ngFor='let week of this.weeks' class='weekButton' [class.selected]='this.isSelected(week)'
+        [class.currentWeek]='this.isCurrentWeek(week)' (click)='this.selectWeek(week)'>
         {{ this.weekNames[week] }}
+        <div class='tooltip'>{{this.getFormattedStartDate(week)}}</div>
     </button>
 </div>

@@ -303,7 +303,8 @@ export class PlannerService {
    * @param plan 
    */
   public tryRefreshPlan(plan: Plan): void {
-    if (plan) {
+    // only refresh if plan is for current year/semester
+    if (plan && plan.year === CURRENT_YEAR && plan.semester === CURRENT_SEMESTER) {
       const hourInMillis = 60 * 60 * 1000;
       if (this.currentPlan.value.lastEdited + hourInMillis < Date.now()) {
 

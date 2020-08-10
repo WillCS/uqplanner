@@ -37,6 +37,7 @@
   --modal-bg: #2a0237;
   --week-color: #e6e6e6;
   --selected-week-color: #ee3036;
+  --current-week-color: rgba(255, 255, 255, 0.3);
   --week-accent-color: #3f134c;
 }
 
@@ -75,6 +76,7 @@
   --modal-bg: #525252;
   --week-color: #525252;
   --selected-week-color: #000000;
+  --current-week-color: rgba(0, 0, 0, 0.3);
   --week-accent-color: #eeeeee;
 }
 
@@ -113,6 +115,7 @@
   --modal-bg: #525252;
   --week-color: #525252;
   --selected-week-color: #000000;
+  --current-week-color: rgba(0, 0, 0, 0.3);
   --week-accent-color: #eeeeee;
 }
 
@@ -151,5 +154,6 @@
   --modal-bg: #1d1d1d;
   --week-color: white;
   --selected-week-color: #52cc74;
+  --current-week-color: rgba(255, 255, 255, 0.3);
   --week-accent-color: #555555;
 }
