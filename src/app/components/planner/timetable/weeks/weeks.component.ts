@@ -61,7 +61,7 @@ export class WeeksComponent implements OnInit {
   }
 
   public calculateWeekStartDate(week: number): Date {
-    let date = new Date(this.startDate);
+    const date = new Date(this.startDate);
     date.setDate(this.startDate.getDate() + ((this.firstWeek + week) * 7));
     return date;
   }
@@ -73,6 +73,10 @@ export class WeeksComponent implements OnInit {
   }
 
   public isCurrentWeek(week: number): boolean {
+    if (!this.startDate) {
+      return false;
+    }
+
     const today = new Date();
     const weekHasStarted = this.calculateWeekStartDate(week) < today;
     const weekHasEnded = this.calculateWeekEndDate(week) < today;
@@ -81,9 +85,11 @@ export class WeeksComponent implements OnInit {
   }
 
   public getFormattedStartDate(week: number) {
-    console.log(week);
+    if (!this.startDate) {
+      return '01/01';
+    }
+
     const startDate = this.calculateWeekStartDate(week);
-    console.log(startDate);
     return `${startDate.getDate()}/${startDate.getMonth()}`;
   }
 
