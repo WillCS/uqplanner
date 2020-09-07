@@ -17,6 +17,7 @@ export class ErrorService implements ErrorHandler {
   ) { }
 
   handleError(error: Error) {
+    console.log("Whoops!");
     console.log(error);
 
     // log to analytics
