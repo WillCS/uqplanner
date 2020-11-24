@@ -269,7 +269,7 @@ export class PlannerService {
 
   public defaultPlanName(semester = CURRENT_SEMESTER): string {
     const alreadyUsed = Object.values(this.plans.value).map((p) => p.name);
-    const semesterName = semester === 3 ? 'Summer Sem.' : `Sem. ${semester}`;
+    const semesterName = semester === 3 ? 'Summer Semester' : `Semester ${semester}`;
 
     const pre =
       semester === (CURRENT_SEMESTER + 1) % 3
