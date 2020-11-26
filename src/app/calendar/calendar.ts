@@ -91,9 +91,15 @@ export const SEMESTER_OPTIONS: SemesterOption[] = [
     number: 2,
     deliveryModes: ["FD", "IN", "EX"],
   },
+  {
+    name: "Summer Semester 2020",
+    year: 2020,
+    number: 3,
+    deliveryModes: ["FD", "IN", "EX"],
+  }
 ];
 
-export const CURRENT_SEMESTER: 1 | 2 | 3 = 2;
+export const CURRENT_SEMESTER: 1 | 2 | 3 = 3;
 export const CURRENT_YEAR = 2020;
 
 export interface Plan {

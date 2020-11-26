@@ -90,7 +90,7 @@ export class WeeksComponent implements OnInit {
     }
 
     const startDate = this.calculateWeekStartDate(week);
-    return `${startDate.getDate()}/${startDate.getMonth()}`;
+    return `${startDate.getDate()}/${startDate.getMonth() + 1}`;
   }
 
   private getStartDate(plan: Plan): Date | undefined {
