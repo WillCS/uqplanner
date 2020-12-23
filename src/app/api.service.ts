@@ -50,6 +50,7 @@ export class ApiService {
             "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             "x-requested-with": "XMLHttpRequest",
+            "year": String(year)
           },
         }
       )

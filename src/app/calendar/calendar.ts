@@ -96,7 +96,13 @@ export const SEMESTER_OPTIONS: SemesterOption[] = [
     year: 2020,
     number: 3,
     deliveryModes: ["FD", "IN", "EX"],
-  }
+  },
+  {
+    name: "Semester 1 2021",
+    year: 2021,
+    number: 1,
+    deliveryModes: ["FD", "IN", "EX"],
+  },
 ];
 
 export const CURRENT_SEMESTER: 1 | 2 | 3 = 3;
