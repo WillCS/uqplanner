@@ -105,8 +105,8 @@ export const SEMESTER_OPTIONS: SemesterOption[] = [
   },
 ];
 
-export const CURRENT_SEMESTER: 1 | 2 | 3 = 3;
-export const CURRENT_YEAR = 2020;
+export const CURRENT_SEMESTER: 1 | 2 | 3 = 1;
+export const CURRENT_YEAR = 2021;
 
 export interface Plan {
   id: string;
