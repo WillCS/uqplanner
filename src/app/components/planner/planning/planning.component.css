@@ -80,6 +80,7 @@
   float: left;
   border: none;
   color: var(--bg-label);
+  background-color: var(--bg-light);
   margin-bottom: 4px;
   margin-top: 6px;
   font-size: 8.5px;
