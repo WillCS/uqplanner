@@ -80,9 +80,9 @@
   float: left;
   border: none;
   color: var(--bg-label);
+  background-color: var(--bg-light);
   margin-bottom: 4px;
   margin-top: 6px;
-  background-color: transparent;
   font-size: 8.5px;
   padding-bottom: 2px;
   text-transform: uppercase;
@@ -91,7 +91,6 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url('/assets/select-arrow.svg') no-repeat right;
 }
 
 .campusSelect:focus,
