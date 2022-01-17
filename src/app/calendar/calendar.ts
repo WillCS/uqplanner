@@ -49,7 +49,7 @@ export const CAMPUSES: Campus[] = [
   },
 ];
 
-export type DeliveryModeId = "IN" | "EX" | "FD";
+export type DeliveryModeId = "IN" | "EX" | "FD" | "WE";
 
 export interface DeliveryMode {
   name: string;
@@ -68,6 +68,10 @@ export const DELIVERY_MODES: DeliveryMode[] = [
   {
     name: "FLEXI. DELIVERY",
     id: "FD"
+  },
+  {
+    name: "WORK EXPERIENCE",
+    id: "WE"
   }
 ];
 
@@ -119,7 +123,7 @@ export const SEMESTER_OPTIONS: SemesterOption[] = [
     name: "Semester 1 2022",
     year: 2022,
     number: 1,
-    deliveryModes: ["IN", "EX", "FD"]
+    deliveryModes: ["IN", "EX", "FD", "WE"]
   },
 ];
 
