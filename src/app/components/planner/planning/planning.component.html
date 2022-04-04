@@ -7,7 +7,7 @@
 <div class='classList'>
     <div class='search'>
         <input #courseCode type='text' placeholder='Add a course' class='classSearchField' maxlength='9'
-            (keyup.enter)='courseCode.value = this.onSearched(courseCode.value)'>
+            (keydown.enter)='courseCode.value = this.onSearched(courseCode.value)'>
         <fa-icon class='searchButton' [icon]='this.searching() ? faCircleNotch : faSearch'
             [class.spin]='this.searching()' (click)='courseCode.value = this.onSearched(courseCode.value)'></fa-icon>
     </div>
