@@ -10,7 +10,6 @@ import { ErrorService } from './error.service';
 import { PlanningComponent } from './components/planner/planning/planning.component';
 import { TimetableComponent } from './components/planner/timetable/timetable.component';
 import { TimetableDayComponent } from './components/planner/timetable-day/timetable-day.component';
-import { ClassSearchComponent } from './components/class-search/class-search.component';
 import { ControlsComponent } from './components/planner/controls/controls.component';
 import { TimePipe } from './calendar/time.pipe';
 import { ModalComponent } from './components/modal/modal.component';
@@ -37,7 +36,6 @@ import { InstallComponent } from './install/install.component';
     PlanningComponent,
     TimetableComponent,
     TimetableDayComponent,
-    ClassSearchComponent,
     TimePipe,
     ControlsComponent,
     ModalComponent,

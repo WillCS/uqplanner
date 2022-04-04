@@ -54,6 +54,7 @@
   transition: opacity 0.2s;
   margin-left: 5px;
   opacity: 0.4;
+  padding: 0;
 }
 
 .controlBtn.active:hover {
