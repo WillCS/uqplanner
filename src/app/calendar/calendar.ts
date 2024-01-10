@@ -47,6 +47,10 @@ export const CAMPUSES: Campus[] = [
     name: "Herston",
     code: "HERST",
   },
+  {
+    name: "Dutton Park",
+    code: "DUTPK",
+  },
 ];
 
 export type DeliveryModeId = "IN" | "EX" | "FD" | "WE";
