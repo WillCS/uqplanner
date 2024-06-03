@@ -165,10 +165,16 @@ export const SEMESTER_OPTIONS: SemesterOption[] = [
     number: 1,
     deliveryModes: ["IN", "EX", "FD", "WE"]
   },
+  {
+    name: "Semester 2 2024",
+    year: 2024,
+    number: 2,
+    deliveryModes: ["IN", "EX", "FD", "WE"]
+  },
 ];
 
-export const CURRENT_SEMESTER: 1 | 2 | 3 = 3;
-export const CURRENT_YEAR = 2023;
+export const CURRENT_SEMESTER: 1 | 2 | 3 = 2;
+export const CURRENT_YEAR = 2024;
 
 export interface Plan {
   id: string;
