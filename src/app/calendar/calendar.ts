@@ -32,24 +32,29 @@ export const TIMETABLE_HOURS: number[] = [
 export interface Campus {
   name: string;
   code: string;
+  codeLegacy: string;
 }
 
 export const CAMPUSES: Campus[] = [
   {
     name: "St Lucia",
-    code: "STLUC",
+    code: "STLUCIA",
+    codeLegacy: "STLUC",
   },
   {
     name: "Gatton",
-    code: "GATTN",
+    code: "GATTON",
+    codeLegacy: "GATTN",
   },
   {
     name: "Herston",
-    code: "HERST",
+    code: "HERSTON",
+    codeLegacy: "HERST",
   },
   {
     name: "Dutton Park",
-    code: "DUTPK",
+    code: "DUTTONPARK",
+    codeLegacy: "DUTPK",
   },
 ];
 
@@ -183,10 +188,16 @@ export const SEMESTER_OPTIONS: SemesterOption[] = [
     number: 2,
     deliveryModes: ["IN", "EX", "FD", "WE"]
   },
+  {
+    name: "Semester 1 2026",
+    year: 2026,
+    number: 1,
+    deliveryModes: ["IN", "EX", "FD", "WE"]
+  },
 ];
 
-export const CURRENT_SEMESTER: 1 | 2 | 3 = 2;
-export const CURRENT_YEAR = 2025;
+export const CURRENT_SEMESTER: 1 | 2 | 3 = 1;
+export const CURRENT_YEAR = 2026;
 
 export interface Plan {
   id: string;

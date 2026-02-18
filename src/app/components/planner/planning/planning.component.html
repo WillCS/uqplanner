@@ -10,40 +10,40 @@
             (keydown.enter)='courseCode.value = this.onSearched(courseCode.value)'>
         <fa-icon class='searchButton' [icon]='this.searching() ? faCircleNotch : faSearch'
             [class.spin]='this.searching()' (click)='courseCode.value = this.onSearched(courseCode.value)'></fa-icon>
-    </div>
+  </div>
     <div class='selectWrap'>
         <select class='semesterSelect' (change)='this.setSemesterHandler($event)'>
-            <option *ngFor='let semester of this.semesterOptions' [value]='semester.name'
+            <option *ngFor='let semester of this.availableSemesterOptions' [value]='semester.name'
                 [selected]='semester.year == this.plan.year && semester.number == this.plan.semester'>
                 {{semester.name}}
                 {{(semester.year == this.plan.year && semester.number == this.plan.semester) ? '&nbsp;▾' : ''}}
-            </option>
-        </select>
+      </option>
+    </select>
         <div class='line before'></div>
         <select class='campusSelect' (change)='this.setCampus($event)'>
             <option *ngFor='let campusOption of this.campuses' [value]='campusOption.code'
                 [selected]='this.campus == campusOption.code'>
                 {{campusOption.name}} {{this.campus == campusOption.code ? '&nbsp;▾' : ''}}
-            </option>
-        </select>
+      </option>
+    </select>
         <select class='deliveryModeSelect' (change)='this.setDeliveryMode($event)'>
             <option *ngFor='let mode of this.deliveryOptions' [value]='mode.id'
                 [selected]='this.deliveryMode.id == mode.id'>
                 {{mode.name}} {{this.deliveryMode.id == mode.id ? '&nbsp;▾' : ''}}
-            </option>
-        </select>
+      </option>
+    </select>
         <div class='line after'></div>
-    </div>
+  </div>
 
-    <!-- <p class='labelText'>Courses</p> -->
+  <!-- <p class='labelText'>Courses</p> -->
     <div class='classWrapper'>
         <div class='classObject placeholder' *ngIf='!(this.plan.classes?.length > 0)'>
-            <p><b>Search to add courses</b></p>
-        </div>
-        <!-- Class Object -->
+      <p><b>Search to add courses</b></p>
+    </div>
+    <!-- Class Object -->
         <div class='classObject normal' *ngFor='let class of this.plan.classes'>
             <fa-icon class='closeButton' [icon]='faTimesCircle' (click)='this.onClassCloseClicked(class.name)'>
-            </fa-icon>
+      </fa-icon>
             <p class='classTitle'><b>{{class.name}}</b></p>
             <p class='description'><b>{{class.description | uppercase}}</b></p>
 
@@ -59,18 +59,18 @@
                                 (click)='this.onStreamClicked(class, classType, i)'
                                 [attr.data-selected]="this.isStreamSelected(class, classType, i)">
                                 {{ stream.streamId.split("|").slice(-2).join("-") }}</div>
-                        </div>
-                    </div>
+            </div>
+          </div>
 
-                </div>
-            </span>
+        </div>
+      </span>
 
 
             <p *ngIf='class.deliveryMode' class='deliveryMode'>
-                <b>{{ class.deliveryMode.name }}</b>
-            </p>
-        </div>
+        <b>{{ class.deliveryMode.name }}</b>
+      </p>
     </div>
+  </div>
 </div>
 
 <!-- Timetable -->

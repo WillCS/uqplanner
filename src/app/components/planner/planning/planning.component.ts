@@ -11,12 +11,11 @@ import {
   CAMPUSES,
   SEMESTER_OPTIONS,
   SemesterOption,
-  DeliveryModeId,
   DELIVERY_MODES,
   DeliveryMode,
   ClassType,
-  ClassStream,
   ClassListing,
+  CURRENT_YEAR,
 } from "../../../calendar/calendar";
 import { Subscription, combineLatest } from "rxjs";
 import { ToastrService } from "ngx-toastr";
@@ -34,7 +33,7 @@ export class PlanningComponent implements OnInit, OnDestroy {
   public plan: Plan;
   public searches = [];
 
-  public campus = "STLUC";
+  public campus = "STLUCIA";
   public campuses = CAMPUSES;
 
   public semesterOptions = SEMESTER_OPTIONS;
@@ -64,8 +63,6 @@ export class PlanningComponent implements OnInit, OnDestroy {
         ).deliveryModes.map(i => DELIVERY_MODES.find(j => j.id === i));
 
         this.deliveryMode = this.deliveryOptions[0];
-        // if (!this.deliveryOptions.includes(this.deliveryMode)) {
-        // }
       });
 
     window.onbeforeunload = (e) => {
@@ -92,6 +89,10 @@ export class PlanningComponent implements OnInit, OnDestroy {
     }
 
     this.plannerService.changeName(name);
+  }
+
+  get availableSemesterOptions(){
+    return this.semesterOptions.filter(option => option.year === CURRENT_YEAR);
   }
 
   public removeClass(className: string): void {
