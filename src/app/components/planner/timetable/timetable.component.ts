@@ -15,6 +15,8 @@ import {
   faPlus,
   faSave,
   faTrash,
+  faMagic,
+  faExchangeAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Plan, PlanSummary } from "../../../calendar/calendar";
 import { Subscription } from "rxjs";
@@ -22,6 +24,7 @@ import { PlannerService } from "../../../calendar/planner.service";
 import { ModalService } from "../../modal/modal.service";
 import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
+import { optimizeTimetable } from '../../../utils/timetable-optimizer';
 
 declare let gtag: Function;
 
@@ -49,12 +52,18 @@ export class TimetableComponent implements OnInit, OnDestroy {
   faTrash = faTrash;
   faDownload = faDownload;
   faSave = faSave;
+  faMagic = faMagic;
+  faExchangeAlt = faExchangeAlt;
 
   public plan: Plan;
   public plans: PlanSummary[];
 
   public planSub: Subscription;
   public nameSub: Subscription;
+
+  public allowLectureClash: boolean = false;
+
+  public showOptimizeDropdown: boolean = false;
 
   constructor(
     public plannerService: PlannerService,
@@ -250,6 +259,37 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
   public setWeek(week: number | undefined): void {
     this.week = week;
+  }
+
+  public optimizeTimetable(): void {
+    const minDays = 1;
+    const maxDays = 5;
+    const schedule = optimizeTimetable(this.plan.classes, minDays, maxDays, this.allowLectureClash);
+
+    if (schedule.length > 0) {
+      for (const option of schedule) {
+        this.plannerService.setSelections(option.courseName, option.type, [option.streamIndex]);
+      }
+      this.toaster.success(
+        `Optimized timetable to ${new Set(schedule.map(s => s.day)).size} days!`,
+        "",
+        {
+          positionClass: "toast-bottom-center",
+          toastClass: "toast successToast ngx-toastr"
+        }
+      );
+    } else {
+      this.toaster.error("No valid packing found!", "", { positionClass: "toast-bottom-center" });
+    }
+  }
+
+  public toggleOptimizeDropdown(): void {
+    this.showOptimizeDropdown = !this.showOptimizeDropdown;
+  }
+
+  public runOptimizeAndClose(): void {
+    this.showOptimizeDropdown = false;
+    this.optimizeTimetable();
   }
 
   private showSaveModal(andThen: () => void): void {

@@ -20,9 +20,24 @@
         </button>
 
         <button class='controlBtn exportBtn' title='Export as iCal'
-        (click)='this.exportCalendar()' [class.active]='this.plan.classes.length > 0'>
+            (click)='this.exportCalendar()' [class.active]='this.plan.classes.length > 0'>
             <fa-icon [icon]='faDownload'></fa-icon>
         </button>
+
+        <div class="dropdownWrapper" style="display:inline-block; position:relative;">
+          <button class="controlBtn optimizeBtn" title="Optimize timetable"
+              (click)="toggleOptimizeDropdown()" [class.active]="plan.classes.length > 0">
+              <fa-icon [icon]="faMagic"></fa-icon>
+          </button>
+          <div class="dropdownMenu" *ngIf="showOptimizeDropdown">
+            <label class="dropdownOption">
+              <input type="checkbox" [(ngModel)]="allowLectureClash" />
+              Allow lecture clashes
+            </label>
+            <button class="dropdownRunBtn" (click)="runOptimizeAndClose()">Run Optimization</button>
+          </div>
+        </div>
+
         <button class='controlBtn deleteBtn' title='Delete this timetable'
             (click)='this.handleDeleteClicked()' [class.active]='this.plans.length > 1 || this.plan.classes.length > 0'>
             <fa-icon [icon]='faTrash'></fa-icon>
